@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="analyzer.Analyzer" project="IDL-Analyzer" 
+    file="/IDL-Analyzer/src/analyzer/Analyzer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="267" y="100"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="compiler.MinizincResolutor" project="IDL-Analyzer" 
+    file="/IDL-Analyzer/src/compiler/MinizincResolutor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="906" y="503"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="compiler.ResolutorCreator" project="IDL-Analyzer" 
+    file="/IDL-Analyzer/src/compiler/ResolutorCreator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1118" y="100"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="compiler.MinizincResolutorWindows" project="IDL-Analyzer" 
+    file="/IDL-Analyzer/src/compiler/MinizincResolutorWindows.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="906" y="712"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="5" language="java" name="compiler.ResolutorInterface" project="IDL-Analyzer" 
+    file="/IDL-Analyzer/src/compiler/ResolutorInterface.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="685" y="337"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" language="java" name="compiler.Resolutor" project="IDL-Analyzer" 
+    file="/IDL-Analyzer/src/compiler/Resolutor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1115" y="339"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="mapper.IDLMapper" project="IDL-Analyzer" 
+    file="/IDL-Analyzer/src/mapper/IDLMapper.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="267" y="695"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="8" language="java" name="mapper.IDLMapperInterface" project="IDL-Analyzer" 
+    file="/IDL-Analyzer/src/mapper/IDLMapperInterface.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="583" y="697"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <association id="9">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="10" name="curentCompiler"/>      
+      <multiplicity id="11" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="12">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <realization id="13">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <realization id="14">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="8"/>  
+  </realization>  
+  <association id="15">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="16" name="idlMapper"/>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="18">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="19">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="20" name="resolutor"/>      
+      <multiplicity id="21" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
