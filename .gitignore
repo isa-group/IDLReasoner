@@ -1,0 +1,9 @@
+/target/
+TODO.txt
+.idea
+IDLanalyzer.iml
+.vscode
+minizinc
+/out/
+/idl_aux_files/
+/files/
