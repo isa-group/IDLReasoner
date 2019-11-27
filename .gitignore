@@ -1,7 +1,7 @@
 /target/
 TODO.txt
 .idea
-IDLanalyzer.iml
+IDLreasoner.iml
 .vscode
 minizinc
 /out/
