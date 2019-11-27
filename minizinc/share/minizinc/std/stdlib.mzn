@@ -50,20 +50,20 @@ annotation mzn_constraint_name(string);
 
 
 /** @group annotations.general Declare the annotated variable as being functionally defined.
-  This annotation is introduced into FlatZinc code by the compiler. */
+  This annotation is introduced into FlatZinc code by the es.us.isa.idl.compiler. */
 annotation is_defined_var;
-/** @group annotations.general Declare a variable as being introduced by the compiler. */
+/** @group annotations.general Declare a variable as being introduced by the es.us.isa.idl.compiler. */
 annotation var_is_introduced;
 /** @group annotations.general Declare variable: \a c as being functionally defined
-  by the annotated constraint. This annotation is introduced into FlatZinc code by the compiler. */
+  by the annotated constraint. This annotation is introduced into FlatZinc code by the es.us.isa.idl.compiler. */
 annotation defines_var(var $t: c);
 /** @group annotations.general Declare that the annotated array should be printed by
   the solver with the given index sets \a a. This annotation is introduced into FlatZinc code by
-  the compiler. */
+  the es.us.isa.idl.compiler. */
 annotation output_array(array[$u] of set of int:a);
 /** @group annotations.general Declare that the annotated variable should be printed by
   the solver. This annotation is introduced into FlatZinc code by
-  the compiler. */
+  the es.us.isa.idl.compiler. */
 annotation output_var;
 /** @group annotations.general Declare that the annotated expression is used to map
   an expression back from FlatZinc to MiniZinc.  */
@@ -74,7 +74,7 @@ annotation doc_comment(string: s);
 /** @group annotations.general Representation of the call-stack when the annotated item
   was introduced, as a string \a s. Can be used to uniquely identify variables and constraints across different
   compilations of a model that may have different names. This annotations is introduced into
-  FlatZinc code by the compiler and is retained if --keep-paths argument is used. */
+  FlatZinc code by the es.us.isa.idl.compiler and is retained if --keep-paths argument is used. */
 annotation mzn_path(string: s);
 /** @group annotations.general With debug build of mzn2fzn, call MiniZinc::mzn_break_here when
   flattening this expression to make debugging easier. This annotation is ignored by the
@@ -88,7 +88,7 @@ annotation expression_name(string: s);
   annotations on constraint keywords are re-written as constraint_name annotations */
 annotation constraint_name(string: s);
 
-/** @group annotations.general Used internally by the compiler */
+/** @group annotations.general Used internally by the es.us.isa.idl.compiler */
 annotation mzn_rhs_from_assignment;
 
 /** @group annotations.general Marks a constraint as a recorded domain changing constraint (when mzn2fzn
@@ -772,7 +772,7 @@ test mzn_check_only_range_domains() =
   if absent(mzn_opt_only_range_domains) then false
   else deopt(mzn_opt_only_range_domains) endif;
 
-/** @group options If defined, this can be used to check that the MiniZinc compiler supports all the features used in the model. */
+/** @group options If defined, this can be used to check that the MiniZinc es.us.isa.idl.compiler supports all the features used in the model. */
 opt int: mzn_min_version_required;
 
 constraint assert(absent(mzn_min_version_required) \/ deopt(mzn_min_version_required) <= mzn_compiler_version(), "This model requires MiniZinc version "++mzn_version_to_string(deopt(mzn_min_version_required))++" but you are running version "++mzn_version_to_string(mzn_compiler_version()));

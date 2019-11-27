@@ -1489,7 +1489,7 @@ predicate sort(array[int] of var int: x, array[int] of var int: y) =
 % MiniZinc standard library.
 %-----------------------------------------------------------------------------%
 % This file contains built-in operations that can be expressed in MiniZinc,
-% and so are not implemented as true built-ins within the compiler.
+% and so are not implemented as true built-ins within the es.us.isa.idl.compiler.
 
 %-----------------------------------------------------------------------------%
 %
@@ -1604,7 +1604,7 @@ annotation time;
 % MiniZinc standard library (Draft for version MiniZinc 2.0)
 %-----------------------------------------------------------------------------%
 % This file contains built-in operations that can be expressed in MiniZinc,
-% and so are not implemented as true built-ins within the compiler.
+% and so are not implemented as true built-ins within the es.us.isa.idl.compiler.
 
 %-----------------------------------------------------------------------------%
 %
