@@ -4,6 +4,8 @@ package es.us.isa.idlreasoner.analyzer;
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
 import es.us.isa.idlreasoner.mapper.IDLMapper;
 
+import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Analyzer {
 
 	private ResolutorCreator resolutor;
-	private String file = "minizinc";
+	private String file = readProperty("aux_constraints");
 	private IDLMapper idlMapper;
 	private Map<String, Map<String, String>> mappingParameters;
 	
@@ -177,7 +179,7 @@ public class Analyzer {
 
 			    fw.append("compiler: Minizinc\n");
 			    fw.append("solver: Chuffed\n");
-			    fw.append("fileRoute: idl_aux_files/dependencies\n");
+			    fw.append("fileRoute: " + readProperty("aux_files_folder") + "/" + readProperty("idl_files_folder") + "\n");
 			    fw.append("maxResults: 100\n");
 			    
 			    fw.flush();

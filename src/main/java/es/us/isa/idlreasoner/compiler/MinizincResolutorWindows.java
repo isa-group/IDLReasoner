@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
+
 public class MinizincResolutorWindows extends MinizincResolutor{
 	
 	private String fileRoute;
@@ -21,9 +23,9 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	public List<Map<String,String>> solveGetAllSolutins(String fileName, String maxResults) {
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
 		
-		String command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " files" +"/"+fileName+".mzn";
+		String command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + readProperty("aux_files_folder") +"/"+readProperty("constraints_file");
 
-		String results = this.callSolver(fileName, command);
+		String results = this.callSolver(command);
 		
 		List<String> resultsSplitted = Arrays.asList(results.split("----------"));
 		
@@ -37,8 +39,8 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	}
 	
 	public Map<String,String> solve(String fileName) {
-		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " files" +"/"+fileName+".mzn";
-		String solutions =  this.callSolver(fileName, command);
+		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + readProperty("aux_files_folder") +"/"+readProperty("constraints_file");
+		String solutions =  this.callSolver(command);
 		return this.mapSolutions(solutions);
 	}
 	
@@ -55,7 +57,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		return res;
 	}
 	
-	private String callSolver(String fileName, String command) {
+	private String callSolver(String command) {
 		String res = "";
 		
 		ProcessBuilder processBuilder = new ProcessBuilder();

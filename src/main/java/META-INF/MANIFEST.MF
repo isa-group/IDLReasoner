@@ -1,25 +1,26 @@
 Manifest-Version: 1.0
-Class-Path: rhino-1.7R4.jar activation-1.1.jar swagger-parser-v3-2.0.1
- 5.jar commons-lang3-3.2.1.jar jackson-dataformat-yaml-2.9.10.jar swag
- ger-core-1.5.24.jar swagger-core-2.0.10.jar antlr-runtime-3.2.jar gua
- va-19.0-rc3.jar swagger-annotations-1.5.24.jar slf4j-ext-1.7.28.jar m
- ailapi-1.4.3.jar jsr305-3.0.1.jar org.eclipse.xtext.util-2.12.0.jar s
- wagger-parser-core-2.0.15.jar commons-io-2.4.jar org.eclipse.emf.ecor
- e.xmi-2.16.0.jar org.eclipse.xtend.lib-2.12.0.jar httpcore-4.4.4.jara
- opalliance-1.0.jar uri-template-0.9.jar msg-simple-1.1.jar org.eclips
- e.osgi-3.11.2.jar jackson-coreutils-1.6.jar org.eclipse.xtext-2.12.0.
- jar org.eclipse.xtext.xbase.lib-2.12.0.jar idlMapper.jar json-patch-1
- .6.jar javax.inject-1.jar jackson-annotations-2.9.10.jar jopt-simple-
- 5.0.3.jar swagger-compat-spec-parser-1.0.47.jar swagger-models-2.0.10
- .jar log4j-core-2.10.0.jar libphonenumber-8.0.0.jar httpclient-4.5.2.
- jar log4j-1.2.16.jar swagger-parser-2.0.15.jar org.eclipse.emf.ecore-
- 2.19.0.jar json-schema-validator-2.2.8.jar org.eclipse.equinox.common
- -3.8.0.jar log4j-api-2.10.0.jar org.eclipse.xtend.lib.macro-2.12.0.ja
- r swagger-models-1.5.24.jar jaxb-api-2.3.0.jar guice-3.0.jar jackson-
- core-2.9.10.jar joda-time-2.9.7.jar swagger-parser-1.0.47.jar swagger
- -parser-v2-converter-2.0.15.jar validation-api-1.1.0.Final.jar slf4j-
- api-1.7.28.jar btf-1.2.jar snakeyaml-1.23.jar jackson-datatype-jsr310
- -2.9.10.jar commons-codec-1.9.jar jackson-databind-2.9.10.jar json-sc
- hema-core-1.2.8.jar swagger-annotations-2.0.10.jar commons-logging-1.
- 2.jar org.eclipse.emf.common-2.16.0.jar
+Class-Path: swagger-annotations-2.0.10.jar swagger-compat-spec-parser-
+ 1.0.47.jar IDLmapper.jar json-patch-1.6.jar swagger-core-1.5.24.jar j
+ avax.inject-1.jar swagger-annotations-1.5.24.jar swagger-parser-v2-co
+ nverter-2.0.15.jar org.eclipse.emf.ecore.xmi-2.16.0.jar hamcrest-core
+ -1.3.jar jackson-coreutils-1.6.jar btf-1.2.jar libphonenumber-8.0.0.j
+ ar slf4j-ext-1.7.28.jar jopt-simple-5.0.3.jar guava-19.0-rc3.jar jack
+ son-annotations-2.9.10.jar org.eclipse.emf.common-2.16.0.jar log4j-co
+ re-2.10.0.jar swagger-models-2.0.10.jar junit-4.12.jar org.eclipse.os
+ gi-3.11.2.jar aopalliance-1.0.jar swagger-core-2.0.10.jar swagger-mod
+ els-1.5.24.jar jackson-datatype-jsr310-2.9.10.jar uri-template-0.9.ja
+ r swagger-parser-v3-2.0.15.jar commons-lang3-3.2.1.jar jackson-datafo
+ rmat-yaml-2.9.10.jar antlr-runtime-3.2.jar commons-codec-1.9.jar swag
+ ger-parser-2.0.15.jar log4j-1.2.16.jar mailapi-1.4.3.jar rhino-1.7R4.
+ jar httpcore-4.4.4.jar swagger-parser-core-2.0.15.jar org.eclipse.xte
+ xt.util-2.12.0.jar log4j-api-2.10.0.jar swagger-parser-1.0.47.jar jac
+ kson-databind-2.9.10.jar guice-3.0.jar commons-io-2.4.jar json-schema
+ -core-1.2.8.jar commons-logging-1.2.jar org.eclipse.emf.ecore-2.19.0.
+ jar json-schema-validator-2.2.8.jar jaxb-api-2.3.0.jar snakeyaml-1.23
+ .jar jackson-core-2.9.10.jar msg-simple-1.1.jar org.eclipse.xtext.xba
+ se.lib-2.12.0.jar jsr305-3.0.1.jar org.eclipse.xtend.lib-2.12.0.jar o
+ rg.eclipse.equinox.common-3.8.0.jar validation-api-1.1.0.Final.jar jo
+ da-time-2.9.7.jar activation-1.1.jar httpclient-4.5.2.jar org.eclipse
+ .xtend.lib.macro-2.12.0.jar slf4j-api-1.7.28.jar org.eclipse.xtext-2.
+ 12.0.jar
 

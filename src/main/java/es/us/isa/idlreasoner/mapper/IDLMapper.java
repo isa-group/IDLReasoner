@@ -15,6 +15,8 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
+
 public class IDLMapper implements IDLMapperInterface {
 	
 
@@ -22,9 +24,8 @@ public class IDLMapper implements IDLMapperInterface {
 	private OpenAPI openAPI;
 	private List<Parameter> parameters;
 	private Map<String, Map<String, String>> mappingParameters = new HashMap<String, Map<String,String>>();
-	
-	private File f1 = createFileWithDirectory("./files", "minizinc.mzn");
 
+	private File f1 = setupParentDir("./" + readProperty("aux_files_folder") + "/" + readProperty("constraints_file"));
 
 	private List<String> reservedWords = Arrays.asList("annotation","any", "array", "bool", "case", "diff", 
 			"div", "else", "elseif", "endif", "enum", "false", "float", "function", "if", "include",
@@ -63,13 +64,9 @@ public class IDLMapper implements IDLMapperInterface {
 
 	}
 
-	private File createFileWithDirectory(String dirName, String fileName) {
-		File dir = new File(dirName);
-		if (!dir.exists()) {
-			dir.mkdir();
-		}
-		File file = new File(dirName + "/" + fileName);
-
+	private File setupParentDir(String filePath) {
+		File file = new File(filePath);
+		file.getParentFile().mkdirs();
 		return file;
 	}
 
