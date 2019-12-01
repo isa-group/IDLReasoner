@@ -15,24 +15,13 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
-
-public class IDLMapper implements IDLMapperInterface {
+public class IDLMapper extends AbstractMapper {
 	
 
 	private Set<String> parametersParsed = new HashSet<>();
 	private OpenAPI openAPI;
 	private List<Parameter> parameters;
 	private Map<String, Map<String, String>> mappingParameters = new HashMap<String, Map<String,String>>();
-
-	private File f1 = setupParentDir("./" + readProperty("aux_files_folder") + "/" + readProperty("constraints_file"));
-
-	private List<String> reservedWords = Arrays.asList("annotation","any", "array", "bool", "case", "diff", 
-			"div", "else", "elseif", "endif", "enum", "false", "float", "function", "if", "include",
-			"intersect", "let", "list", "maximize", "minimize", "mod",  "of", "opt", "output", "par",
-			"predicate", "record", "satisfy", "set", "solve", "string", "subset", "superset", "symdiff", "test",
-			"then", "tuple", "type","union", "var", "where", "xor");
-
 	
 	
 	InterparameterDependenciesLanguageGenerator ex = new InterparameterDependenciesLanguageGenerator();
@@ -42,15 +31,21 @@ public class IDLMapper implements IDLMapperInterface {
    
 		
 	public IDLMapper(String idl, String operation, String oasLink,String operationType, String fileRoute) {
+		reservedWords = Arrays.asList("annotation","any", "array", "bool", "case", "diff",
+				"div", "else", "elseif", "endif", "enum", "false", "float", "function", "if", "include",
+				"intersect", "let", "list", "maximize", "minimize", "mod",  "of", "opt", "output", "par",
+				"predicate", "record", "satisfy", "set", "solve", "string", "subset", "superset", "symdiff", "test",
+				"then", "tuple", "type","union", "var", "where", "xor");
+
 		this.openAPI = new OpenAPIV3Parser().read(oasLink);
 		if(operationType.contains("get"))
-		this.parameters = openAPI.getPaths().get("/"+operation).getGet().getParameters();
+			this.parameters = openAPI.getPaths().get("/"+operation).getGet().getParameters();
 		if(operationType.contains("delete"))
-		this.parameters = openAPI.getPaths().get("/"+operation).getDelete().getParameters();
+			this.parameters = openAPI.getPaths().get("/"+operation).getDelete().getParameters();
 		if(operationType.contains("post"))
-		this.parameters = openAPI.getPaths().get("/"+operation).getPost().getParameters();
+			this.parameters = openAPI.getPaths().get("/"+operation).getPost().getParameters();
 		if(operationType.contains("put"))
-		this.parameters = openAPI.getPaths().get("/"+operation).getPut().getParameters();
+			this.parameters = openAPI.getPaths().get("/"+operation).getPut().getParameters();
 
 
 		this.resource = resourceSet.getResource(URI.createFileURI("./"+ fileRoute+ "/"+idl), true);
@@ -64,19 +59,13 @@ public class IDLMapper implements IDLMapperInterface {
 
 	}
 
-	private File setupParentDir(String filePath) {
-		File file = new File(filePath);
-		file.getParentFile().mkdirs();
-		return file;
-	}
-
 
 	public void generateFile() throws IOException {
 		
 	   	
 	   	List<String> lines = new ArrayList<>();
         
-        FileReader fr = new FileReader(f1);
+        FileReader fr = new FileReader(constraintsFile);
         BufferedReader reader = new BufferedReader(fr);
 		
         String line = reader.readLine();
@@ -84,13 +73,13 @@ public class IDLMapper implements IDLMapperInterface {
         	String l = line;
         	List<String> reservedWordUsed = reservedWords.stream().filter(r->l.contains(r)).collect(Collectors.toList());
         	for(String r: reservedWordUsed) {
-        		line = line.replace(r, reservedWords(r));
+        		line = line.replace(r, changeIfReservedWord(r));
         	}
         	lines.add(line);
         	line = reader.readLine();
         }
         
-        FileWriter fw = new FileWriter(f1);
+        FileWriter fw = new FileWriter(constraintsFile);
         BufferedWriter out = new BufferedWriter(fw);
         
         String var;
@@ -101,7 +90,7 @@ public class IDLMapper implements IDLMapperInterface {
 	   		
 			if(schema.getType()=="boolean") {
 				var = "var bool: ";
-			}else if(schema.getEnum()!=null) {
+			} else if(schema.getEnum()!=null) {
 				Integer number = schema.getEnum().size()-1;
 				
 				if(number!=0) {
@@ -112,23 +101,21 @@ public class IDLMapper implements IDLMapperInterface {
 						values.put(schema.getEnum().get(i).toString(),Integer.toString(i) );
 					}
 					mappingParameters.put(parameter.getName(), values);
-				}
-				
-				else {
+				} else {
 					var ="var 0..1: ";
 				}
-			}else {
-			var ="var 0..1: ";
+			} else {
+				var ="var 0..1: ";
 			}
-			var +=reservedWords(parameter.getName())+";\n";
+			var += changeIfReservedWord(parameter.getName())+";\n";
 			if(!parametersParsed.contains(var)) {
 				parametersParsed.add(var);
 				out.append(var);
-				}
-			varSet = "var 0..1: " + reservedWords(parameter.getName())+"Set;\n";
+			}
+			varSet = "var 0..1: " + changeIfReservedWord(parameter.getName())+"Set;\n";
 			if(!parametersParsed.contains(varSet)) {
-			parametersParsed.add(varSet);
-			out.append(varSet);
+				parametersParsed.add(varSet);
+				out.append(varSet);
 			}
 			
 		}
@@ -149,14 +136,6 @@ public class IDLMapper implements IDLMapperInterface {
 
 		return res;
 	}
-
-	public String reservedWords(String parameter) {
-		if(reservedWords.contains(parameter)) {
-			parameter = parameter + parameter.charAt(parameter.length()-1);
-		}
-		return parameter;
-	
-	}
 	
 	public Map<String, Map<String,String>> getMappingParameters(){
 		return this.mappingParameters;
@@ -166,42 +145,35 @@ public class IDLMapper implements IDLMapperInterface {
 		
 		FileWriter fw;
 		try {
-			fw = new FileWriter(f1, true);
+			fw = new FileWriter(constraintsFile, true);
 		    BufferedWriter out = new BufferedWriter(fw);
 		    
 		    if(put) {
-
-		    out.append("constraint " + reservedWords(parameter)+"Set"+ " == 1;");
-		    }else {
-
-		      out.append("constraint " + reservedWords(parameter)+"Set"+ " == 0;");	
+		    	out.append("constraint " + changeIfReservedWord(parameter)+"Set"+ " == 1;");
+		    } else {
+		    	out.append("constraint " + changeIfReservedWord(parameter)+"Set"+ " == 0;");
 		    }
 		 	out.newLine();
 		    out.flush();	
 	        out.close();
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		}
-
-	        
-		
 	}
 	
 	public void setValue(String parameter, String value){
 		
 		FileWriter fw;
 		try {
-			fw = new FileWriter(f1, true);
+			fw = new FileWriter(constraintsFile, true);
 		    BufferedWriter out = new BufferedWriter(fw);
 
-		    out.append("constraint " + reservedWords(parameter)+ " == "+value+";");
+		    out.append("constraint " + changeIfReservedWord(parameter)+ " == "+value+";");
 
 		 	out.newLine();
 		    out.flush();	
 	        out.close();
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		}
 
@@ -212,7 +184,7 @@ public class IDLMapper implements IDLMapperInterface {
 		
 		FileWriter fw;
 		try {
-			fw = new FileWriter(f1, true);
+			fw = new FileWriter(constraintsFile, true);
 		    BufferedWriter out = new BufferedWriter(fw);
 		 	out.append("solve satisfy;");
 		    out.flush();	
@@ -223,14 +195,4 @@ public class IDLMapper implements IDLMapperInterface {
 		}
 
 	}
-	
-	public void setFile(String directory ,String file) {
-		this.f1 = new File("./"+directory+"/"+file+".mzn");
-	}
-	
-	
-		
-
-
-
 }

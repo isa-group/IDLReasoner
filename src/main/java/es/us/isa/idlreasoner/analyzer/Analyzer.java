@@ -18,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Analyzer {
 
 	private ResolutorCreator resolutor;
-	private String file = readProperty("aux_constraints");
+	private String file = readProperty("constraints_file");
 	private IDLMapper idlMapper;
 	private Map<String, Map<String, String>> mappingParameters;
 	
@@ -34,16 +34,17 @@ public class Analyzer {
 		this.initConfigurationFile();
 		
 		this.resolutor = new ResolutorCreator();
+//		this.idlMapper = new IDLMapper()
 		this.idl = idl;
 		this.oasLink = oasLink;
 		this.operation = operation;
 		this.operationType = operationType;
-		
+
 	}
 	
 	
 	public List<Map<String,String>>  getAllRequest() {
-		
+
 		this.initDocument();
 		this.finishDocumentMinizinc();
 		return resolutor.solveGetAllSolutins(this.file);

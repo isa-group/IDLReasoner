@@ -23,7 +23,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	public List<Map<String,String>> solveGetAllSolutins(String fileName, String maxResults) {
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
 		
-		String command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + readProperty("aux_files_folder") +"/"+readProperty("constraints_file");
+		String command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + readProperty("aux_files_folder") +"/"+fileName;
 
 		String results = this.callSolver(command);
 		
@@ -39,7 +39,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	}
 	
 	public Map<String,String> solve(String fileName) {
-		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + readProperty("aux_files_folder") +"/"+readProperty("constraints_file");
+		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + readProperty("aux_files_folder") +"/"+fileName;
 		String solutions =  this.callSolver(command);
 		return this.mapSolutions(solutions);
 	}

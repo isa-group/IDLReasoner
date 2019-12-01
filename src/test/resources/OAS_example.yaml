@@ -1,0 +1,163 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server"
+  version: "1.0.0"
+  title: "Swagger Example"
+host: "localhost:8080"
+basePath: "/api"
+schemes:
+- "http"
+paths:
+  /optionalParams:
+    get:
+      summary: "Operation with optional parameters only"
+      description: "Operation with optional parameters only"
+      operationId: "optionalParams"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "p1"
+        in: "query"
+        description: "p1"
+        required: false
+        type: "integer"
+        enum:
+        - 1
+        - 2
+      - name: "p2"
+        in: "query"
+        description: "p2"
+        required: false
+        type: "integer"
+        enum:
+        - 1
+        - 2
+        - 3
+      - name: "p3"
+        in: "query"
+        description: "p3"
+        required: false
+        type: "integer"
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      - name: "p4"
+        in: "query"
+        description: "p4"
+        required: false
+        type: "integer"
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Bad Request"
+  /requiredParams:
+    get:
+      summary: "Operation with required parameters only"
+      description: "Operation with required parameters only"
+      operationId: "requiredParams"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "p1"
+        in: "query"
+        description: "p1"
+        required: true
+        type: "integer"
+        enum:
+        - 1
+        - 2
+      - name: "p2"
+        in: "query"
+        description: "p2"
+        required: true
+        type: "integer"
+        enum:
+        - 1
+        - 2
+        - 3
+      - name: "p3"
+        in: "query"
+        description: "p3"
+        required: true
+        type: "integer"
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      - name: "p4"
+        in: "query"
+        description: "p4"
+        required: true
+        type: "integer"
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Bad Request"
+  /requiredAndOptionalParams:
+    get:
+      summary: "Operation with required and optional parameters"
+      description: "Operation with required and optional parameters"
+      operationId: "requiredAndOptionalParams"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "p1"
+        in: "query"
+        description: "p1"
+        required: true
+        type: "integer"
+        enum:
+        - 1
+        - 2
+      - name: "p2"
+        in: "query"
+        description: "p2"
+        required: true
+        type: "integer"
+        enum:
+        - 1
+        - 2
+        - 3
+      - name: "p3"
+        in: "query"
+        description: "p3"
+        required: false
+        type: "integer"
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      - name: "p4"
+        in: "query"
+        description: "p4"
+        required: false
+        type: "integer"
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Bad Request"
