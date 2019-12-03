@@ -4,6 +4,7 @@ package es.us.isa.idlreasoner.analyzer;
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
 import es.us.isa.idlreasoner.mapper.IDLMapper;
 
+import static es.us.isa.idlreasoner.util.IDLConfiguration.updateConf;
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
 import java.io.File;
@@ -69,6 +70,7 @@ public class Analyzer {
 
 
 	public Boolean isFalseOptional(String parameter) {
+		// TODO: Previously check that the parameter is actually optional
 		this.initDocument();
 
 		this.idlMapper.setRestriction(parameter, false);
@@ -155,7 +157,7 @@ public class Analyzer {
 	}
 	
 	private void initDocument() {
-		idlMapper = new IDLMapper(idl, operation, oasLink, operationType, resolutor.getDirectory());
+		idlMapper = new IDLMapper(idl, operation, oasLink, operationType);
 	}
 	
 	private void finishDocumentMinizinc() {
@@ -190,6 +192,8 @@ public class Analyzer {
 				e.printStackTrace();
 			}
 		}
+
+		updateConf();
 	}
 	
 	

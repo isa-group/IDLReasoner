@@ -15,6 +15,8 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static es.us.isa.idlreasoner.util.IDLConfiguration.IDL_FILES_FOLDER;
+
 public class IDLMapper extends AbstractMapper {
 	
 
@@ -23,14 +25,13 @@ public class IDLMapper extends AbstractMapper {
 	private List<Parameter> parameters;
 	private Map<String, Map<String, String>> mappingParameters = new HashMap<String, Map<String,String>>();
 	
-	
 	InterparameterDependenciesLanguageGenerator ex = new InterparameterDependenciesLanguageGenerator();
 	Injector injector = new InterparameterDependenciesLanguageStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
 	XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
 	private Resource resource;
    
 		
-	public IDLMapper(String idl, String operation, String oasLink,String operationType, String fileRoute) {
+	public IDLMapper(String idl, String operation, String oasLink,String operationType) {
 		reservedWords = Arrays.asList("annotation","any", "array", "bool", "case", "diff",
 				"div", "else", "elseif", "endif", "enum", "false", "float", "function", "if", "include",
 				"intersect", "let", "list", "maximize", "minimize", "mod",  "of", "opt", "output", "par",
@@ -48,7 +49,7 @@ public class IDLMapper extends AbstractMapper {
 			this.parameters = openAPI.getPaths().get("/"+operation).getPut().getParameters();
 
 
-		this.resource = resourceSet.getResource(URI.createFileURI("./"+ fileRoute+ "/"+idl), true);
+		this.resource = resourceSet.getResource(URI.createFileURI("./"+ IDL_FILES_FOLDER + "/" + idl), true);
 		ex.doGenerate(resource, null, null);
 		
 		try {
