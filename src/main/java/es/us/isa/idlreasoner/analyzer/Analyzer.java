@@ -2,8 +2,10 @@ package es.us.isa.idlreasoner.analyzer;
 
 
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
-import es.us.isa.idlreasoner.mapper.IDLMapper;
+import es.us.isa.idlreasoner.mapper.*;
 
+import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.updateConf;
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
@@ -21,24 +23,30 @@ public class Analyzer {
 	private ResolutorCreator resolutor;
 	private String file = readProperty("constraints_file");
 	private IDLMapper idlMapper;
+	private AbstractConstraintMapper constraintMapper;
+	private AbstractVariableMapper variableMapper;
 	private Map<String, Map<String, String>> mappingParameters;
 	
 	private String idl;
-	private String operation;
+	private String operationPath;
 	private String oasLink;
 	private String operationType;
 	
 	private Map<String, String> restrictions = new HashMap<String, String>();
 
-	public Analyzer(String idl, String oasLink, String operationType, String operation) {
+	public Analyzer(String idl, String oasLink, String operationPath, String operationType) {
 		
 		this.initConfigurationFile();
 		
 		this.resolutor = new ResolutorCreator();
 //		this.idlMapper = new IDLMapper()
+		this.constraintMapper = new MiniZincConstraintMapper(idl);
+//		this.constraintMapper.createConstraintsFileIfNotExists();
+		this.variableMapper = new OAS2MiniZincVariableMapper(oasLink, operationPath, operationType);
+//		this.variableMapper.createConstraintsFileIfNotExists();
 		this.idl = idl;
 		this.oasLink = oasLink;
-		this.operation = operation;
+		this.operationPath = operationPath;
 		this.operationType = operationType;
 
 	}
@@ -56,14 +64,25 @@ public class Analyzer {
 	
 	}
 
-	public Boolean isDeadParameter(String parameter) {
-		this.initDocument();
-		
-		this.idlMapper.setRestriction(parameter, true);
+//	public Boolean isDeadParameter(String parameter) {
+//		this.initDocument();
+//
+//		this.idlMapper.setRestriction(parameter, true);
+//
+//		this.finishDocumentMinizinc();
+//		Map<String,String> res =  resolutor.solve(this.file);
+//
+//		return res.size()==0;
+//	}
 
-		this.finishDocumentMinizinc();
+	public Boolean isDeadParameter(String parameter) {
+		setupOperationAnalysis();
+
+		this.constraintMapper.setParamToValue(parameter, "1");
+
+		this.constraintMapper.finishConstraintsFile();
 		Map<String,String> res =  resolutor.solve(this.file);
-		
+
 		return res.size()==0;
 	}
 	
@@ -157,13 +176,23 @@ public class Analyzer {
 	}
 	
 	private void initDocument() {
-		idlMapper = new IDLMapper(idl, operation, oasLink, operationType);
+		idlMapper = new IDLMapper(idl, operationPath, oasLink, operationType);
 	}
 	
 	private void finishDocumentMinizinc() {
 	
 		idlMapper.finishMinizincDocument();
 
+	}
+
+	private void setupOperationAnalysis() {
+//		recreateFile(CONSTRAINTS_FILE);
+		this.constraintMapper.mapConstraints();
+		try {
+			this.variableMapper.mapVariables();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void initConfigurationFile() {

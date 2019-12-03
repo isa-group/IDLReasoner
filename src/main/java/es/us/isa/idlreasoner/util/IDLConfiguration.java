@@ -11,8 +11,11 @@ public class IDLConfiguration {
     public static String SOLVER;
     public static String IDL_FILES_FOLDER;
     public static String MAX_RESULTS;
+    public static String CONSTRAINTS_FILE;
 
     public static void updateConf() {
+        CONSTRAINTS_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("constraints_file");
+
         InputStream inputStream;
         try {
             Properties props = new Properties();

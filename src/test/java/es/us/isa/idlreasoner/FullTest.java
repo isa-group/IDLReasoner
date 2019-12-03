@@ -12,7 +12,7 @@ public class FullTest {
     @Test
     public void fullTest() {
         Analyzer a = new Analyzer("youtube_getVideos.idl",
-                "https://api.apis.guru/v2/specs/googleapis.com/youtube/v3/swagger.yaml", "get", "videos");
+                "https://api.apis.guru/v2/specs/googleapis.com/youtube/v3/swagger.yaml", "videos", "get");
 
         //GetAllRequests
         List<Map<String,String>> allRequests = a.getAllRequest();

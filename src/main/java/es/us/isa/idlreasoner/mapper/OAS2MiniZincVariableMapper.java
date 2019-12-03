@@ -10,19 +10,22 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
+
 public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
     private OpenAPI openAPISpec;
     private List<Parameter> parameters;
 
-    public OAS2MiniZincVariableMapper(String oasPath, String operationPath, String operationType) {
+    public OAS2MiniZincVariableMapper(String apiSpecificationPath, String operationPath, String operationType) {
+        this.apiSpecificationPath = apiSpecificationPath;
         reservedWords = Arrays.asList("annotation","any", "array", "bool", "case", "diff",
                 "div", "else", "elseif", "endif", "enum", "false", "float", "function", "if", "include",
                 "intersect", "let", "list", "maximize", "minimize", "mod",  "of", "opt", "output", "par",
                 "predicate", "record", "satisfy", "set", "solve", "string", "subset", "superset", "symdiff", "test",
                 "then", "tuple", "type","union", "var", "where", "xor");
 
-        openAPISpec = new OpenAPIV3Parser().read(oasPath);
+        openAPISpec = new OpenAPIV3Parser().read(apiSpecificationPath);
         if(operationType.equals("get"))
             parameters = openAPISpec.getPaths().get("/"+operationPath).getGet().getParameters();
         if(operationType.equals("delete"))
@@ -38,14 +41,18 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         if(operationType.equals("options"))
             parameters = openAPISpec.getPaths().get("/"+operationPath).getOptions().getParameters();
 
-        try {
-            mapVariables();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+////            recreateConstraintsFile();
+//            mapVariables();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
-    void mapVariables() throws IOException {
+    public void mapVariables() throws IOException {
+        List<String> previousContent = savePreviousFileContent();
+
+        File constraintsFile = new File(CONSTRAINTS_FILE);
         FileWriter fw = new FileWriter(constraintsFile);
         BufferedWriter out = new BufferedWriter(fw);
         String var;
@@ -73,6 +80,11 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
             varSet = "var 0..1: " + changeIfReservedWord(parameter.getName())+"Set;\n";
             out.append(varSet);
+        }
+
+        out.newLine();
+        for (String previousContentLine : previousContent) {
+            out.append(previousContentLine + "\n");
         }
 
         out.flush();
