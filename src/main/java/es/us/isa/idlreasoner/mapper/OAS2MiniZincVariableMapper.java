@@ -1,5 +1,6 @@
 package es.us.isa.idlreasoner.mapper;
 
+import es.us.isa.idlreasoner.pojos.Variable;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
@@ -11,6 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static es.us.isa.idlreasoner.util.FileManager.openWriter;
+import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
 
 public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
@@ -20,6 +22,7 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
     public OAS2MiniZincVariableMapper(String apiSpecificationPath, String operationPath, String operationType) {
         this.apiSpecificationPath = apiSpecificationPath;
+        variables = new ArrayList<>();
         reservedWords = Arrays.asList("annotation","any", "array", "bool", "case", "diff",
                 "div", "else", "elseif", "endif", "enum", "false", "float", "function", "if", "include",
                 "intersect", "let", "list", "maximize", "minimize", "mod",  "of", "opt", "output", "par",
@@ -51,7 +54,9 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
     }
 
     public void mapVariables() throws IOException {
+        variables.clear();
         List<String> previousContent = savePreviousFileContent();
+        recreateFile(CONSTRAINTS_FILE);
 
         BufferedWriter out = openWriter(CONSTRAINTS_FILE);
         BufferedWriter requiredVarsOut = openWriter(CONSTRAINTS_FILE);
@@ -82,8 +87,10 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
             out.append(varSet);
 
             if (parameter.getRequired() != null && parameter.getRequired()) {
-                requiredVarsOut.append(changeIfReservedWord(parameter.getName())+"Set = 1;\n");
+                mapRequiredVar(requiredVarsOut, parameter);
             }
+
+            variables.add(new Variable(parameter.getName(), schema.getType(), parameter.getRequired()));
         }
 
         out.newLine();
@@ -95,5 +102,9 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         requiredVarsOut.flush();
         out.close();
         requiredVarsOut.close();
+    }
+
+    private void mapRequiredVar(BufferedWriter requiredVarsOut, Parameter parameter) throws IOException {
+        requiredVarsOut.append("constraint " + changeIfReservedWord(parameter.getName())+"Set = 1;\n");
     }
 }

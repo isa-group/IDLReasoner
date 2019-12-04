@@ -3,6 +3,7 @@ package es.us.isa.idlreasoner.analyzer;
 
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
 import es.us.isa.idlreasoner.mapper.*;
+import es.us.isa.idlreasoner.pojos.Variable;
 
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
@@ -78,27 +79,40 @@ public class Analyzer {
 	public Boolean isDeadParameter(String parameter) {
 		setupOperationAnalysis();
 
-		this.constraintMapper.setParamToValue(parameter, "1");
-
+		this.constraintMapper.setParamToValue(parameter+"Set", "1");
 		this.constraintMapper.finishConstraintsFile();
-		Map<String,String> res =  resolutor.solve(this.file);
 
-		return res.size()==0;
+		return resolutor.solve(this.file).size()==0;
 	}
 	
 
 
+//	public Boolean isFalseOptional(String parameter) {
+//		// TODO: Previously check that the parameter is actually optional
+//		this.initDocument();
+//
+//		this.idlMapper.setRestriction(parameter, false);
+//
+//		this.finishDocumentMinizinc();
+//
+//		Map<String,String> res =  resolutor.solve(this.file);
+//
+//		return res.size()==0;
+//	}
+
 	public Boolean isFalseOptional(String parameter) {
-		// TODO: Previously check that the parameter is actually optional
-		this.initDocument();
+		setupOperationAnalysis();
 
-		this.idlMapper.setRestriction(parameter, false);
-
-		this.finishDocumentMinizinc();
-		
-		Map<String,String> res =  resolutor.solve(this.file);
-		
-		return res.size()==0;
+		Variable parameterVar = this.variableMapper.getVariables().stream()
+				.filter(var -> var.getName().equals(parameter))
+				.findFirst().orElse(null);
+		if (parameterVar != null && !parameterVar.getRequired()) {
+			this.constraintMapper.setParamToValue(parameter+"Set", "0");
+			this.constraintMapper.finishConstraintsFile();
+			return resolutor.solve(this.file).size()==0;
+		} else {
+			return false;
+		}
 	}
 	
 	

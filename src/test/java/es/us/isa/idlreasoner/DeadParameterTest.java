@@ -17,8 +17,8 @@ public class DeadParameterTest {
 
     @Test
     public void oneDepRequires() throws IOException {
-//        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "C:/Users/isa-tecnico-05-aml/Desktop/workspace/IDLreasoner/src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
-        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "C:/Users/Alberto/workspace/IDL-Analyzer/src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
+        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "./src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
+//        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "C:/Users/Alberto/workspace/IDL-Analyzer/src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
         System.out.println(analyzer.isDeadParameter("p1"));
         System.out.println(analyzer.isDeadParameter("p2"));
         System.out.println(analyzer.isDeadParameter("p3"));
@@ -26,8 +26,7 @@ public class DeadParameterTest {
 //        File file = new File("./hola/hola2/hola.txt");
 //        if (!file.exists()) {
 //            System.out.println(file.getParentFile().mkdirs());
-//            System.out.println(file.createNewFile());
-//        }
+//            System.out.println(file.createNewFile());//        }
 //
 //        List<String> lines = new ArrayList<>();
 //
