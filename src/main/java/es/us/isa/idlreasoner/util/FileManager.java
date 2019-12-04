@@ -1,9 +1,6 @@
 package es.us.isa.idlreasoner.util;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class FileManager {
 
@@ -32,18 +29,37 @@ public class FileManager {
         return file;
     }
 
-    public static void appendLine(String filePath, String line) {
+    public static void appendContentToFile(String filePath, String content) {
         File file = new File(filePath);
-        FileWriter fw;
         try {
-            fw = new FileWriter(file, true);
-            BufferedWriter out = new BufferedWriter(fw);
-            out.append(line + "\n");
+            BufferedWriter out = new BufferedWriter(new FileWriter(file, true));
+            out.append(content);
             out.flush();
             out.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public static BufferedWriter openWriter(String filePath) {
+        File file = new File(filePath);
+        BufferedWriter out = null;
+        try {
+            out = new BufferedWriter(new FileWriter(file, true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return out;
+    }
+
+    public static BufferedReader openReader(String filePath) {
+        File file = new File(filePath);
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new FileReader(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return in;
     }
 }

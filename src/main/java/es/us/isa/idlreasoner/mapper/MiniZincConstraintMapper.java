@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static es.us.isa.idlreasoner.util.FileManager.appendLine;
+import static es.us.isa.idlreasoner.util.FileManager.appendContentToFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.IDL_FILES_FOLDER;
 
@@ -37,10 +37,10 @@ public class MiniZincConstraintMapper extends AbstractConstraintMapper {
     }
 
     public void setParamToValue(String parameter, String value) {
-        appendLine(CONSTRAINTS_FILE, "constraint " + parameter + " = " + value + ";");
+        appendContentToFile(CONSTRAINTS_FILE, "constraint " + parameter + " = " + value + ";\n");
     }
 
     public void finishConstraintsFile() {
-        appendLine(CONSTRAINTS_FILE, "solve satisfy;");
+        appendContentToFile(CONSTRAINTS_FILE, "solve satisfy;\n");
     }
 }

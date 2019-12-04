@@ -10,6 +10,7 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static es.us.isa.idlreasoner.util.FileManager.openWriter;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
 
 public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
@@ -52,9 +53,8 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
     public void mapVariables() throws IOException {
         List<String> previousContent = savePreviousFileContent();
 
-        File constraintsFile = new File(CONSTRAINTS_FILE);
-        FileWriter fw = new FileWriter(constraintsFile);
-        BufferedWriter out = new BufferedWriter(fw);
+        BufferedWriter out = openWriter(CONSTRAINTS_FILE);
+        BufferedWriter requiredVarsOut = openWriter(CONSTRAINTS_FILE);
         String var;
         String varSet;
 
@@ -80,6 +80,10 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
             varSet = "var 0..1: " + changeIfReservedWord(parameter.getName())+"Set;\n";
             out.append(varSet);
+
+            if (parameter.getRequired() != null && parameter.getRequired()) {
+                requiredVarsOut.append(changeIfReservedWord(parameter.getName())+"Set = 1;\n");
+            }
         }
 
         out.newLine();
@@ -88,6 +92,8 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         }
 
         out.flush();
+        requiredVarsOut.flush();
         out.close();
+        requiredVarsOut.close();
     }
 }

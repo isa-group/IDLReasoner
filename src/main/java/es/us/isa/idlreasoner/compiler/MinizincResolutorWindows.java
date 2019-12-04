@@ -68,17 +68,17 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		try {
 
            	Process process = processBuilder.start();
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             String line;
             while ((line = reader.readLine()) != null) {
                 res+=line+"\n";
-            	}
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        } 
-		
+			}
+            reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 
 		return res;
 	}

@@ -1,6 +1,7 @@
 package es.us.isa.idlreasoner;
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
+import es.us.isa.idlreasoner.mapper.MiniZincConstraintMapper;
 import org.junit.Test;
 
 import java.io.*;
@@ -16,8 +17,8 @@ public class DeadParameterTest {
 
     @Test
     public void oneDepRequires() throws IOException {
-        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "C:/Users/isa-tecnico-05-aml/Desktop/workspace/IDLreasoner/src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
-//        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "C:/Users/Alberto/workspace/IDLreasoner/src/test/resources/OAS_example.yaml", "get", "requiredAndOptionalParams");
+//        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "C:/Users/isa-tecnico-05-aml/Desktop/workspace/IDLreasoner/src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
+        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "C:/Users/Alberto/workspace/IDL-Analyzer/src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
         System.out.println(analyzer.isDeadParameter("p1"));
         System.out.println(analyzer.isDeadParameter("p2"));
         System.out.println(analyzer.isDeadParameter("p3"));

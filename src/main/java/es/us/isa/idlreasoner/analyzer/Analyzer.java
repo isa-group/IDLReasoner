@@ -186,7 +186,7 @@ public class Analyzer {
 	}
 
 	private void setupOperationAnalysis() {
-//		recreateFile(CONSTRAINTS_FILE);
+		recreateFile(CONSTRAINTS_FILE);
 		this.constraintMapper.mapConstraints();
 		try {
 			this.variableMapper.mapVariables();
