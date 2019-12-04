@@ -6,19 +6,19 @@ import java.util.Map;
 public class Resolutor implements ResolutorInterface{
 
 	
-	public Resolutor(String routeFile) {
+	public Resolutor() {
 	}
 	
 	@Override
-	public Map<String,String> solve(String file) {
+	public Map<String,String> solve() {
 		System.out.println("There is no compiler defined");
 		return null;
 
 	}
 
 	@Override
-	public List<Map<String,String>> solveGetAllSolutins(String file, String maxResults) {
-		this.solve(file);
+	public List<Map<String,String>> solveGetAllSolutins(String maxResults) {
+		this.solve();
 		return null;
 	}
 

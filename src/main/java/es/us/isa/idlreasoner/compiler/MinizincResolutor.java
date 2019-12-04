@@ -6,18 +6,18 @@ import java.util.Map;
 public class MinizincResolutor extends Resolutor {
 	
 
-	public MinizincResolutor(String fileRoute, String solver) {
-		super(fileRoute);
+	public MinizincResolutor(String solver) {
+		super();
 	}
 
-	public Map<String,String> solve(String file) {
+	public Map<String,String> solve() {
 		
 		System.out.println("This Operative System is not soported");
 		return null;
 	}
 
-	public List<Map<String,String>>  solveGetAllSolutins(String file, String maxResults) {
-		this.solve(file);
+	public List<Map<String,String>>  solveGetAllSolutins(String maxResults) {
+		this.solve();
 		return null;
 	}
 

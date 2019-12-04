@@ -25,27 +25,27 @@ public class ResolutorCreator {
 			
 			if(this.osName.contains("Windows")) {
 
-				this.curentCompiler = new MinizincResolutorWindows(this.fileRoute, this.solver);
+				this.curentCompiler = new MinizincResolutorWindows(this.solver);
 				
 			}else{
 				
-				this.curentCompiler = new MinizincResolutor(this.fileRoute, this.solver);
+				this.curentCompiler = new MinizincResolutor(this.solver);
 			}
 			
 
 		}else {
-			this.curentCompiler = new Resolutor(fileRoute);
+			this.curentCompiler = new Resolutor();
 		}
 
 		
 	}
 	
-	public Map<String,String> solve(String file) {
-		return this.curentCompiler.solve(file);
+	public Map<String,String> solve() {
+		return this.curentCompiler.solve();
 	}
 	
-	public List<Map<String,String>>  solveGetAllSolutins(String file) {
-		return this.curentCompiler.solveGetAllSolutins(file, this.maxResults);
+	public List<Map<String,String>>  solveGetAllSolutins() {
+		return this.curentCompiler.solveGetAllSolutins(this.maxResults);
 	}
 
 	

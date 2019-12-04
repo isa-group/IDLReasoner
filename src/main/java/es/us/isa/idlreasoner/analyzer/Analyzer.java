@@ -57,7 +57,7 @@ public class Analyzer {
 
 		this.initDocument();
 		this.finishDocumentMinizinc();
-		return resolutor.solveGetAllSolutins(this.file);
+		return resolutor.solveGetAllSolutins();
 	}
 	
 	public Map<String,String> randomRequest() {
@@ -82,7 +82,7 @@ public class Analyzer {
 		this.constraintMapper.setParamToValue(parameter+"Set", "1");
 		this.constraintMapper.finishConstraintsFile();
 
-		return resolutor.solve(this.file).size()==0;
+		return resolutor.solve().size()==0;
 	}
 	
 
@@ -109,7 +109,7 @@ public class Analyzer {
 		if (parameterVar != null && !parameterVar.getRequired()) {
 			this.constraintMapper.setParamToValue(parameter+"Set", "0");
 			this.constraintMapper.finishConstraintsFile();
-			return resolutor.solve(this.file).size()==0;
+			return resolutor.solve().size()==0;
 		} else {
 			return false;
 		}
@@ -155,7 +155,7 @@ public class Analyzer {
 			}
 		}
 		this.finishDocumentMinizinc();
-		return this.resolutor.solve(file).size()!=0;
+		return this.resolutor.solve().size()!=0;
 	}
 	
 	//TODO
@@ -170,7 +170,7 @@ public class Analyzer {
 			}
 		}
 		this.finishDocumentMinizinc();
-		return this.resolutor.solve(file).size()!=0;
+		return this.resolutor.solve().size()!=0;
 	}
 	
 

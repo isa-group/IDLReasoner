@@ -5,8 +5,8 @@ import java.util.Map;
 
 public interface ResolutorInterface {
 	
-	public Map<String,String> solve(String file);
+	public Map<String,String> solve();
 	
-	public List<Map<String,String>> solveGetAllSolutins(String file, String maxResults);
+	public List<Map<String,String>> solveGetAllSolutins(String maxResults);
 
 }
