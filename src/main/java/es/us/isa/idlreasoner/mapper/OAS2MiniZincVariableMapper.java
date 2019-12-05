@@ -69,16 +69,26 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
             if(schema.getType().equals("boolean")) {
                 var = "var bool: ";
             } else if(schema.getEnum() != null) {
-                int numberOfEnumProperties = schema.getEnum().size()-1;
-                var = "var 0.." + numberOfEnumProperties + ": ";
+                if (schema.getType().equals("string")) {
+                    var = "var 0.." + (schema.getEnum().size()-1) + ": ";
+                } else if (schema.getType().equals("integer")) {
+                    var = "var {";
+                    for (Object o : schema.getEnum()) {
+                        var += o + ", ";
+                    }
+                    var = var.substring(0, var.length()-2);
+                    var += "}: ";
+                } else {
+                    // TODO: Manage mapping of float enum
+                    var = "var float: ";
+                }
             } else if(schema.getType().equals("string")) {
                 var = "var 0..10000: "; // If string, add enough possible values (10000)
-            } else if(schema.getType().equals("number")) {
-                // TODO: Manage numbers mapping to MiniZinc
-                var = "var float: ";
+            } else if(schema.getType().equals("integer")) {
+                var = "var int: ";
             } else {
-                // TODO: Manage every other type mapping to MiniZinc
-                var = "var 0..1: ";
+                // TODO: Manage mapping of float
+                var = "var float: ";
             }
             var += changeIfReservedWord(parameter.getName())+";\n";
             out.append(var);

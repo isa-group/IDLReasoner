@@ -17,7 +17,7 @@ public class DeadParameterTest {
 
     @Test
     public void oneDepRequires() throws IOException {
-        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "./src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
+        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "./src/test/resources/OAS_example.yaml", "optionalParams", "get");
 //        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "C:/Users/Alberto/workspace/IDL-Analyzer/src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
         System.out.println(analyzer.isDeadParameter("p1"));
         System.out.println(analyzer.isDeadParameter("p2"));
