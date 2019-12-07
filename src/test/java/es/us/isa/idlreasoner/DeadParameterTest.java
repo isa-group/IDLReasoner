@@ -16,51 +16,11 @@ import static org.junit.Assert.assertTrue;
 public class DeadParameterTest {
 
     @Test
-    public void oneDepRequires() throws IOException {
+    public void oneDepRequires() {
         Analyzer analyzer = new Analyzer("oneDepRequires.idl", "./src/test/resources/OAS_example.yaml", "optionalParams", "get");
-//        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "C:/Users/Alberto/workspace/IDL-Analyzer/src/test/resources/OAS_example.yaml", "requiredAndOptionalParams", "get");
-        System.out.println(analyzer.isDeadParameter("p1"));
-        System.out.println(analyzer.isDeadParameter("p2"));
-        System.out.println(analyzer.isDeadParameter("p3"));
-        System.out.println(analyzer.isDeadParameter("p4"));
-//        File file = new File("./hola/hola2/hola.txt");
-//        if (!file.exists()) {
-//            System.out.println(file.getParentFile().mkdirs());
-//            System.out.println(file.createNewFile());//        }
-//
-//        List<String> lines = new ArrayList<>();
-//
-//        FileReader fr = new FileReader(file);
-//        BufferedReader reader = new BufferedReader(fr);
-//
-//        String line = reader.readLine();
-//        while(line!=null) {
-//            lines.add(line);
-//            line = reader.readLine();
-//        }
-//
-//        FileWriter fw = new FileWriter(file);
-//        BufferedWriter out = new BufferedWriter(fw);
-//
-//        out.append("Holaaa");
-//
-//        out.newLine();
-//        for (String fileLine : lines) {
-//            out.append(fileLine+"\n");
-//        }
-//
-//        out.flush();
-//        out.close();
-
-//        System.out.println(file.delete());
-//        System.out.println(file.getParentFile().mkdirs());
-//        try {
-//            System.out.println(file.createNewFile());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        file.delete();
-//        file.getParentFile().mkdirs();
-//        return file;
+        System.out.println(analyzer.isFalseOptional("p1"));
+        System.out.println(analyzer.isFalseOptional("p2"));
+        System.out.println(analyzer.isFalseOptional("p3"));
+        System.out.println(analyzer.isFalseOptional("p4"));
     }
 }

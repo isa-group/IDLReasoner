@@ -5,9 +5,9 @@ import es.us.isa.idlreasoner.compiler.ResolutorCreator;
 import es.us.isa.idlreasoner.mapper.*;
 import es.us.isa.idlreasoner.pojos.Variable;
 
+import static es.us.isa.idlreasoner.util.FileManager.copyFile;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.updateConf;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
 import java.io.File;
@@ -22,7 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Analyzer {
 
 	private ResolutorCreator resolutor;
-	private String file = readProperty("constraints_file");
 	private IDLMapper idlMapper;
 	private AbstractConstraintMapper constraintMapper;
 	private AbstractVariableMapper variableMapper;
@@ -38,6 +37,8 @@ public class Analyzer {
 	public Analyzer(String idl, String oasLink, String operationPath, String operationType) {
 		
 		this.initConfigurationFile();
+
+		recreateFile(BASE_CONSTRAINTS_FILE);
 		
 		this.resolutor = new ResolutorCreator();
 //		this.idlMapper = new IDLMapper()
@@ -77,7 +78,7 @@ public class Analyzer {
 //	}
 
 	public Boolean isDeadParameter(String parameter) {
-		setupOperationAnalysis();
+		setupAnalysisOperation();
 
 		this.constraintMapper.setParamToValue(parameter+"Set", "1");
 		this.constraintMapper.finishConstraintsFile();
@@ -101,7 +102,7 @@ public class Analyzer {
 //	}
 
 	public Boolean isFalseOptional(String parameter) {
-		setupOperationAnalysis();
+		setupAnalysisOperation();
 
 		Variable parameterVar = this.variableMapper.getVariables().stream()
 				.filter(var -> var.getName().equals(parameter))
@@ -199,14 +200,16 @@ public class Analyzer {
 
 	}
 
-	private void setupOperationAnalysis() {
-		recreateFile(CONSTRAINTS_FILE);
-		this.constraintMapper.mapConstraints();
-		try {
-			this.variableMapper.mapVariables();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private void setupAnalysisOperation() {
+		recreateFile(FULL_CONSTRAINTS_FILE);
+		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
+//		recreateFile(BASE_CONSTRAINTS_FILE);
+//		this.constraintMapper.mapConstraints();
+//		try {
+//			this.variableMapper.mapVariables();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	private void initConfigurationFile() {

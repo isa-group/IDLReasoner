@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
-import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.BASE_CONSTRAINTS_FILE;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.FULL_CONSTRAINTS_FILE;
 
 public class MinizincResolutorWindows extends MinizincResolutor{
 	
@@ -22,7 +22,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	public List<Map<String,String>> solveGetAllSolutins(String maxResults) {
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
 		
-		String command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + CONSTRAINTS_FILE;
+		String command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
 
 		String results = this.callSolver(command);
 		
@@ -38,7 +38,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	}
 	
 	public Map<String,String> solve() {
-		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + CONSTRAINTS_FILE;
+		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
 		String solutions =  this.callSolver(command);
 		return this.mapSolutions(solutions);
 	}

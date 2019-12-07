@@ -1,1 +1,8 @@
 IF p3 THEN p4;
+IF p1=="hola"|"adios"|"que tal" THEN NOT p3;
+Or(p1, p4=="mi gente");
+OnlyOne(p2=="prueba", p3); //
+AllOrNone(p3, p4);
+ZeroOrOne(p2, p3); //
+ZeroOrOne(p2, p4);
+Or(p2, p3); // Or(p3, p4); // Or(p4=="mis gentes", p4=="mi gente");

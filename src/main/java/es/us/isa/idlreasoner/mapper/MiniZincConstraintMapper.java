@@ -3,22 +3,13 @@ package es.us.isa.idlreasoner.mapper;
 import com.google.inject.Injector;
 import es.us.isa.interparamdep.InterparameterDependenciesLanguageStandaloneSetupGenerated;
 import es.us.isa.interparamdep.generator.InterparameterDependenciesLanguageGenerator;
-import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.parameters.Parameter;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static es.us.isa.idlreasoner.util.FileManager.appendContentToFile;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.IDL_FILES_FOLDER;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
 public class MiniZincConstraintMapper extends AbstractConstraintMapper {
 
@@ -29,6 +20,7 @@ public class MiniZincConstraintMapper extends AbstractConstraintMapper {
 
     public MiniZincConstraintMapper(String idlSpecificationPath) {
         this.idlSpecificationPath = idlSpecificationPath;
+        mapConstraints();
     }
 
     public void mapConstraints() {
@@ -37,10 +29,10 @@ public class MiniZincConstraintMapper extends AbstractConstraintMapper {
     }
 
     public void setParamToValue(String parameter, String value) {
-        appendContentToFile(CONSTRAINTS_FILE, "constraint " + parameter + " = " + value + ";\n");
+        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + parameter + " = " + value + ";\n");
     }
 
     public void finishConstraintsFile() {
-        appendContentToFile(CONSTRAINTS_FILE, "solve satisfy;\n");
+        appendContentToFile(FULL_CONSTRAINTS_FILE, "solve satisfy;\n");
     }
 }

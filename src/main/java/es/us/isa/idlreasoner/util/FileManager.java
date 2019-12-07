@@ -1,5 +1,7 @@
 package es.us.isa.idlreasoner.util;
 
+import com.google.common.io.Files;
+
 import java.io.*;
 
 public class FileManager {
@@ -61,5 +63,13 @@ public class FileManager {
             e.printStackTrace();
         }
         return in;
+    }
+
+    public static void copyFile(String originPath, String destPath) {
+        try {
+            Files.copy(new File(originPath), new File(destPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

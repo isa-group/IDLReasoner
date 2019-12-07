@@ -20,40 +20,28 @@ paths:
         in: "query"
         description: "p1"
         required: false
-        type: "integer"
-        enum:
-        - 1
-        - 2
+        type: "string"
       - name: "p2"
         in: "query"
         description: "p2"
         required: false
-        type: "integer"
-        enum:
-        - 1
-        - 2
-        - 3
+        type: "string"
       - name: "p3"
         in: "query"
         description: "p3"
         required: false
-        type: "integer"
+        type: "string"
         enum:
-        - 1
-        - 2
-        - 3
-        - 4
+        - "test1"
+        - "test2"
       - name: "p4"
         in: "query"
         description: "p4"
         required: false
-        type: "integer"
+        type: "string"
         enum:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
+        - "mi gente"
+        - "mis gentes"
       responses:
         200:
           description: "OK"

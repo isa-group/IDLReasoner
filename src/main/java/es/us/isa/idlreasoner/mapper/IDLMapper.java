@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static es.us.isa.idlreasoner.util.FileManager.createFileIfNotExists;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.CONSTRAINTS_FILE;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.BASE_CONSTRAINTS_FILE;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.IDL_FILES_FOLDER;
 
 public class IDLMapper extends AbstractMapper {
@@ -68,7 +68,7 @@ public class IDLMapper extends AbstractMapper {
 	   	
 	   	List<String> lines = new ArrayList<>();
 
-		File constraintsFile = createFileIfNotExists(CONSTRAINTS_FILE);
+		File constraintsFile = createFileIfNotExists(BASE_CONSTRAINTS_FILE);
         FileReader fr = new FileReader(constraintsFile);
         BufferedReader reader = new BufferedReader(fr);
 		
@@ -149,7 +149,7 @@ public class IDLMapper extends AbstractMapper {
 		
 		FileWriter fw;
 		try {
-			File constraintsFile = new File(CONSTRAINTS_FILE);
+			File constraintsFile = new File(BASE_CONSTRAINTS_FILE);
 			fw = new FileWriter(constraintsFile, true);
 		    BufferedWriter out = new BufferedWriter(fw);
 		    
@@ -170,7 +170,7 @@ public class IDLMapper extends AbstractMapper {
 		
 		FileWriter fw;
 		try {
-			File constraintsFile = new File(CONSTRAINTS_FILE);
+			File constraintsFile = new File(BASE_CONSTRAINTS_FILE);
 			fw = new FileWriter(constraintsFile, true);
 		    BufferedWriter out = new BufferedWriter(fw);
 
@@ -190,7 +190,7 @@ public class IDLMapper extends AbstractMapper {
 		
 		FileWriter fw;
 		try {
-			File constraintsFile = new File(CONSTRAINTS_FILE);
+			File constraintsFile = new File(BASE_CONSTRAINTS_FILE);
 			fw = new FileWriter(constraintsFile, true);
 		    BufferedWriter out = new BufferedWriter(fw);
 		 	out.append("solve satisfy;");

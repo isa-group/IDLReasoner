@@ -11,10 +11,14 @@ public class IDLConfiguration {
     public static String SOLVER;
     public static String IDL_FILES_FOLDER;
     public static String MAX_RESULTS;
-    public static String CONSTRAINTS_FILE;
+    public static String BASE_CONSTRAINTS_FILE;
+    public static String FULL_CONSTRAINTS_FILE;
+    public static String MAPPING_FILE;
 
     public static void updateConf() {
-        CONSTRAINTS_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("constraints_file");
+        BASE_CONSTRAINTS_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("base_constraints_file");
+        FULL_CONSTRAINTS_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("full_constraints_file");
+        MAPPING_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("mapping_file");
 
         InputStream inputStream;
         try {
