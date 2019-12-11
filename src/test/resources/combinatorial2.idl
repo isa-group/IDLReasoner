@@ -1,0 +1,8 @@
+IF p1 THEN NOT p2;
+IF p2 THEN p3==5;
+IF NOT p1 THEN p4;
+IF p4 THEN p5==p7; // Complex with 2 types
+IF NOT (p4 OR p6) THEN p5 AND p7;
+OnlyOne(Or(p7, p8), Or(p9, p10)); // Complex with 2 types
+IF p7 OR p8 THEN p9 OR p10; //
+IF NOT p1==true THEN NOT (p2==3 OR p4==4) AND p7;

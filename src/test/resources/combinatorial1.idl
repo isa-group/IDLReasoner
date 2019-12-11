@@ -1,0 +1,5 @@
+Or(p1=='value1', p2=='value1');
+OnlyOne(p2=='value2', p3=='value2');
+AllOrNone(p2=='value3', p3=='value4');
+ZeroOrOne(p4=='value5', p5=='value6');
+p1==p5;

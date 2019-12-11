@@ -2,7 +2,7 @@ package es.us.isa.idlreasoner;
 
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
