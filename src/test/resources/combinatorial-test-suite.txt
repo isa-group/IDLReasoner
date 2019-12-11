@@ -1,0 +1,65 @@
+# Meaning of variables:
+#
+# numParamsOp:          Number of parameters in the operation
+# PercentOptParamsOp:   Percentage of optional parameters in the operation
+# boolParams:           Boolean parameters
+# stringParams:         String parameters
+# intParams:            Int parameters
+# enumStringParams:     Enum string parameters
+# enumIntParams:        Enum int parameters
+# numIdlDeps:           Number of IDL dependencies
+# requiresDep:          Requires dependency
+# orDep:                Or dependency
+# onlyOneDep:           OnlyOne dependency
+# allOrNoneDep:         AllOrNone dependency
+# zeroOrOneDep:         ZeroOrOne dependency
+# arithRelDep:          Arithmetic/Relational dependency
+# complexDep:           Complex dependency
+# numIdlDepsinComplex:  Number of IDL dependencies in Complex
+
+numParamsOp:            5, 10
+percentOptParamsOp:     0, 50, 100
+boolParams:             0, 1
+stringParams:           0, 1
+intParams:              0, 1
+enumStringParams:       0, 1
+enumIntParams:          0, 1
+numIdlDeps:             5, 10
+requiresDep:            0, 1
+orDep:                  0, 1
+onlyOneDep:             0, 1
+allOrNoneDep:           0, 1
+zeroOrOneDep:           0, 1
+arithRelDep:            0, 1
+complexDep:             0, 1
+numIdlDepsInComplex:    2, 5
+
+# Results from PICT:
+#
+# numParamsOp     percentOptParamsOp      boolParams      stringParams    intParams       enumStringParams        enumIntParams   numIdlDeps      requiresDep     orDep   onlyOneDep      allOrNoneDep    zeroOrOneDep    arithRelDep     complexDep      numIdlDepsInComplex
+# 5               0                       0               1               0               0                       0               5               0               1       1               1               1               1               0               5
+# 10              100                     1               0               1               0                       1               10              1               0       0               0               0               0               1               2
+# 5               100                     1               1               0               1                       1               10              0               1       1               0               0               1               0               2
+# 10              100                     0               0               1               1                       0               5               0               0       0               1               1               0               1               5
+# 10              0                       1               1               1               1                       0               5               1               1       0               0               1               1               1               2
+# 5               0                       0               0               0               1                       1               10              1               0       1               1               0               0               0               5
+# 5               50                      0               0               1               1                       1               5               0               0       0               0               0               1               0               5
+# 10              50                      1               1               0               0                       0               10              1               1       0               1               1               0               1               2
+# 10              50                      0               1               1               1                       0               5               1               0       1               0               0               1               0               2
+# 5               0                       1               0               0               1                       1               10              0               1       1               0               1               1               1               5
+
+# Other test cases:
+#
+# numParamsOp = 0, numIdlDeps = 0
+# numParamsOp = 1, numIdlDeps = 0, percentOptParamsOp = 100, boolParams = 1
+# numParamsOp = 1, numIdlDeps = 0, percentOptParamsOp = 100, stringParams = 1
+# numParamsOp = 1, numIdlDeps = 0, percentOptParamsOp = 100, intParams = 1
+# numParamsOp = 1, numIdlDeps = 0, percentOptParamsOp = 100, enumStringParams = 1
+# numParamsOp = 1, numIdlDeps = 0, percentOptParamsOp = 100, enumIntParams = 1
+# numIdlDeps = 1, requiresDep = 1
+# numIdlDeps = 1, orDep = 1
+# numIdlDeps = 1, onlyOneDep = 1
+# numIdlDeps = 1, allOrNoneDep = 1
+# numIdlDeps = 1, zeroOrOneDep = 1
+# numIdlDeps = 1, arithRelDep = 1
+# numIdlDeps = 1, complexDep = 1
