@@ -34,19 +34,19 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
         openAPISpec = new OpenAPIV3Parser().read(apiSpecificationPath);
         if(operationType.equals("get"))
-            parameters = openAPISpec.getPaths().get("/"+operationPath).getGet().getParameters();
+            parameters = openAPISpec.getPaths().get(operationPath).getGet().getParameters();
         if(operationType.equals("delete"))
-            parameters = openAPISpec.getPaths().get("/"+operationPath).getDelete().getParameters();
+            parameters = openAPISpec.getPaths().get(operationPath).getDelete().getParameters();
         if(operationType.equals("post"))
-            parameters = openAPISpec.getPaths().get("/"+operationPath).getPost().getParameters();
+            parameters = openAPISpec.getPaths().get(operationPath).getPost().getParameters();
         if(operationType.equals("put"))
-            parameters = openAPISpec.getPaths().get("/"+operationPath).getPut().getParameters();
+            parameters = openAPISpec.getPaths().get(operationPath).getPut().getParameters();
         if(operationType.equals("patch"))
-            parameters = openAPISpec.getPaths().get("/"+operationPath).getPatch().getParameters();
+            parameters = openAPISpec.getPaths().get(operationPath).getPatch().getParameters();
         if(operationType.equals("head"))
-            parameters = openAPISpec.getPaths().get("/"+operationPath).getHead().getParameters();
+            parameters = openAPISpec.getPaths().get(operationPath).getHead().getParameters();
         if(operationType.equals("options"))
-            parameters = openAPISpec.getPaths().get("/"+operationPath).getOptions().getParameters();
+            parameters = openAPISpec.getPaths().get(operationPath).getOptions().getParameters();
 
         try {
             mapVariables();
@@ -63,6 +63,8 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
     }
 
     public void mapVariables() throws IOException {
+        if (parameters == null || parameters.size() == 0)
+            return;
         variables.clear();
         List<String> previousContent = savePreviousBaseConstraintsFileContent();
         recreateFile(BASE_CONSTRAINTS_FILE);

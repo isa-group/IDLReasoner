@@ -17,7 +17,7 @@ public class DeadParameterTest {
 
     @Test
     public void oneDepRequires() {
-        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "./src/test/resources/OAS_example.yaml", "optionalParams", "get");
+        Analyzer analyzer = new Analyzer("oneDepRequires.idl", "./src/test/resources/OAS_example.yaml", "/optionalParams", "get");
         System.out.println(analyzer.isFalseOptional("p1"));
         System.out.println(analyzer.isFalseOptional("p2"));
         System.out.println(analyzer.isFalseOptional("p3"));
