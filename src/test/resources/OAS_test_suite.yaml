@@ -1,0 +1,667 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server"
+  version: "1.0.0"
+  title: "Swagger Example"
+host: "localhost:8080"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /noParams:
+    get:
+      responses:
+        default:
+          description: "Default"
+  /oneParamBoolean:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "boolean"
+      responses:
+        default:
+          description: "Default"
+  /oneParamString:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "string"
+      responses:
+        default:
+          description: "Default"
+  /oneParamInt:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "integer"
+      responses:
+        default:
+          description: "Default"
+  /oneParamEnumString:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+      responses:
+        default:
+          description: "Default"
+  /oneParamEnumInt:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+      responses:
+        default:
+          description: "Default"
+  /oneDependency:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p2"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "p3"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p4"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p5"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+      responses:
+        default:
+          description: "Default"
+  /combinatorial1:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p2"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p3"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p4"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p5"
+          in: "query"
+          required: true
+          type: "string"
+      responses:
+        default:
+          description: "Default"
+  /combinatorial2:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p2"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p3"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        - name: "p4"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p5"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        - name: "p6"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p7"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p8"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        - name: "p9"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p10"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+      responses:
+        default:
+          description: "Default"
+  /combinatorial3:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p2"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "p3"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p4"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        - name: "p5"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+      responses:
+        default:
+          description: "Default"
+  /combinatorial4:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p2"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p3"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p4"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p5"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p6"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p7"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p8"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p9"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p10"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+      responses:
+        default:
+          description: "Default"
+  /combinatorial5:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: true
+          type: "boolean"
+        - name: "p2"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p3"
+          in: "query"
+          required: true
+          type: "integer"
+        - name: "p4"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p5"
+          in: "query"
+          required: true
+          type: "integer"
+        - name: "p6"
+          in: "query"
+          required: true
+          type: "boolean"
+        - name: "p7"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p8"
+          in: "query"
+          required: true
+          type: "integer"
+        - name: "p9"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p10"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+      responses:
+        default:
+          description: "Default"
+  /combinatorial6:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p2"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p3"
+          in: "query"
+          required: true
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        - name: "p4"
+          in: "query"
+          required: true
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        - name: "p5"
+          in: "query"
+          required: true
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+      responses:
+        default:
+          description: "Default"
+  /combinatorial7:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p2"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p3"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        - name: "p4"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        - name: "p5"
+          in: "query"
+          required: false
+          type: "integer"
+      responses:
+        default:
+          description: "Default"
+  /combinatorial8:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p2"
+          in: "query"
+          required: true
+          type: "boolean"
+        - name: "p3"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p4"
+          in: "query"
+          required: true
+          type: "boolean"
+        - name: "p5"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p6"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p7"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "p8"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p9"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "p10"
+          in: "query"
+          required: true
+          type: "string"
+      responses:
+        default:
+          description: "Default"
+  /combinatorial9:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p2"
+          in: "query"
+          required: true
+          type: "integer"
+        - name: "p3"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "p4"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p5"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "p6"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p7"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p8"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p9"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p10"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+      responses:
+        default:
+          description: "Default"
+  /combinatorial10:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: true
+          type: "boolean"
+        - name: "p2"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p3"
+          in: "query"
+          required: true
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+            - "value3"
+            - "value4"
+            - "value5"
+        - name: "p4"
+          in: "query"
+          required: true
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        - name: "p5"
+          in: "query"
+          required: true
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+      responses:
+        default:
+          description: "Default"
