@@ -1,0 +1,5 @@
+Or(p1, p2, p3, p4, p5);
+OnlyOne(p1, p2);
+p4>=p5;
+Or(p1==true, p4==1);
+IF p4 THEN NOT p1;

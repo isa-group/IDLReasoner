@@ -25,7 +25,13 @@ public class MiniZincConstraintMapper extends AbstractConstraintMapper {
 
     public void mapConstraints() {
         this.resource = resourceSet.getResource(URI.createFileURI("./"+ IDL_FILES_FOLDER + "/" + idlSpecificationPath), true);
-        idlGenerator.doGenerate(resource, null, null);
+        try {
+            idlGenerator.doGenerate(resource, null, null);
+        } catch (Exception e) {
+            System.err.println("There was an error processing the IDL file. Check that it does not contain any errors.\n");
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     public void setParamToValue(String parameter, String value) {
