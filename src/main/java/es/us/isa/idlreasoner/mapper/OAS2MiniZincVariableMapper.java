@@ -20,12 +20,14 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
     private OpenAPI openAPISpec;
     private List<Parameter> parameters;
     private Map<String, Integer> stringIntMapping;
+    private Map<String, Map<String, Integer>> mappingParameters;
     private Integer stringToIntCounter;
 
     public OAS2MiniZincVariableMapper(String apiSpecificationPath, String operationPath, String operationType) {
         super();
         this.apiSpecificationPath = apiSpecificationPath;
         stringIntMapping = new HashMap<>();
+        mappingParameters = new HashMap<String, Map<String,Integer>>();
         reservedWords = Arrays.asList("annotation","any", "array", "bool", "case", "diff",
                 "div", "else", "elseif", "endif", "enum", "false", "float", "function", "if", "include",
                 "intersect", "let", "list", "maximize", "minimize", "mod",  "of", "opt", "output", "par",
@@ -94,6 +96,7 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
                             var += stringToIntCounter++ + ", ";
                         }
                     }
+                    mappingParameters.put(parameter.getName(), stringIntMapping);
                     var = var.substring(0, var.length()-2); // trim last comma and space
                     var += "}: ";
                 } else if (schema.getType().equals("integer")) {
@@ -124,7 +127,6 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
             if (parameter.getRequired() != null && parameter.getRequired()) {
                 mapRequiredVar(requiredVarsOut, parameter);
             }
-
             variables.add(new Variable(parameter.getName(), schema.getType(), parameter.getRequired()));
         }
 
@@ -140,6 +142,11 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
         exportStringIntMappingToFile();
     }
+
+    public Map<String, Map<String,Integer>> getMappingParameters(){
+        return this.mappingParameters;
+    }
+
 
     private void mapRequiredVar(BufferedWriter requiredVarsOut, Parameter parameter) throws IOException {
         requiredVarsOut.append("constraint " + changeIfReservedWord(parameter.getName())+"Set = 1;\n");

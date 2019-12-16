@@ -11,14 +11,14 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 import static es.us.isa.idlreasoner.util.FileManager.appendContentToFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
-public class MiniZincConstraintMapper extends AbstractConstraintMapper {
+public class MiniZincIDLConstraintMapper extends AbstractConstraintMapper {
 
     InterparameterDependenciesLanguageGenerator idlGenerator = new InterparameterDependenciesLanguageGenerator();
     Injector injector = new InterparameterDependenciesLanguageStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
     XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
     private Resource resource;
 
-    public MiniZincConstraintMapper(String idlSpecificationPath) {
+    public MiniZincIDLConstraintMapper(String idlSpecificationPath) {
         this.idlSpecificationPath = idlSpecificationPath;
         mapConstraints();
     }

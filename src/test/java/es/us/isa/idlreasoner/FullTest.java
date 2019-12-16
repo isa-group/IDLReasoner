@@ -2,7 +2,7 @@ package es.us.isa.idlreasoner;
 
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +12,7 @@ public class FullTest {
     @Test
     public void fullTest() {
         Analyzer a = new Analyzer("youtube_getVideos.idl",
-                "https://api.apis.guru/v2/specs/googleapis.com/youtube/v3/swagger.yaml", "videos", "get");
+                "https://api.apis.guru/v2/specs/googleapis.com/youtube/v3/swagger.yaml", "/videos", "get");
 
         //GetAllRequests
         List<Map<String,String>> allRequests = a.getAllRequest();

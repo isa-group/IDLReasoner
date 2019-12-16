@@ -28,6 +28,8 @@ public abstract class AbstractVariableMapper extends AbstractMapper {
 
     abstract public void mapVariables() throws IOException;
 
+    abstract public Map<String, Map<String,Integer>> getMappingParameters();
+
     List<String> savePreviousBaseConstraintsFileContent() throws IOException {
         List<String> previousContent = new ArrayList<>();
         BufferedReader reader = openReader(BASE_CONSTRAINTS_FILE);

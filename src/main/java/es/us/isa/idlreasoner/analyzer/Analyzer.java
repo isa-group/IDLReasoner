@@ -19,63 +19,54 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import java.util.stream.Collectors;
+
+
 public class Analyzer {
 
 	private ResolutorCreator resolutor;
-	private IDLMapper idlMapper;
+	private MapperCreator mapperCreator;
 	private AbstractConstraintMapper constraintMapper;
 	private AbstractVariableMapper variableMapper;
-	private Map<String, Map<String, String>> mappingParameters;
+	private Map<String, Map<String, Integer>> mappingParameters;
 	
-	private String idl;
-	private String operationPath;
-	private String oasLink;
-	private String operationType;
 	
 	private Map<String, String> restrictions = new HashMap<String, String>();
 
-	public Analyzer(String idl, String oasLink, String operationPath, String operationType) {
+	public Analyzer(String idl, String apiSpecificationPath, String operationPath, String operationType) {
 		
 		this.initConfigurationFile();
-
+		
 		recreateFile(BASE_CONSTRAINTS_FILE);
 		
 		this.resolutor = new ResolutorCreator();
-//		this.idlMapper = new IDLMapper()
-		this.constraintMapper = new MiniZincConstraintMapper(idl);
-//		this.constraintMapper.createConstraintsFileIfNotExists();
-		this.variableMapper = new OAS2MiniZincVariableMapper(oasLink, operationPath, operationType);
-//		this.variableMapper.createConstraintsFileIfNotExists();
-		this.idl = idl;
-		this.oasLink = oasLink;
-		this.operationPath = operationPath;
-		this.operationType = operationType;
+		this.mapperCreator = new MapperCreator(idl, apiSpecificationPath, operationPath, operationType);
+		
+		this.constraintMapper = this.mapperCreator.getContraintMapper();
+		this.variableMapper = this.mapperCreator.getVariableMapper();
+
 
 	}
 	
 	
 	public List<Map<String,String>>  getAllRequest() {
 
-		this.initDocument();
-		this.finishDocumentMinizinc();
+		setupAnalysisOperation();
+		this.constraintMapper.finishConstraintsFile();
 		return resolutor.solveGetAllSolutins();
 	}
 	
 	public Map<String,String> randomRequest() {
-		return this.getAllRequest().get(ThreadLocalRandom.current().nextInt(0, resolutor.getMaxResults()));
+		Map<String, String> res = new HashMap<>();
+		List<Map<String,String>> allRequest = this.getAllRequest();
+		
+		if(allRequest.size()!=0) {
+			allRequest.get(ThreadLocalRandom.current().nextInt(0, allRequest.size()));
+		}
+		return res;
 	
 	}
 
-//	public Boolean isDeadParameter(String parameter) {
-//		this.initDocument();
-//
-//		this.idlMapper.setRestriction(parameter, true);
-//
-//		this.finishDocumentMinizinc();
-//		Map<String,String> res =  resolutor.solve(this.file);
-//
-//		return res.size()==0;
-//	}
 
 	public Boolean isDeadParameter(String parameter) {
 		setupAnalysisOperation();
@@ -87,19 +78,6 @@ public class Analyzer {
 	}
 	
 
-
-//	public Boolean isFalseOptional(String parameter) {
-//		// TODO: Previously check that the parameter is actually optional
-//		this.initDocument();
-//
-//		this.idlMapper.setRestriction(parameter, false);
-//
-//		this.finishDocumentMinizinc();
-//
-//		Map<String,String> res =  resolutor.solve(this.file);
-//
-//		return res.size()==0;
-//	}
 
 	public Boolean isFalseOptional(String parameter) {
 		setupAnalysisOperation();
@@ -118,7 +96,7 @@ public class Analyzer {
 	
 	
 	public Boolean isValidIDL() {
-		List<String> parameters = this.idlMapper.getParameters();
+		List<String> parameters = this.variableMapper.getVariables().stream().map(Variable::getName).collect(Collectors.toList());
 		Boolean res = true;
 		for(String parameter : parameters) {
 			res = !this.isDeadParameter(parameter) && !this.isFalseOptional(parameter);
@@ -131,9 +109,9 @@ public class Analyzer {
 	
 	public void setParameter(String parameter, String value) {
 		if(this.mappingParameters==null) {
-			this.mappingParameters = idlMapper.getMappingParameters();
+			this.mappingParameters =this.variableMapper.getMappingParameters();
 		}
-		restrictions.put(parameter, translateParameter(parameter, value));
+		restrictions.put(parameter, Integer.toString(translateParameter(parameter, value)));
 	}
 	
 	
@@ -143,34 +121,35 @@ public class Analyzer {
 	
 
 	public Boolean validRequest() {
+		setupAnalysisOperation();
 		Set<String> parameters = this.restrictions.keySet();
-		List<String> allParemeters = this.idlMapper.getParameters();
-		this.initDocument();
-		for(String p : allParemeters) {
+		List<String> allParameters = this.variableMapper.getVariables().stream().map(Variable::getName).collect(Collectors.toList());
+
+		for(String p : allParameters) {
 			if(parameters.contains(p)) {
-				this.idlMapper.setValue(p, this.restrictions.get(p));
-				this.idlMapper.setRestriction(p, true);
+				this.constraintMapper.setParamToValue(p, this.restrictions.get(p));
+				this.constraintMapper.setParamToValue(p+"Set", "1");
 			}else {
-				this.idlMapper.setRestriction(p, false);
+				this.constraintMapper.setParamToValue(p+"Set", "0");
 
 			}
 		}
-		this.finishDocumentMinizinc();
+		this.constraintMapper.finishConstraintsFile();
 		return this.resolutor.solve().size()!=0;
 	}
 	
-	//TODO
+
 	public Boolean validPartialRequest() {
 		Set<String> parameters = this.restrictions.keySet();
-		List<String> allParemeters = this.idlMapper.getParameters();
-		this.initDocument();
-		for(String p : allParemeters) {
+		List<String> allParameters = this.variableMapper.getVariables().stream().map(Variable::getName).collect(Collectors.toList());
+		setupAnalysisOperation();
+		for(String p : allParameters) {
 			if(parameters.contains(p)) {
-				this.idlMapper.setValue(p, this.restrictions.get(p));
-				this.idlMapper.setRestriction(p, true);
+				this.constraintMapper.setParamToValue(p, this.restrictions.get(p));
+				this.constraintMapper.setParamToValue(p+"Set", "1");
 			}
 		}
-		this.finishDocumentMinizinc();
+		this.constraintMapper.finishConstraintsFile();
 		return this.resolutor.solve().size()!=0;
 	}
 	
@@ -179,37 +158,29 @@ public class Analyzer {
 		return this.getAllRequest().size();
 	}
 	
-	private String translateParameter(String parameter, String value) {
-		String res = "1";
+	private Integer translateParameter(String parameter, String value) {
+		Integer res = 1;
 		Set<String> parameters = mappingParameters.keySet();
 		if(parameters.contains(parameter)) {
-			Map<String, String> mapping = mappingParameters.get(parameter);
+			Map<String, Integer> mapping = mappingParameters.get(parameter);
 			res = mapping.get(value);
 		}
 		
 		return res;
 	}
 	
-	private void initDocument() {
-		idlMapper = new IDLMapper(idl, operationPath, oasLink, operationType);
-	}
-	
-	private void finishDocumentMinizinc() {
-	
-		idlMapper.finishMinizincDocument();
 
-	}
 
 	private void setupAnalysisOperation() {
 		recreateFile(FULL_CONSTRAINTS_FILE);
+		recreateFile(BASE_CONSTRAINTS_FILE);
+		this.constraintMapper.mapConstraints();
+		try {
+			this.variableMapper.mapVariables();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
-//		recreateFile(BASE_CONSTRAINTS_FILE);
-//		this.constraintMapper.mapConstraints();
-//		try {
-//			this.variableMapper.mapVariables();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 	}
 	
 	private void initConfigurationFile() {
@@ -228,6 +199,8 @@ public class Analyzer {
 
 			    fw.append("compiler: Minizinc\n");
 			    fw.append("solver: Chuffed\n");
+			    fw.append("mapper: idl\n");
+			    fw.append("specification: oas\n");
 			    fw.append("fileRoute: " + readProperty("aux_files_folder") + "/" + readProperty("idl_files_folder") + "\n");
 			    fw.append("maxResults: 100\n");
 			    
@@ -241,7 +214,6 @@ public class Analyzer {
 
 		updateConf();
 	}
-	
 	
 	
 	

@@ -13,7 +13,7 @@ and the operation type
 
 This is the current UML Class Diagram:
 
-![UML Class Diagram](resources/uml.png)
+![UML Class Diagram](extra_resources/uml.png)
 
 The ResolutorCreator class is the class where the resolver specified in the config.properties file will be created, currently the unique resolutor is Minizinc, but it is possible to add a new resolutor as Choco. Also this class will call a different constructor according to operating system, because the command console will be different depending on the operating system. 
  
