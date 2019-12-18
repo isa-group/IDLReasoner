@@ -8,28 +8,24 @@ public class MapperCreator {
 	
 	private String compiler;
 	
-	private AbstractConstraintMapper contraintMapper;
+	private AbstractConstraintMapper constraintMapper;
 	private AbstractVariableMapper variableMapper;
 	
 	public MapperCreator(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
 		this.extractDataFromProperties();
-		
-		//VariableMapper
-		
-		if(specificationType.toLowerCase().equals("oas") && this.compiler.toLowerCase().equals("minizinc")) {
+
+		// ConstraintMapper: must be created BEFORE the VariableMapper
+		if(this.compiler.toLowerCase().equals("minizinc"))
+			this.constraintMapper = new MiniZincIDLConstraintMapper(idl);
+
+		// VariableMapper: must be created AFTER the ConstraintMapper
+		if(specificationType.toLowerCase().equals("oas") && this.compiler.toLowerCase().equals("minizinc"))
 			this.variableMapper = new OAS2MiniZincVariableMapper(apiSpecificationPath, operationPath, operationType);
-		}
-		
-		//ConstraintMapper
-		
-		if(this.compiler.toLowerCase().equals("minizinc")) {
-			this.contraintMapper = new MiniZincIDLConstraintMapper(idl);
-		}
 	}
 	
 	
-	public AbstractConstraintMapper getContraintMapper() {
-		return this.contraintMapper;
+	public AbstractConstraintMapper getConstraintMapper() {
+		return this.constraintMapper;
 	}
 	
 	public AbstractVariableMapper getVariableMapper() {

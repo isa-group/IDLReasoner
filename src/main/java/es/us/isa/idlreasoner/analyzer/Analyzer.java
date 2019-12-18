@@ -42,7 +42,7 @@ public class Analyzer {
 		this.resolutor = new ResolutorCreator();
 		this.mapperCreator = new MapperCreator(specificationType, idl, apiSpecificationPath, operationPath, operationType);
 		
-		this.constraintMapper = this.mapperCreator.getContraintMapper();
+		this.constraintMapper = this.mapperCreator.getConstraintMapper();
 		this.variableMapper = this.mapperCreator.getVariableMapper();
 
 
@@ -172,13 +172,6 @@ public class Analyzer {
 
 	private void setupAnalysisOperation() {
 		recreateFile(FULL_CONSTRAINTS_FILE);
-		recreateFile(BASE_CONSTRAINTS_FILE);
-		this.constraintMapper.mapConstraints();
-		try {
-			this.variableMapper.mapVariables();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
 	}
 	
@@ -187,6 +180,7 @@ public class Analyzer {
 		File file = new File("./idl_aux_files/config.properties");
 		Boolean exists = file.canRead();
 
+		//TODO: Use FileManager class for all file-related operations (create file, append content, etc.)
 		if(!exists) {
 			file.getParentFile().mkdir();
 			FileWriter fw;
@@ -198,8 +192,8 @@ public class Analyzer {
 
 			    fw.append("compiler: Minizinc\n");
 			    fw.append("solver: Chuffed\n");
-			    fw.append("mapper: idl\n");
-			    fw.append("specification: oas\n");
+			    fw.append("mapper: idl\n"); //TODO: delete this
+			    fw.append("specification: oas\n"); //TODO: delete this
 			    fw.append("fileRoute: " + readProperty("aux_files_folder") + "/" + readProperty("idl_files_folder") + "\n");
 			    fw.append("maxResults: 100\n");
 			    
