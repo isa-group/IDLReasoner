@@ -25,91 +25,91 @@ public class DeadParameterTest {
 
     @Test
     public void one_param_boolean_no_deps() {
-        Analyzer analyzer = new Analyzer("no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamBoolean", "get");
+        Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamBoolean", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_param_boolean_no_deps.");
     }
 
     @Test
     public void one_param_string_no_deps() {
-        Analyzer analyzer = new Analyzer("no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamString", "get");
+        Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamString", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_param_string_no_deps.");
     }
 
     @Test
     public void one_param_int_no_deps() {
-        Analyzer analyzer = new Analyzer("no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamInt", "get");
+        Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamInt", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_param_int_no_deps.");
     }
 
     @Test
     public void one_param_enum_string_no_deps() {
-        Analyzer analyzer = new Analyzer("no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumString", "get");
+        Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumString", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_param_enum_string_no_deps.");
     }
 
     @Test
     public void one_param_enum_int_no_deps() {
-        Analyzer analyzer = new Analyzer("no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumInt", "get");
+        Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumInt", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
 
     @Test
     public void one_dep_requires() {
-        Analyzer analyzer = new Analyzer("one_dep_requires.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
+        Analyzer analyzer = new Analyzer("oas","one_dep_requires.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_dep_requires.");
     }
 
     @Test
     public void one_dep_or() {
-        Analyzer analyzer = new Analyzer("one_dep_or.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
+        Analyzer analyzer = new Analyzer("oas","one_dep_or.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_dep_or.");
     }
 
     @Test
     public void one_dep_onlyone() {
-        Analyzer analyzer = new Analyzer("one_dep_onlyone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
+        Analyzer analyzer = new Analyzer("oas","one_dep_onlyone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_dep_onlyone.");
     }
 
     @Test
     public void one_dep_allornone() {
-        Analyzer analyzer = new Analyzer("one_dep_allornone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
+        Analyzer analyzer = new Analyzer("oas","one_dep_allornone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_dep_allornone.");
     }
 
     @Test
     public void one_dep_zeroorone() {
-        Analyzer analyzer = new Analyzer("one_dep_zeroorone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
+        Analyzer analyzer = new Analyzer("oas","one_dep_zeroorone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_dep_zeroorone.");
     }
 
     @Test
     public void one_dep_arithrel() {
-        Analyzer analyzer = new Analyzer("one_dep_arithrel.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
+        Analyzer analyzer = new Analyzer("oas","one_dep_arithrel.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_dep_arithrel.");
     }
 
     @Test
     public void one_dep_complex() {
-        Analyzer analyzer = new Analyzer("one_dep_complex.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
+        Analyzer analyzer = new Analyzer("oas","one_dep_complex.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         System.out.println("Test passed: one_dep_complex.");
     }
 
     @Test
     public void combinatorial1() {
-        Analyzer analyzer = new Analyzer("combinatorial1.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial1", "get");
+        Analyzer analyzer = new Analyzer("oas","combinatorial1.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial1", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         assertFalse(analyzer.isDeadParameter("p2"), "The parameter p2 should NOT be dead");
         assertFalse(analyzer.isDeadParameter("p3"), "The parameter p3 should NOT be dead");
@@ -120,7 +120,7 @@ public class DeadParameterTest {
 
     @Test
     public void combinatorial2() {
-        Analyzer analyzer = new Analyzer("combinatorial2.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial2", "get");
+        Analyzer analyzer = new Analyzer("oas","combinatorial2.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial2", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         assertTrue(analyzer.isDeadParameter("p2"), "The parameter p2 SHOULD be dead");
         assertFalse(analyzer.isDeadParameter("p3"), "The parameter p3 should NOT be dead");
@@ -136,7 +136,7 @@ public class DeadParameterTest {
 
     @Test
     public void combinatorial3() {
-        Analyzer analyzer = new Analyzer("combinatorial3.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial3", "get");
+        Analyzer analyzer = new Analyzer("oas","combinatorial3.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial3", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         assertTrue(analyzer.isDeadParameter("p2"), "The parameter p2 SHOULD be dead");
         assertFalse(analyzer.isDeadParameter("p3"), "The parameter p3 should NOT be dead");

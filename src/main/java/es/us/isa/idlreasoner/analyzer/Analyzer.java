@@ -33,14 +33,14 @@ public class Analyzer {
 	
 	private Map<String, String> restrictions = new HashMap<String, String>();
 
-	public Analyzer(String idl, String apiSpecificationPath, String operationPath, String operationType) {
+	public Analyzer(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
 		
 		this.initConfigurationFile();
 		
 		recreateFile(BASE_CONSTRAINTS_FILE);
 		
 		this.resolutor = new ResolutorCreator();
-		this.mapperCreator = new MapperCreator(idl, apiSpecificationPath, operationPath, operationType);
+		this.mapperCreator = new MapperCreator(specificationType, idl, apiSpecificationPath, operationPath, operationType);
 		
 		this.constraintMapper = this.mapperCreator.getContraintMapper();
 		this.variableMapper = this.mapperCreator.getVariableMapper();
@@ -124,7 +124,6 @@ public class Analyzer {
 		setupAnalysisOperation();
 		Set<String> parameters = this.restrictions.keySet();
 		List<String> allParameters = this.variableMapper.getVariables().stream().map(Variable::getName).collect(Collectors.toList());
-
 		for(String p : allParameters) {
 			if(parameters.contains(p)) {
 				this.constraintMapper.setParamToValue(p, this.restrictions.get(p));

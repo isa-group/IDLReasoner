@@ -21,9 +21,12 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	
 	public List<Map<String,String>> solveGetAllSolutins(String maxResults) {
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
-		
-		String command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
-
+		String command;
+		if(!maxResults.trim().equals("")){
+			command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+		}else {
+			command = "\"minizinc/minizinc.exe\" -a --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+		}
 		String results = this.callSolver(command);
 		
 		List<String> resultsSplitted = Arrays.asList(results.split("----------"));
@@ -33,7 +36,6 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		}
 		
 		res.remove(res.get(res.size()-1));
-		
 		return res;
 	}
 	

@@ -7,24 +7,22 @@ import java.util.Properties;
 public class MapperCreator {
 	
 	private String compiler;
-	private String specification;
-	private String mapper;
 	
 	private AbstractConstraintMapper contraintMapper;
 	private AbstractVariableMapper variableMapper;
 	
-	public MapperCreator(String idl, String apiSpecificationPath, String operationPath, String operationType) {
+	public MapperCreator(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
 		this.extractDataFromProperties();
 		
 		//VariableMapper
 		
-		if(this.specification.toLowerCase().equals("oas") && this.compiler.toLowerCase().equals("minizinc")) {
+		if(specificationType.toLowerCase().equals("oas") && this.compiler.toLowerCase().equals("minizinc")) {
 			this.variableMapper = new OAS2MiniZincVariableMapper(apiSpecificationPath, operationPath, operationType);
 		}
 		
 		//ConstraintMapper
 		
-		if(this.compiler.toLowerCase().equals("minizinc") && this.mapper.equals("idl")) {
+		if(this.compiler.toLowerCase().equals("minizinc")) {
 			this.contraintMapper = new MiniZincIDLConstraintMapper(idl);
 		}
 	}
@@ -53,8 +51,6 @@ public class MapperCreator {
 		prop.load(inputStream);
 		
 		this.compiler = prop.getProperty("compiler");
-		this.specification= prop.getProperty("specification");
-		this.mapper = prop.getProperty("mapper");
 
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
