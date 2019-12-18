@@ -7,6 +7,7 @@ import java.util.*;
 
 import static es.us.isa.idlreasoner.util.IDLConfiguration.BASE_CONSTRAINTS_FILE;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.FULL_CONSTRAINTS_FILE;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.FULL_CONSTRAINTS_FILE_FZN;
 
 public class MinizincResolutorWindows extends MinizincResolutor{
 	
@@ -22,10 +23,11 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	public List<Map<String,String>> solveGetAllSolutins(String maxResults) {
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
 		String command;
+		this.convertToFzn();
 		if(!maxResults.trim().equals("")){
-			command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+			command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE_FZN;
 		}else {
-			command = "\"minizinc/minizinc.exe\" -a --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+			command = "\"minizinc/minizinc.exe\" -a --solver " + solver + " " + FULL_CONSTRAINTS_FILE_FZN;
 		}
 		String results = this.callSolver(command);
 		
@@ -40,7 +42,8 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	}
 	
 	public Map<String,String> solve() {
-		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+		this.convertToFzn();
+		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + FULL_CONSTRAINTS_FILE_FZN;
 		String solutions =  this.callSolver(command);
 		return this.mapSolutions(solutions);
 	}
@@ -84,6 +87,29 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		return res;
 	}
 
+	private void convertToFzn() {
+		String res = "";
+		
+		ProcessBuilder processBuilder = new ProcessBuilder();
+		String command = "\"minizinc/minizinc.exe\" -c --solver "+ solver +" " + FULL_CONSTRAINTS_FILE;
+		
+		processBuilder.command(Wconsole, "/c", command);
+	
+		try {
+
+           	Process process = processBuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                res+=line+"\n";
+			}
+            reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 
 }
