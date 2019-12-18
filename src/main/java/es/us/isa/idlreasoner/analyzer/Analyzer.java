@@ -4,12 +4,15 @@ package es.us.isa.idlreasoner.analyzer;
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
 import es.us.isa.idlreasoner.mapper.*;
 import es.us.isa.idlreasoner.pojos.Variable;
+import es.us.isa.idlreasoner.util.FileManager;
 
 import static es.us.isa.idlreasoner.util.FileManager.copyFile;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -177,35 +180,36 @@ public class Analyzer {
 	
 	private void initConfigurationFile() {
 		
-		File file = new File("./idl_aux_files/config.properties");
-		Boolean exists = file.canRead();
+
+		String filePath = "./idl_aux_files/config.properties";
 
 		//TODO: Use FileManager class for all file-related operations (create file, append content, etc.)
-		if(!exists) {
-			file.getParentFile().mkdir();
-			FileWriter fw;
+		FileManager.createFileIfNotExists(filePath);
+		
+		BufferedReader br = FileManager.openReader(filePath);
 
 			try {
-				file.createNewFile();
-				
-				fw = new FileWriter(file);
-
-			    fw.append("compiler: Minizinc\n");
-			    fw.append("solver: Chuffed\n");
-			    fw.append("mapper: idl\n"); //TODO: delete this
-			    fw.append("specification: oas\n"); //TODO: delete this
-			    fw.append("fileRoute: " + readProperty("aux_files_folder") + "/" + readProperty("idl_files_folder") + "\n");
-			    fw.append("maxResults: 100\n");
-			    
-			    fw.flush();
-			    fw.close();
+				if(br.readLine()==null) {
+					br.close();
+					BufferedWriter fw = FileManager.openWriter(filePath);
+					
+				    fw.append("compiler: Minizinc\n");
+				    fw.append("solver: Chuffed\n");
+				    fw.append("fileRoute: " + readProperty("aux_files_folder") + "/" + readProperty("idl_files_folder") + "\n");
+				    fw.append("maxResults: 100\n");
+				    
+				    fw.flush();
+				    fw.close();
+				}else {
+					br.close();
+				}
+			
 			} catch (IOException e) {
-	
+				// TODO Auto-generated catch block
 				e.printStackTrace();
+			
 			}
-		}
-
-		updateConf();
+			updateConf();
 	}
 	
 	
