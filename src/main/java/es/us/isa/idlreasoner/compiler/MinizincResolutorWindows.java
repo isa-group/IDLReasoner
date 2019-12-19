@@ -62,15 +62,10 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	}
 	
 	private String callSolver(String command) {
-		String res = "";
-		
 		ProcessBuilder processBuilder = new ProcessBuilder();
-
-		
 		processBuilder.command(Wconsole, "/c", command);
-	
+		String res = "";
 		try {
-
            	Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
@@ -78,37 +73,17 @@ public class MinizincResolutorWindows extends MinizincResolutor{
             while ((line = reader.readLine()) != null) {
                 res+=line+"\n";
 			}
+
             reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 
 		return res;
 	}
 
 	private void convertToFzn() {
-		String res = "";
-		
-		ProcessBuilder processBuilder = new ProcessBuilder();
-		String command = "\"minizinc/minizinc.exe\" -c --solver "+ solver +" " + FULL_CONSTRAINTS_FILE;
-		
-		processBuilder.command(Wconsole, "/c", command);
-	
-		try {
-
-           	Process process = processBuilder.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                res+=line+"\n";
-			}
-            reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		callSolver("\"minizinc/minizinc.exe\" -c --solver " + solver + " " + FULL_CONSTRAINTS_FILE);
 	}
 	
 
