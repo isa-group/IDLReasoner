@@ -6,8 +6,7 @@ import es.us.isa.idlreasoner.mapper.*;
 import es.us.isa.idlreasoner.pojos.Variable;
 import es.us.isa.idlreasoner.util.FileManager;
 
-import static es.us.isa.idlreasoner.util.FileManager.copyFile;
-import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
+import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
@@ -179,35 +178,28 @@ public class Analyzer {
 	}
 	
 	private void initConfigurationFile() {
-		
-
 		String filePath = "./idl_aux_files/config.properties";
-
-		//TODO: Use FileManager class for all file-related operations (create file, append content, etc.)
-		FileManager.createFileIfNotExists(filePath);
-		
-		BufferedReader br = FileManager.openReader(filePath);
+		createFileIfNotExists(filePath);
+		BufferedReader br = openReader(filePath);
 
 			try {
 				if(br.readLine()==null) {
 					br.close();
-					BufferedWriter fw = FileManager.openWriter(filePath);
+					BufferedWriter bw = openWriter(filePath);
 					
-				    fw.append("compiler: Minizinc\n");
-				    fw.append("solver: Chuffed\n");
-				    fw.append("fileRoute: " + readProperty("aux_files_folder") + "/" + readProperty("idl_files_folder") + "\n");
-				    fw.append("maxResults: 100\n");
+				    bw.append("compiler: Minizinc\n");
+				    bw.append("solver: Chuffed\n");
+				    bw.append("fileRoute: " + readProperty("aux_files_folder") + "/" + readProperty("idl_files_folder") + "\n");
+				    bw.append("maxResults: 100\n");
 				    
-				    fw.flush();
-				    fw.close();
-				}else {
+				    bw.flush();
+				    bw.close();
+				} else {
 					br.close();
 				}
 			
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			
 			}
 			updateConf();
 	}
