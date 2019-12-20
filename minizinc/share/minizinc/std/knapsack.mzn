@@ -1,6 +1,3 @@
-include "fzn_knapsack.mzn";
-include "fzn_knapsack_reif.mzn";
-
 /**  @group globals.packing
 Requires that items are packed in a knapsack with certain weight and profit restrictions.
 
@@ -14,6 +11,7 @@ Assumptions:
 @param W: sum of sizes of all items in the knapsack
 @param P: sum of profits of all items in the knapsack
 */
+
 predicate knapsack(array[int] of int: w, array[int] of int:p, 
                    array[int] of var int:x, var int: W, var int: P) = 
 	assert(index_set(w) = index_set(p) /\ index_set(w) = index_set(x),
@@ -22,5 +20,13 @@ predicate knapsack(array[int] of int: w, array[int] of int:p,
 		"weights must be non-negative",
 	assert(lb_array(p) >= 0,
 		"profits must be non-negative",
-    fzn_knapsack(w, p, x, W, P)
+  forall (i in index_set(x)) (x[i] >= 0)
+  /\
+  W >= 0
+  /\
+  P >= 0
+  /\
+	P = sum(i in index_set(p)) (x[i]*p[i])
+	/\
+	W = sum(i in index_set(w)) (x[i]*w[i])
 	)));

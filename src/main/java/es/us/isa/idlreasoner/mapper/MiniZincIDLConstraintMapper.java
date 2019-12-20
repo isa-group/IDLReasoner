@@ -11,6 +11,9 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 import static es.us.isa.idlreasoner.util.FileManager.appendContentToFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 public class MiniZincIDLConstraintMapper extends AbstractConstraintMapper {
 
     InterparameterDependenciesLanguageGenerator idlGenerator = new InterparameterDependenciesLanguageGenerator();
@@ -35,7 +38,8 @@ public class MiniZincIDLConstraintMapper extends AbstractConstraintMapper {
     }
 
     public void setParamToValue(String parameter, String value) {
-        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + parameter + " = " + value + ";\n");
+    	String lineToWrite = "constraint " + parameter + " = " + value + ";\n";
+        appendContentToFile(FULL_CONSTRAINTS_FILE, lineToWrite);
     }
 
     public void finishConstraintsFile() {

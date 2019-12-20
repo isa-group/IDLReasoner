@@ -5,6 +5,10 @@
 %  Copyright:
 %     Guido Tack, 2007
 %
+%  Last modified:
+%     $Date: 2011-06-04 01:27:50 +1000 (Sat, 04 Jun 2011) $ by $Author: tack $
+%     $Revision: 12041 $
+%
 %  This file is part of Gecode, the generic constraint
 %  development environment:
 %     http://www.gecode.org
@@ -37,9 +41,4 @@ predicate diffn(array[int] of var int: x,
                 array[int] of var int: y,
                 array[int] of var int: dx,
                 array[int] of var int: dy) =
-    assert(
-        index_set(x) = index_set(y)  /\
-        index_set(x) = index_set(dx) /\
-        index_set(x) = index_set(dy),
-        "diffn: index set mismatch",
-    gecode_nooverlap(x,dx,y,dy));
+    gecode_nooverlap(x,dx,y,dy);

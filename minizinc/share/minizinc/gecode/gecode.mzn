@@ -5,6 +5,10 @@
 %  Copyright:
 %     Guido Tack, 2007
 %
+%  Last modified:
+%     $Date: 2015-01-05 17:33:06 +1100 (Mon, 05 Jan 2015) $ by $Author: tack $
+%     $Revision: 14337 $
+%
 %  This file is part of Gecode, the generic constraint
 %  development environment:
 %     http://www.gecode.org
@@ -53,11 +57,6 @@ annotation float_default_search(ann: varsel, ann: valsel);
 % Simple LNS: upon restart, for each variable the probability of it being
 % fixed to the previous solution is 'percentage' (out of 100).
 annotation relax_and_reconstruct(array[int] of var int: x, int: percentage);
-
-% Simple LNS: upon restart, for each variable the probability of it being
-% fixed to the previous solution is 'percentage' (out of 100). Start from
-% an initial solution y.
-annotation relax_and_reconstruct(array[int] of var int: x, int: percentage, array[int] of int: y);
 
 % i in z <-> forall (j in x) (i in y[j])
 predicate gecode_array_set_element_intersect(var set of int: x,

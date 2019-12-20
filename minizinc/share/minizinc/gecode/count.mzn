@@ -5,6 +5,10 @@
 %  Copyright:
 %     Guido Tack, 2007
 %
+%  Last modified:
+%     $Date: 2012-08-14 10:15:14 +1000 (Tue, 14 Aug 2012) $ by $Author: tack $
+%     $Revision: 12979 $
+%
 %  This file is part of Gecode, the generic constraint
 %  development environment:
 %     http://www.gecode.org
@@ -34,6 +38,3 @@ predicate count(array[int] of var int: x, var int: y, var int: c);
 
 predicate count_reif(array[int] of var int: x, var int: y, var int: c,
                      var bool: b);
-
-predicate count_imp(array[int] of var int: x, var int: y, var int: c,
-                    var bool: r);

@@ -5,6 +5,10 @@
 %  Copyright:
 %     Guido Tack, 2007
 %
+%  Last modified:
+%     $Date: 2009-09-09 01:42:03 +1000 (Wed, 09 Sep 2009) $ by $Author: schulte $
+%     $Revision: 9689 $
+%
 %  This file is part of Gecode, the generic constraint
 %  development environment:
 %     http://www.gecode.org
@@ -30,30 +34,5 @@
 %
 %
 
-predicate gecode_regular(array[int] of var int: x, int: Q, int: S,
-                         array[int] of int: d, int: q0, set of int: F);
-
 predicate regular(array[int] of var int: x, int: Q, int: S,
-                  array[int,int] of int: d, int: q0, set of int: F) =
-    assert(Q > 0,
-        "regular: 'Q' must be greater than zero",
-
-    assert(S > 0,
-        "regular: 'S' must be greater than zero",
-
-    assert(index_set_1of2(d) = 1..Q /\ index_set_2of2(d) == 1..S,
-        "regular: the transition function 'd' must be [1..Q,1..S]",
-
-    assert(forall([d[i, j] in 0..Q | i in 1..Q, j in 1..S]),
-        "regular: transition function 'd' points to states outside 0..Q",
-
-        % Nb: we need the parentheses around the expression otherwise the
-        % parser thinks it's a generator call!
-    assert((q0 in 1..Q),
-        "regular: start state 'q0' not in 1..Q",
-
-    assert(F subset 1..Q,
-        "regular: final states in 'F' contain states outside 1..Q",
-
-    gecode_regular(x,Q,S,array1d(d),q0,F)
-    ))))));
+                  array[int,int] of int: d, int: q0, set of int: F);

@@ -25,12 +25,11 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		String command;
 		this.convertToFzn();
 		if(!maxResults.trim().equals("")){
-			command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE_FZN;
+			command = "\"minizinc/fzn-gecode.exe\" -n "+ maxResults+ " "+ FULL_CONSTRAINTS_FILE_FZN;
 		}else {
-			command = "\"minizinc/minizinc.exe\" -a --solver " + solver + " " + FULL_CONSTRAINTS_FILE_FZN;
+			command = "\"minizinc/fzn-gecode.exe\" -a " + FULL_CONSTRAINTS_FILE_FZN;
 		}
 		String results = this.callSolver(command);
-		
 		List<String> resultsSplitted = Arrays.asList(results.split("----------"));
 		
 		for(String r: resultsSplitted) {
@@ -43,7 +42,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	
 	public Map<String,String> solve() {
 		this.convertToFzn();
-		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + FULL_CONSTRAINTS_FILE_FZN;
+		String command = "\"minizinc/fzn-gecode.exe\" " + FULL_CONSTRAINTS_FILE_FZN;
 		String solutions =  this.callSolver(command);
 		return this.mapSolutions(solutions);
 	}
@@ -68,7 +67,6 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		try {
            	Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
             String line;
             while ((line = reader.readLine()) != null) {
                 res+=line+"\n";
@@ -83,7 +81,14 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	}
 
 	private void convertToFzn() {
-		callSolver("\"minizinc/minizinc.exe\" -c --solver " + solver + " " + FULL_CONSTRAINTS_FILE);
+		String command = "\"minizinc/mzn2fzn.exe\" " + FULL_CONSTRAINTS_FILE;
+		ProcessBuilder processBuilder = new ProcessBuilder();
+		processBuilder.command(Wconsole, "/c", command);
+       	try {
+			processBuilder.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 

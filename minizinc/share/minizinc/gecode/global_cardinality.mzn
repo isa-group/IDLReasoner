@@ -5,6 +5,10 @@
 %  Copyright:
 %     Guido Tack, 2007
 %
+%  Last modified:
+%     $Date: 2013-03-07 12:18:29 +1100 (Thu, 07 Mar 2013) $ by $Author: mears $
+%     $Revision: 13455 $
+%
 %  This file is part of Gecode, the generic constraint
 %  development environment:
 %     http://www.gecode.org
@@ -30,16 +34,9 @@
 %
 %
 
-predicate gecode_global_cardinality(array[int] of var int: x,
-                                    array[int] of int: cover,
-                                    array[int] of var int: counts);
-
 predicate global_cardinality(array[int] of var int: x,
                              array[int] of int: cover,
-                             array[int] of var int: counts) =
-    assert(index_set(cover) = index_set(counts),
-        "global_cardinality: cover and counts must have identical index sets",
-        gecode_global_cardinality(x,cover,counts));
+                             array[int] of var int: counts);
 
 predicate global_cardinality_old(array[int] of var int: x,
                              array[int] of var int: c) =

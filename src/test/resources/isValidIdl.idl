@@ -1,2 +1,2 @@
-IF p1 THEN NOT p3;
-IF p2 THEN p4
+IF p1 THEN p3;
+IF p3 THEN NOT p2;

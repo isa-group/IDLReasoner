@@ -1,11 +1,13 @@
 %
 %  Main authors:
-%     Christian Schulte <schulte@gecode.org>
 %     Guido Tack <tack@gecode.org>
 %
 %  Copyright:
-%     Christian Schulte, 2018
 %     Guido Tack, 2007
+%
+%  Last modified:
+%     $Date: 2009-09-09 01:42:03 +1000 (Wed, 09 Sep 2009) $ by $Author: schulte $
+%     $Revision: 9689 $
 %
 %  This file is part of Gecode, the generic constraint
 %  development environment:
@@ -32,32 +34,4 @@
 %
 %
 
-predicate gecode_table_int(array[int] of var int: x,
-                           array[int] of int: t);
-
-predicate gecode_table_int_reif(array[int] of var int: x,
-                                array[int] of int: t, var bool: b);
-
-predicate gecode_table_int_imp(array[int] of var int: x,
-                               array[int] of int: t, var bool: b);
-
-predicate table_int(array[int] of var int: x, array[int, int] of int: t) =
-    assert (index_set_2of2(t) == index_set(x),
-        "The second dimension of the table must equal the number of variables "
-            ++ "in the first argument",
-        gecode_table_int(x,array1d(t)));
-
-predicate table_int_reif(array[int] of var int: x, array[int, int] of int: t,
-                         var bool: b) =
-    assert (index_set_2of2(t) == index_set(x),
-        "The second dimension of the table must equal the number of variables "
-            ++ "in the first argument",
-        gecode_table_int_reif(x,array1d(t),b));
-
-predicate table_int_imp(array[int] of var int: x, array[int, int] of int: t,
-                        var bool: b) =
-    assert (index_set_2of2(t) == index_set(x),
-        "The second dimension of the table must equal the number of variables "
-            ++ "in the first argument",
-        gecode_table_int_imp(x,array1d(t),b));
-
+predicate table_int(array[int] of var int: x, array[int, int] of int: t);

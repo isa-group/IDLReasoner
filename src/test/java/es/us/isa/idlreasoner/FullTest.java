@@ -61,6 +61,7 @@ public class FullTest {
     @Test
     public void numberOfRequest() {
     	Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_example.yaml", "/requiredAndOptionalParams", "get");
+
     	assertTrue(analyzer.numberOfRequest()==480);
     }
 }
