@@ -13,9 +13,27 @@ public abstract class AbstractVariableMapper extends AbstractMapper {
 
     String apiSpecificationPath;
     Set<Variable> variables;
+    Map<String, String> parameterNamesMapping;
+    Map<String, Integer> stringIntMapping;
 
     public AbstractVariableMapper() {
         variables = new HashSet<>();
+    }
+
+    public Map<String, String> getParameterNamesMapping() {
+        return parameterNamesMapping;
+    }
+
+    public void setParameterNamesMapping(Map<String, String> parameterNamesMapping) {
+        this.parameterNamesMapping = parameterNamesMapping;
+    }
+
+    public Map<String, Integer> getStringIntMapping() {
+        return stringIntMapping;
+    }
+
+    public void setStringIntMapping(Map<String, Integer> stringIntMapping) {
+        this.stringIntMapping = stringIntMapping;
     }
 
     public Set<Variable> getVariables() {
@@ -42,5 +60,15 @@ public abstract class AbstractVariableMapper extends AbstractMapper {
         reader.close();
 
         return previousContent;
+    }
+
+    String changeIfReservedWord(String word) {
+        String changedWord = word;
+        if(reservedWords.contains(word)) {
+            changedWord += "_R";
+            parameterNamesMapping.putIfAbsent(changedWord, word);
+        }
+        return changedWord;
+
     }
 }

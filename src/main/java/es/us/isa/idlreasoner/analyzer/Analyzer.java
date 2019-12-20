@@ -15,10 +15,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import java.util.stream.Collectors;
@@ -60,10 +57,12 @@ public class Analyzer {
 	
 	public Map<String,String> randomRequest() {
 		Map<String, String> res = new HashMap<>();
+		Map<String, String> res2 = new HashMap<>();
 		List<Map<String,String>> allRequest = this.getAllRequest();
 		
 		if(allRequest.size()!=0) {
 			res = allRequest.get(ThreadLocalRandom.current().nextInt(0, allRequest.size()));
+			res2 = setUpRequest2(res);
 		}
 		return res;
 	
@@ -202,6 +201,116 @@ public class Analyzer {
 				e.printStackTrace();
 			}
 			updateConf();
+	}
+
+	/**
+	 * This method takes as input a solution provided by MiniZinc, i.e. a map of
+	 * variables with their values (including the pSets) and returns a request ready
+	 * to be instantiated, i.e. a map without the pSets, containing only the ps
+	 * whose pSets are equal to 1, replacing parameter names to original names
+	 * (e.g. type_R -> type) and replacing int values with strings.
+	 *
+	 * @param cspSolution Original solution from MiniZinc
+	 * @return Request ready to be instantiated (e.g. by RESTest)
+	 */
+	private Map<String,String> setUpRequest(Map<String,String> cspSolution) {
+
+		Iterator<Map.Entry<String, String>> cspVariables = cspSolution.entrySet().iterator();
+		Map.Entry<String, String> currentCspVariable;
+		String changedName;
+		String originalName;
+		Variable parameter;
+		String parameterType;
+		while (cspVariables.hasNext()) {
+			currentCspVariable = cspVariables.next();
+			changedName = currentCspVariable.getKey();
+			if (cspSolution.get(changedName + "Set") != null) {
+				if (cspSolution.get(changedName + "Set").equals("1")) {
+					originalName = variableMapper.getParameterNamesMapping().get(changedName);
+					if (originalName != null) {
+						cspSolution.put(originalName, currentCspVariable.getValue());
+					} else {
+						originalName = changedName;
+					}
+					String finalOriginalName = originalName;
+					parameter = variableMapper.getVariables().stream().filter(var -> var.getName().equals(finalOriginalName)).findFirst().orElse(null);
+					if (parameter != null) {
+						parameterType = parameter.getType();
+						if (parameterType.equals("string")) {
+							cspSolution.put(originalName, "random string");
+//							if (variableMapper.getStringIntMapping().containsValue(new Integer(currentCspVariable.getValue()))) {
+//
+//							}
+//							if (variableMapper.getStringIntMapping().get(currentCspVariable.getValue()) != null) {
+//								cspSolution.put(originalName, variableMapper.getStringIntMapping().get(currentCspVariable.getValue()))
+//							}
+						}
+					}
+					if (!originalName.equals(changedName)) {
+						cspSolution.remove(changedName);
+					}
+					cspSolution.remove(changedName + "Set");
+				}
+//				else {
+//					cspSolution.remove(currentCspVariable.getKey());
+//					cspSolution.remove(currentCspVariable.getKey() + "Set");
+//				}
+			}
+//			if (currentCspVariable.getKey().substring(currentCspVariable.getKey().length()-3).equals("Set")) {
+//
+//			}
+		}
+
+
+		return cspSolution;
+	}
+
+
+	/**
+	 * This method takes as input a solution provided by MiniZinc, i.e. a map of
+	 * variables with their values (including the pSets) and returns a request ready
+	 * to be instantiated, i.e. a map without the pSets, containing only the ps
+	 * whose pSets are equal to 1, replacing parameter names to original names
+	 * (e.g. type_R -> type) and replacing int values with strings.
+	 *
+	 * @param cspSolution Original solution from MiniZinc
+	 * @return Request ready to be instantiated (e.g. by RESTest)
+	 */
+	private Map<String,String> setUpRequest2(Map<String,String> cspSolution) {
+		Map<String,String> request = new HashMap<>();
+		Iterator<Map.Entry<String, String>> cspVariables = cspSolution.entrySet().iterator();
+		Map.Entry<String, String> currentCspVariable;
+		String key;
+		String value;
+
+		while (cspVariables.hasNext()) {
+			currentCspVariable = cspVariables.next();
+			key = currentCspVariable.getKey();
+			value = currentCspVariable.getValue();
+			if (cspSolution.get(key + "Set") != null) {
+				if (cspSolution.get(key + "Set").equals("1")) {
+					if (variableMapper.getParameterNamesMapping().get(key) != null) {
+						key = variableMapper.getParameterNamesMapping().get(key);
+					}
+					String finalKey = key;
+					Variable parameter = variableMapper.getVariables().stream().filter(var -> var.getName().equals(finalKey)).findFirst().orElse(null);
+					if (parameter != null) {
+						if (parameter.getType().equals("string")) {
+							String finalValue = value;
+							Map.Entry<String,Integer> intEntry = variableMapper.getStringIntMapping().entrySet().stream().filter(stringIntMapping -> stringIntMapping.getValue().equals(new Integer(finalValue))).findFirst().orElse(null);
+							if (intEntry != null)	 {
+								value = intEntry.getKey();
+							} else {
+								value = "default string";
+							}
+						}
+					}
+					request.put(key, value);
+				}
+			}
+		}
+
+		return request;
 	}
 	
 	

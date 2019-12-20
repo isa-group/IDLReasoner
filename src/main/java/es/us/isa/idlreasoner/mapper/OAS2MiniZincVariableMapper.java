@@ -12,14 +12,12 @@ import java.io.*;
 import java.util.*;
 
 import static es.us.isa.idlreasoner.util.FileManager.*;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.BASE_CONSTRAINTS_FILE;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.MAPPING_FILE;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
 public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
     private OpenAPI openAPISpec;
     private List<Parameter> parameters;
-    private Map<String, Integer> stringIntMapping;
     private Map<String, Map<String, Integer>> mappingParameters;
     private Integer stringToIntCounter;
 
@@ -27,7 +25,7 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         super();
         this.apiSpecificationPath = apiSpecificationPath;
         stringIntMapping = new HashMap<>();
-        mappingParameters = new HashMap<String, Map<String,Integer>>();
+        mappingParameters = new HashMap<>();
         reservedWords = Arrays.asList("annotation","any", "array", "bool", "case", "diff",
                 "div", "else", "elseif", "endif", "enum", "false", "float", "function", "if", "include",
                 "intersect", "let", "list", "maximize", "minimize", "mod",  "of", "opt", "output", "par",
@@ -71,6 +69,7 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         List<String> previousContent = savePreviousBaseConstraintsFileContent();
         recreateFile(BASE_CONSTRAINTS_FILE);
         initializeStringIntMapping();
+        initializeParameterNamesMapping();
 
         BufferedWriter out = openWriter(BASE_CONSTRAINTS_FILE);
         BufferedWriter requiredVarsOut = openWriter(BASE_CONSTRAINTS_FILE);
@@ -141,6 +140,7 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         requiredVarsOut.close();
 
         exportStringIntMappingToFile();
+        exportParameterNamesMappingToFile();
     }
 
     public Map<String, Map<String,Integer>> getMappingParameters(){
@@ -162,10 +162,16 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 //        }
 //    }
 
+    private void initializeParameterNamesMapping() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
+        parameterNamesMapping = mapper.readValue(new File(PARAMETER_NAMES_MAPPING_FILE), typeRef);
+    }
+
     private void initializeStringIntMapping() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String, Integer>> typeRef = new TypeReference<HashMap<String, Integer>>() {};
-        stringIntMapping = mapper.readValue(new File(MAPPING_FILE), typeRef);
+        stringIntMapping = mapper.readValue(new File(STRING_INT_MAPPING_FILE), typeRef);
         Map.Entry<String, Integer> entryWithHighestInt = stringIntMapping.entrySet().stream()
                 .max(Comparator.comparing(Map.Entry::getValue))
                 .orElse(null);
@@ -177,9 +183,16 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
     }
 
     private void exportStringIntMappingToFile() throws IOException {
-        recreateFile(MAPPING_FILE);
+        recreateFile(STRING_INT_MAPPING_FILE);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(stringIntMapping);
-        appendContentToFile(MAPPING_FILE, json);
+        appendContentToFile(STRING_INT_MAPPING_FILE, json);
+    }
+
+    private void exportParameterNamesMappingToFile() throws IOException {
+        recreateFile(PARAMETER_NAMES_MAPPING_FILE);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(parameterNamesMapping);
+        appendContentToFile(PARAMETER_NAMES_MAPPING_FILE, json);
     }
 }

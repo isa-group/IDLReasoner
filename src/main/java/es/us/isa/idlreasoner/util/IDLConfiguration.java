@@ -13,12 +13,14 @@ public class IDLConfiguration {
     public static String MAX_RESULTS;
     public static String BASE_CONSTRAINTS_FILE;
     public static String FULL_CONSTRAINTS_FILE;
-    public static String MAPPING_FILE;
+    public static String STRING_INT_MAPPING_FILE;
+    public static String PARAMETER_NAMES_MAPPING_FILE;
 
     public static void updateConf() {
         BASE_CONSTRAINTS_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("base_constraints_file");
         FULL_CONSTRAINTS_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("full_constraints_file");
-        MAPPING_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("mapping_file");
+        STRING_INT_MAPPING_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("string_int_mapping_file");
+        PARAMETER_NAMES_MAPPING_FILE = "./" + readProperty("aux_files_folder") + "/" + readProperty("parameter_names_mapping_file");
 
         InputStream inputStream;
         try {
