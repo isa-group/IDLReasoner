@@ -63,7 +63,7 @@ public class Analyzer {
 		List<Map<String,String>> allRequest = this.getAllRequest();
 		
 		if(allRequest.size()!=0) {
-			allRequest.get(ThreadLocalRandom.current().nextInt(0, allRequest.size()));
+			res = allRequest.get(ThreadLocalRandom.current().nextInt(0, allRequest.size()));
 		}
 		return res;
 	
