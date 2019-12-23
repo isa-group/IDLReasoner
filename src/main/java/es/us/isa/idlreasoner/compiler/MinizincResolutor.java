@@ -16,7 +16,7 @@ public class MinizincResolutor extends Resolutor {
 		return null;
 	}
 
-	public List<Map<String,String>>  solveGetAllSolutins(String maxResults) {
+	public List<Map<String,String>> solveGetAllSolutions(String maxResults) {
 		this.solve();
 		return null;
 	}

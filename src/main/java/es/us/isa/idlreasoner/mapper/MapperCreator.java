@@ -1,58 +1,61 @@
 package es.us.isa.idlreasoner.mapper;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Properties;
+import java.util.Map;
+import java.util.Set;
+
+import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
 public class MapperCreator {
-	
-	private String compiler;
-	
-	private AbstractConstraintMapper constraintMapper;
-	private AbstractVariableMapper variableMapper;
+
+	private MiniZincConstraintMapper cm;
+	private AbstractVariableMapper vm;
 	
 	public MapperCreator(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
-		this.extractDataFromProperties();
+		String compiler = readProperty("compiler");
 
 		// ConstraintMapper: must be created BEFORE the VariableMapper
-		if(this.compiler.toLowerCase().equals("minizinc"))
-			this.constraintMapper = new MiniZincIDLConstraintMapper(idl);
+		if(compiler.toLowerCase().equals("minizinc"))
+			this.cm = new MiniZincConstraintMapper(idl, null);
+		else {
+			System.err.println("Compiler " + compiler + " not supported.");
+			System.exit(-1);
+		}
 
 		// VariableMapper: must be created AFTER the ConstraintMapper
-		if(specificationType.toLowerCase().equals("oas") && this.compiler.toLowerCase().equals("minizinc"))
-			this.variableMapper = new OAS2MiniZincVariableMapper(apiSpecificationPath, operationPath, operationType);
+		if(specificationType.toLowerCase().equals("oas") && compiler.toLowerCase().equals("minizinc"))
+			this.vm = new OAS2MiniZincVariableMapper(apiSpecificationPath, operationPath, operationType, cm.mr);
+		else {
+			System.err.println("Specification type " + specificationType + " and or compiler " + compiler + " not supported.");
+			System.exit(-1);
+		}
 	}
-	
-	
-	public AbstractConstraintMapper getConstraintMapper() {
-		return this.constraintMapper;
+
+	public MiniZincConstraintMapper getConstraintMapper() {
+		return this.cm;
 	}
 	
 	public AbstractVariableMapper getVariableMapper() {
-		return this.variableMapper;
-	}
-	
-	
-	
-	private void extractDataFromProperties() {
-
-		InputStream inputStream;
-		
-		try {
-		
-		Properties prop = new Properties();
-		
-		inputStream = new FileInputStream("./idl_aux_files/config.properties");
-		
-		prop.load(inputStream);
-		
-		this.compiler = prop.getProperty("compiler");
-
-		} catch (Exception e) {
-			System.out.println("Exception: " + e);
-		} 
-		
-
+		return this.vm;
 	}
 
+	public Boolean isOptionalParameter(String paramName) {
+		Map.Entry<String, Boolean> paramFeatures = vm.mr.operationParameters.get(paramName);
+		if (paramFeatures != null) {
+			return !paramFeatures.getValue();
+		} else {
+			return null;
+		}
+	}
+
+	public void setParamToValue(String paramName, String paramValue) {
+		cm.setParamToValue(paramName, paramValue);
+	}
+
+	public void finishConstraintsFile() {
+		cm.finishConstraintsFile();
+	}
+
+	public Set<String> getOperationParameters() {
+		return vm.mr.operationParameters.keySet();
+	}
 }

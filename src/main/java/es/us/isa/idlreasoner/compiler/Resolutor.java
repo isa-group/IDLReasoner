@@ -17,7 +17,7 @@ public class Resolutor implements ResolutorInterface{
 	}
 
 	@Override
-	public List<Map<String,String>> solveGetAllSolutins(String maxResults) {
+	public List<Map<String,String>> solveGetAllSolutions(String maxResults) {
 		this.solve();
 		return null;
 	}

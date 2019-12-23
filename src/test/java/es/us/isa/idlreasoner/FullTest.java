@@ -3,8 +3,6 @@ package es.us.isa.idlreasoner;
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
 
-import org.eclipse.core.runtime.Assert;
-
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,6 +59,6 @@ public class FullTest {
     @Test
     public void numberOfRequest() {
     	Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_example.yaml", "/requiredAndOptionalParams", "get");
-    	assertTrue(analyzer.numberOfRequest()==480);
+    	assertTrue(analyzer.numberOfRequest()==100);
     }
 }

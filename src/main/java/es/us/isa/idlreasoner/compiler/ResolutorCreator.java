@@ -12,7 +12,7 @@ public class ResolutorCreator {
 	private String compiler;
 	private String solver;
 	private String fileRoute;
-	private Resolutor curentCompiler;
+	private Resolutor currentCompiler;
 	private String maxResults;
 	
 	
@@ -21,31 +21,23 @@ public class ResolutorCreator {
 		this.osName = System.getProperty("os.name");
 		this.extractDataFromProperties();
 
-		if(this.compiler.equals("Minizinc")) {	
-			
-			if(this.osName.contains("Windows")) {
-
-				this.curentCompiler = new MinizincResolutorWindows(this.solver);
-				
-			}else{
-				
-				this.curentCompiler = new MinizincResolutor(this.solver);
+		if (this.compiler.equals("Minizinc")) {
+			if (this.osName.contains("Windows")) {
+				this.currentCompiler = new MinizincResolutorWindows(this.solver);
+			} else {
+				this.currentCompiler = new MinizincResolutor(this.solver);
 			}
-			
-
-		}else {
-			this.curentCompiler = new Resolutor();
+		} else {
+			this.currentCompiler = new Resolutor();
 		}
-
-		
 	}
 	
 	public Map<String,String> solve() {
-		return this.curentCompiler.solve();
+		return this.currentCompiler.solve();
 	}
 	
-	public List<Map<String,String>>  solveGetAllSolutins() {
-		return this.curentCompiler.solveGetAllSolutins(this.maxResults);
+	public List<Map<String,String>> solveGetAllSolutions() {
+		return this.currentCompiler.solveGetAllSolutions(this.maxResults);
 	}
 
 	
@@ -54,30 +46,19 @@ public class ResolutorCreator {
 		InputStream inputStream;
 		
 		try {
-		
-		Properties prop = new Properties();
-		String propFileName = "config.properties";
-		
-		inputStream = new FileInputStream("./idl_aux_files/config.properties");
-		
-		//inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-		
-		prop.load(inputStream);
-		
-		this.compiler = prop.getProperty("compiler");
-		this.solver= prop.getProperty("solver");
-		this.fileRoute = prop.getProperty("fileRoute");
-		this.maxResults = prop.getProperty("maxResults");
+			Properties prop = new Properties();
+			inputStream = new FileInputStream("./idl_aux_files/config.properties");
+			prop.load(inputStream);
 
+			this.compiler = prop.getProperty("compiler");
+			this.solver= prop.getProperty("solver");
+			this.fileRoute = prop.getProperty("fileRoute");
+			this.maxResults = prop.getProperty("maxResults");
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
 		} 
 		
 
-	}
-	
-	public String getDirectory() {
-		return this.fileRoute;
 	}
 	
 	public Integer getMaxResults() {

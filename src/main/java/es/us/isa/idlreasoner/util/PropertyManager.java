@@ -11,7 +11,7 @@ import java.util.Properties;
  */
 public class PropertyManager {
 
-    static String propertyFilePath = "src/main/resources/config.properties";
+    static String propertyFilePath = "idl_aux_files/config.properties";
     static 	Properties properties = null;
 
     static public String readProperty(String name) {

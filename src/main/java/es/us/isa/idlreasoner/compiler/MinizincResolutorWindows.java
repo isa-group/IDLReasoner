@@ -19,7 +19,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 
 	private String Wconsole = "cmd.exe";
 	
-	public List<Map<String,String>> solveGetAllSolutins(String maxResults) {
+	public List<Map<String,String>> solveGetAllSolutions(String maxResults) {
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
 		String command;
 		if(!maxResults.trim().equals("")){
