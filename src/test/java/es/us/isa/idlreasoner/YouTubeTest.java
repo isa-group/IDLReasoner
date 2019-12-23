@@ -9,7 +9,8 @@ public class YouTubeTest {
 
     @Test
     public void randomRequestTest() {
-        Analyzer analyzer = new Analyzer("oas","youtube.idl", "./src/test/resources/youtube.yaml", "/search", "get");
-        System.out.println(analyzer.randomRequest());
+        Analyzer analyzer = new Analyzer("oas","foursquare.idl", "./src/test/resources/foursquare.yaml", "/venues/search", "get");
+//        System.out.println(analyzer.randomRequest());
+//        analyzer.getAllSetUpRequest().forEach(System.out::println);
     }
 }

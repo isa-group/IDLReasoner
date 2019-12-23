@@ -1,0 +1,191 @@
+swagger: '2.0'
+schemes:
+  - https
+host: api.foursquare.com
+basePath: /v2
+info:
+  contact:
+    name: Foursquare
+    url: 'https://foursquare.com/'
+  description: 'Foursquare API'
+  license:
+    name: Creative Commons Attribution 3.0
+    url: 'http://creativecommons.org/licenses/by/3.0/'
+  title: Foursquare
+  version: v2
+externalDocs:
+  url: 'https://developer.foursquare.com/docs'
+paths:
+  /venues/search:
+    get:
+      description: 'Search for venues.'
+      operationId: searchVenues
+      parameters:
+        - in: query
+          name: ll
+          type: string
+          required: false
+          enum:
+            - 37.42307,-122.08427
+            - 37.392191,-5.995193
+            - 35.681999,139.769254
+            - -33.924278,18.424572
+            - -37.812746,144.961832
+        - in: query
+          name: near
+          type: string
+          required: false
+          enum:
+            - Seville
+            - Chicago
+            - Tokyo
+            - Oslo
+            - Melbourne
+        - in: query
+          name: name
+          type: string
+          required: false
+          enum:
+            - bar
+            - restaurant
+            - cinema
+            - sushi
+            - pizza
+        - enum:
+            - checkin
+            - global
+            - browse
+            - match
+          in: query
+          name: intent
+          type: string
+          required: false
+        - in: query
+          maximum: 100000
+          minimum: 0
+          name: radius
+          type: integer
+          required: false
+          enum:
+            - 0
+            - 50
+            - 1000
+            - 20000
+            - 100000
+        - in: query
+          name: sw
+          type: string
+          required: false
+          enum:
+            - 37.52307,-122.18427
+            - 37.53307,-122.19427
+            - 37.54307,-122.20427
+            - 37.55307,-122.21427
+            - 37.56307,-122.22427
+        - in: query
+          name: ne
+          type: string
+          required: false
+          enum:
+            - 37.51307,-122.17427
+            - 37.50307,-122.16427
+            - 37.49307,-122.15427
+            - 37.48307,-122.14427
+            - 37.47307,-122.13427
+        - in: query
+          name: query
+          type: string
+          required: false
+          enum:
+            - tacos
+            - bar
+            - sushi
+            - cinema
+            - mall
+        - maximum: 50
+          minimum: 1
+          in: query
+          name: limit
+          type: integer
+          required: false
+          enum:
+            - 1
+            - 5
+            - 15
+            - 30
+            - 50
+        - in: query
+          name: categoryId
+          type: string
+          required: false
+          enum:
+            - 4d4b7104d754a06370d81259
+            - 4bf58dd8d48988d17f941735
+            - 4d4b7105d754a06372d81259
+            - 4d4b7105d754a06373d81259
+            - 4d4b7105d754a06374d81259
+        - in: query
+          name: llAcc
+          type: integer
+          required: false
+          enum:
+            - 1
+            - 10
+            - 100
+            - 1000
+            - 100000
+        - in: query
+          name: alt
+          type: integer
+          required: false
+          enum:
+            - 0
+            - 10
+            - 100
+            - 1000
+            - 3000
+        - in: query
+          name: altAcc
+          type: integer
+          required: false
+          enum:
+            - 1
+            - 10
+            - 100
+            - 1000
+            - 3000
+        - in: query
+          name: url
+          type: string
+          required: false
+          enum:
+            - http://nymag.com/food
+            - https://example2.com
+            - https://example3.com
+            - https://example4.com
+            - https://example5.com
+        - in: query
+          name: providerId
+          type: string
+          required: false
+          enum:
+            - nymag
+            - time
+            - mcdonalds
+            - nike
+            - example
+        - in: query
+          name: linkedId
+          type: string
+          required: false
+          enum:
+            - 1002207971611
+            - 1002234561611
+            - 1002207975756
+            - 1002343297161
+            - 1002207934543
+      responses:
+        '200':
+          description: Successful response
+        'default':
+          description: General response
