@@ -11,3 +11,4 @@ minizinc
 .project
 .settings/
 /bin/
+/classes/
