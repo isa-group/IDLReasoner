@@ -11,45 +11,12 @@ import java.util.*;
 
 import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.PARAMETER_NAMES_MAPPING_FILE;
 
 public abstract class AbstractVariableMapper extends AbstractMapper {
 
     public AbstractVariableMapper(MapperResources mr) {
         super(mr);
     }
-
-//    Set<Variable> variables;
-//    BiMap<String, String> parameterNamesMapping;
-//    BiMap<String, Integer> stringIntMapping;
-
-//    public AbstractVariableMapper() {
-//        variables = new HashSet<>();
-//    }
-//
-//    public BiMap<String, String> getParameterNamesMapping() {
-//        return parameterNamesMapping;
-//    }
-//
-//    public void setParameterNamesMapping(BiMap<String, String> parameterNamesMapping) {
-//        this.parameterNamesMapping = parameterNamesMapping;
-//    }
-//
-//    public BiMap<String, Integer> getStringIntMapping() {
-//        return stringIntMapping;
-//    }
-//
-//    public void setStringIntMapping(BiMap<String, Integer> stringIntMapping) {
-//        this.stringIntMapping = stringIntMapping;
-//    }
-//
-//    public Set<Variable> getVariables() {
-//        return variables;
-//    }
-//
-//    public void setVariables(Set<Variable> variables) {
-//        this.variables = variables;
-//    }
 
     abstract public void mapVariables() throws IOException;
 

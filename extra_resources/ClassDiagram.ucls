@@ -20,7 +20,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="es.us.isa.idlreasoner.mapper.MapperCreator" project="IDL-Analyzer" 
+  <class id="3" language="java" name="es.us.isa.idlreasoner.mapper.MiniZincMapper" project="IDL-Analyzer"
     file="/IDL-Analyzer/src/main/java/es/us/isa/idlreasoner/mapper/MapperCreator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="594" y="227"/>    

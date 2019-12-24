@@ -2,16 +2,15 @@ package es.us.isa.idlreasoner.mapper;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
-public class MapperCreator {
+public class MiniZincMapper {
 
 	private MiniZincConstraintMapper cm;
 	private AbstractVariableMapper vm;
 	
-	public MapperCreator(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
+	public MiniZincMapper(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
 		String compiler = readProperty("compiler");
 
 		// ConstraintMapper: must be created BEFORE the VariableMapper

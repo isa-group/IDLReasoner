@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Analyzer {
 
 	private ResolutorCreator resolutor;
-	private MapperCreator mapper;
+	private MiniZincMapper mapper;
 //	private AbstractConstraintMapper constraintMapper;
 //	private AbstractVariableMapper variableMapper;
 	private Map<String, String> restrictions = new HashMap<String, String>();
@@ -31,7 +31,7 @@ public class Analyzer {
 		recreateFile(BASE_CONSTRAINTS_FILE);
 		
 		this.resolutor = new ResolutorCreator();
-		mapper = new MapperCreator(specificationType, idl, apiSpecificationPath, operationPath, operationType);
+		mapper = new MiniZincMapper(specificationType, idl, apiSpecificationPath, operationPath, operationType);
 		
 //		this.constraintMapper = mapper.getConstraintMapper();
 //		this.variableMapper = mapper.getVariableMapper();
