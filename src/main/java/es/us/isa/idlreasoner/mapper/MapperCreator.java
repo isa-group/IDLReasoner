@@ -2,6 +2,7 @@ package es.us.isa.idlreasoner.mapper;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
@@ -30,14 +31,6 @@ public class MapperCreator {
 		}
 	}
 
-	public MiniZincConstraintMapper getConstraintMapper() {
-		return this.cm;
-	}
-	
-	public AbstractVariableMapper getVariableMapper() {
-		return this.vm;
-	}
-
 	public Boolean isOptionalParameter(String paramName) {
 		Map.Entry<String, Boolean> paramFeatures = vm.mr.operationParameters.get(paramName);
 		if (paramFeatures != null) {
@@ -51,6 +44,10 @@ public class MapperCreator {
 		cm.setParamToValue(paramName, paramValue);
 	}
 
+	public void setParamToValue(String changedParamName, String origParamName, String paramValue) {
+		cm.setParamToValue(changedParamName, origParamName, paramValue);
+	}
+
 	public void finishConstraintsFile() {
 		cm.finishConstraintsFile();
 	}
@@ -58,4 +55,8 @@ public class MapperCreator {
 	public Set<String> getOperationParameters() {
 		return vm.mr.operationParameters.keySet();
 	}
+
+//	public Set<String> getRequiredParameters() {
+//		return vm.mr.operationParameters.entrySet().stream().filter(param -> param.getValue().getValue()).map(Map.Entry::getKey).collect(Collectors.toSet());
+//	}
 }

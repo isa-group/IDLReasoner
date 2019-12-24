@@ -3,6 +3,8 @@ package es.us.isa.idlreasoner.mapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.HashBiMap;
+
+import static es.us.isa.idlreasoner.util.Utils.parseParamName;
 import static es.us.isa.interparamdep.generator.ReservedWords.RESERVED_WORDS;
 
 import java.io.File;
@@ -86,12 +88,5 @@ public class AbstractMapper {
         }
 
         return value;
-    }
-
-    private String parseParamName(String paramName) {
-        String parsedParamName = paramName.replaceAll("[\\[\\]]", "").replaceAll("[\\.\\-\\/\\:]", "_");
-        if (RESERVED_WORDS.contains(parsedParamName))
-            parsedParamName += "_R";
-        return parsedParamName;
     }
 }

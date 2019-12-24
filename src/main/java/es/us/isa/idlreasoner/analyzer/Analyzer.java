@@ -1,23 +1,19 @@
 package es.us.isa.idlreasoner.analyzer;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
 import es.us.isa.idlreasoner.mapper.*;
-import es.us.isa.idlreasoner.pojos.Variable;
 
 import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
+import static es.us.isa.idlreasoner.util.Utils.parseParamName;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
-import java.util.stream.Collectors;
 
 
 public class Analyzer {
@@ -63,7 +59,7 @@ public class Analyzer {
 	public Boolean isDeadParameter(String parameter) {
 		setupAnalysisOperation();
 
-		mapper.setParamToValue(parameter+"Set", "1");
+		mapper.setParamToValue(parseParamName(parameter)+"Set", "1");
 		mapper.finishConstraintsFile();
 
 		return resolutor.solve().size()==0;
@@ -73,7 +69,7 @@ public class Analyzer {
 		setupAnalysisOperation();
 
 		if (mapper.isOptionalParameter(parameter)) {
-			mapper.setParamToValue(parameter+"Set", "0");
+			mapper.setParamToValue(parseParamName(parameter)+"Set", "0");
 			mapper.finishConstraintsFile();
 			return resolutor.solve().size()==0;
 		} else {
@@ -107,10 +103,10 @@ public class Analyzer {
 		Set<String> operationParameters = mapper.getOperationParameters();
 		for(String operationParameter : operationParameters) {
 			if (restrictionParameters.contains(operationParameter)) {
-				mapper.setParamToValue(operationParameter, restrictions.get(operationParameter));
-				mapper.setParamToValue(operationParameter+"Set", "1");
+				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, restrictions.get(operationParameter));
+				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "1");
 			} else {
-				mapper.setParamToValue(operationParameter+"Set", "0");
+				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "0");
 
 			}
 		}
@@ -124,8 +120,8 @@ public class Analyzer {
 		Set<String> operationParameters = mapper.getOperationParameters();
 		for(String operationParameter : operationParameters) {
 			if (restrictionParameters.contains(operationParameter)) {
-				mapper.setParamToValue(operationParameter, restrictions.get(operationParameter));
-				mapper.setParamToValue(operationParameter+"Set", "1");
+				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, restrictions.get(operationParameter));
+				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "1");
 			}
 		}
 		mapper.finishConstraintsFile();

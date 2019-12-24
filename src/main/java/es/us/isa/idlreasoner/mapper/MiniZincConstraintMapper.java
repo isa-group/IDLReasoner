@@ -39,6 +39,10 @@ public class MiniZincConstraintMapper extends AbstractMapper {
         appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(parameter) + " = " + origToChangedParamValue(parameter, value) + ";\n");
     }
 
+    public void setParamToValue(String changedParamName, String origParamName, String value) {
+        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(changedParamName) + " = " + origToChangedParamValue(origParamName, value) + ";\n");
+    }
+
     public void finishConstraintsFile() {
         appendContentToFile(FULL_CONSTRAINTS_FILE, "solve satisfy;\n");
     }
