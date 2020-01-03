@@ -6,82 +6,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
+
 public class ResolutorCreator {
 	
 	private String osName;
-	private String compiler;
-	private String solver;
-	private String fileRoute;
-	private Resolutor curentCompiler;
-	private String maxResults;
-	
+	private Resolutor currentCompiler;
+
 	
 	public ResolutorCreator() {
 
 		this.osName = System.getProperty("os.name");
-		this.extractDataFromProperties();
 
-		if(this.compiler.equals("Minizinc")) {	
-			
-			if(this.osName.contains("Windows")) {
-
-				this.curentCompiler = new MinizincResolutorWindows(this.solver);
-				
-			}else{
-				
-				this.curentCompiler = new MinizincResolutor(this.solver);
+		if (COMPILER.equals("Minizinc")) {
+			if (this.osName.contains("Windows")) {
+				this.currentCompiler = new MinizincResolutorWindows(SOLVER);
+			} else {
+				this.currentCompiler = new MinizincResolutor(SOLVER);
 			}
-			
-
-		}else {
-			this.curentCompiler = new Resolutor();
+		} else {
+			this.currentCompiler = new Resolutor();
 		}
-
-		
 	}
 	
 	public Map<String,String> solve() {
-		return this.curentCompiler.solve();
+		return this.currentCompiler.solve();
 	}
 	
-	public List<Map<String,String>>  solveGetAllSolutins() {
-		return this.curentCompiler.solveGetAllSolutins(this.maxResults);
-	}
-
-	
-	private void extractDataFromProperties() {
-
-		InputStream inputStream;
-		
-		try {
-		
-		Properties prop = new Properties();
-		String propFileName = "config.properties";
-		
-		inputStream = new FileInputStream("./idl_aux_files/config.properties");
-		
-		//inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-		
-		prop.load(inputStream);
-		
-		this.compiler = prop.getProperty("compiler");
-		this.solver= prop.getProperty("solver");
-		this.fileRoute = prop.getProperty("fileRoute");
-		this.maxResults = prop.getProperty("maxResults");
-
-		} catch (Exception e) {
-			System.out.println("Exception: " + e);
-		} 
-		
-
-	}
-	
-	public String getDirectory() {
-		return this.fileRoute;
+	public List<Map<String,String>> solveGetAllSolutions() {
+		return this.currentCompiler.solveGetAllSolutions(MAX_RESULTS);
 	}
 	
 	public Integer getMaxResults() {
-		return Integer.parseInt(this.maxResults);
+		return Integer.parseInt(MAX_RESULTS);
 	}
 	
 

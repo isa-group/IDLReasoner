@@ -7,6 +7,6 @@ public interface ResolutorInterface {
 	
 	public Map<String,String> solve();
 	
-	public List<Map<String,String>> solveGetAllSolutins(String maxResults);
+	public List<Map<String,String>> solveGetAllSolutions(String maxResults);
 
 }

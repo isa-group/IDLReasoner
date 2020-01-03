@@ -11,20 +11,21 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 import static es.us.isa.idlreasoner.util.FileManager.appendContentToFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
-public class MiniZincIDLConstraintMapper extends AbstractConstraintMapper {
+public class MiniZincConstraintMapper extends AbstractMapper {
 
     InterparameterDependenciesLanguageGenerator idlGenerator = new InterparameterDependenciesLanguageGenerator();
     Injector injector = new InterparameterDependenciesLanguageStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
     XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
     private Resource resource;
 
-    public MiniZincIDLConstraintMapper(String idlSpecificationPath) {
-        this.idlSpecificationPath = idlSpecificationPath;
+    public MiniZincConstraintMapper(String idlSpecificationPath, MapperResources mr) {
+        super(mr);
+        this.specificationPath = idlSpecificationPath;
         mapConstraints();
     }
 
     public void mapConstraints() {
-        this.resource = resourceSet.getResource(URI.createFileURI("./"+ IDL_FILES_FOLDER + "/" + idlSpecificationPath), true);
+        this.resource = resourceSet.getResource(URI.createFileURI("./"+ IDL_FILES_FOLDER + "/" + specificationPath), true);
         try {
             idlGenerator.doGenerate(resource, null, null);
         } catch (Exception e) {
@@ -35,7 +36,11 @@ public class MiniZincIDLConstraintMapper extends AbstractConstraintMapper {
     }
 
     public void setParamToValue(String parameter, String value) {
-        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + parameter + " = " + value + ";\n");
+        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(parameter) + " = " + origToChangedParamValue(parameter, value) + ";\n");
+    }
+
+    public void setParamToValue(String changedParamName, String origParamName, String value) {
+        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(changedParamName) + " = " + origToChangedParamValue(origParamName, value) + ";\n");
     }
 
     public void finishConstraintsFile() {

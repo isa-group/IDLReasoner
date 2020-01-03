@@ -65,7 +65,7 @@ paths:
         - name: "p1"
           in: "query"
           required: false
-          type: "string"
+          type: "integer"
           enum:
             - 1
             - 2

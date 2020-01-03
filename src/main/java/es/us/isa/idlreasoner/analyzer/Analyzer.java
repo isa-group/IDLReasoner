@@ -3,59 +3,32 @@ package es.us.isa.idlreasoner.analyzer;
 
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
 import es.us.isa.idlreasoner.mapper.*;
-import es.us.isa.idlreasoner.pojos.Variable;
-import es.us.isa.idlreasoner.util.FileManager;
 
 import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
+import static es.us.isa.idlreasoner.util.Utils.parseParamName;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
-import java.util.stream.Collectors;
 
 
 public class Analyzer {
 
 	private ResolutorCreator resolutor;
-	private MapperCreator mapperCreator;
-	private AbstractConstraintMapper constraintMapper;
-	private AbstractVariableMapper variableMapper;
-	private Map<String, Map<String, Integer>> mappingParameters;
-	
-	
+	private MiniZincMapper mapper;
 	private Map<String, String> restrictions = new HashMap<String, String>();
 
 	public Analyzer(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
-		
-		this.initConfigurationFile();
-		
-		recreateFile(BASE_CONSTRAINTS_FILE);
-		
-		this.resolutor = new ResolutorCreator();
-		this.mapperCreator = new MapperCreator(specificationType, idl, apiSpecificationPath, operationPath, operationType);
-		
-		this.constraintMapper = this.mapperCreator.getConstraintMapper();
-		this.variableMapper = this.mapperCreator.getVariableMapper();
-
-
+		initFilesAndConf();
+		resolutor = new ResolutorCreator();
+		mapper = new MiniZincMapper(specificationType, idl, apiSpecificationPath, operationPath, operationType);
 	}
 	
-	
-	public List<Map<String,String>>  getAllRequest() {
+	public List<Map<String,String>> getAllRequest() {
 
 		setupAnalysisOperation();
-		this.constraintMapper.finishConstraintsFile();
-		return resolutor.solveGetAllSolutins();
+		mapper.finishConstraintsFile();
+		return resolutor.solveGetAllSolutions();
 	}
 	
 	public Map<String,String> randomRequest() {
@@ -63,42 +36,34 @@ public class Analyzer {
 		List<Map<String,String>> allRequest = this.getAllRequest();
 		
 		if(allRequest.size()!=0) {
-			allRequest.get(ThreadLocalRandom.current().nextInt(0, allRequest.size()));
+			res = allRequest.get(ThreadLocalRandom.current().nextInt(0, allRequest.size()));
 		}
 		return res;
-	
 	}
-
 
 	public Boolean isDeadParameter(String parameter) {
 		setupAnalysisOperation();
 
-		this.constraintMapper.setParamToValue(parameter+"Set", "1");
-		this.constraintMapper.finishConstraintsFile();
+		mapper.setParamToValue(parseParamName(parameter)+"Set", "1");
+		mapper.finishConstraintsFile();
 
 		return resolutor.solve().size()==0;
 	}
-	
-
 
 	public Boolean isFalseOptional(String parameter) {
 		setupAnalysisOperation();
 
-		Variable parameterVar = this.variableMapper.getVariables().stream()
-				.filter(var -> var.getName().equals(parameter))
-				.findFirst().orElse(null);
-		if (parameterVar != null && !parameterVar.getRequired()) {
-			this.constraintMapper.setParamToValue(parameter+"Set", "0");
-			this.constraintMapper.finishConstraintsFile();
+		if (mapper.isOptionalParameter(parameter)) {
+			mapper.setParamToValue(parseParamName(parameter)+"Set", "0");
+			mapper.finishConstraintsFile();
 			return resolutor.solve().size()==0;
 		} else {
 			return false;
 		}
 	}
-	
-	
+
 	public Boolean isValidIDL() {
-		List<String> parameters = this.variableMapper.getVariables().stream().map(Variable::getName).collect(Collectors.toList());
+		Set<String> parameters = mapper.getOperationParameters();
 		Boolean res = true;
 		for(String parameter : parameters) {
 			res = !this.isDeadParameter(parameter) && !this.isFalseOptional(parameter);
@@ -110,99 +75,130 @@ public class Analyzer {
 	}
 	
 	public void setParameter(String parameter, String value) {
-		if(this.mappingParameters==null) {
-			this.mappingParameters =this.variableMapper.getMappingParameters();
-		}
-		restrictions.put(parameter, Integer.toString(translateParameter(parameter, value)));
+		restrictions.put(parameter, value);
 	}
-	
-	
+
 	public void setListParameterToVoid() {
-		this.restrictions = new HashMap<String, String>();
+		restrictions.clear();
 	}
-	
 
 	public Boolean validRequest() {
 		setupAnalysisOperation();
-		Set<String> parameters = this.restrictions.keySet();
-		List<String> allParameters = this.variableMapper.getVariables().stream().map(Variable::getName).collect(Collectors.toList());
-		for(String p : allParameters) {
-			if(parameters.contains(p)) {
-				this.constraintMapper.setParamToValue(p, this.restrictions.get(p));
-				this.constraintMapper.setParamToValue(p+"Set", "1");
-			}else {
-				this.constraintMapper.setParamToValue(p+"Set", "0");
+		Set<String> restrictionParameters = this.restrictions.keySet();
+		Set<String> operationParameters = mapper.getOperationParameters();
+		for(String operationParameter : operationParameters) {
+			if (restrictionParameters.contains(operationParameter)) {
+				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, restrictions.get(operationParameter));
+				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "1");
+			} else {
+				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "0");
 
 			}
 		}
-		this.constraintMapper.finishConstraintsFile();
+		mapper.finishConstraintsFile();
 		return this.resolutor.solve().size()!=0;
 	}
-	
 
 	public Boolean validPartialRequest() {
-		Set<String> parameters = this.restrictions.keySet();
-		List<String> allParameters = this.variableMapper.getVariables().stream().map(Variable::getName).collect(Collectors.toList());
 		setupAnalysisOperation();
-		for(String p : allParameters) {
-			if(parameters.contains(p)) {
-				this.constraintMapper.setParamToValue(p, this.restrictions.get(p));
-				this.constraintMapper.setParamToValue(p+"Set", "1");
+		Set<String> restrictionParameters = this.restrictions.keySet();
+		Set<String> operationParameters = mapper.getOperationParameters();
+		for(String operationParameter : operationParameters) {
+			if (restrictionParameters.contains(operationParameter)) {
+				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, restrictions.get(operationParameter));
+				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "1");
 			}
 		}
-		this.constraintMapper.finishConstraintsFile();
+		mapper.finishConstraintsFile();
 		return this.resolutor.solve().size()!=0;
 	}
-	
 
 	public Integer numberOfRequest() {
 		return this.getAllRequest().size();
 	}
-	
-	private Integer translateParameter(String parameter, String value) {
-		Integer res = 1;
-		Set<String> parameters = mappingParameters.keySet();
-		if(parameters.contains(parameter)) {
-			Map<String, Integer> mapping = mappingParameters.get(parameter);
-			res = mapping.get(value);
-		}
-		
-		return res;
-	}
-	
-
 
 	private void setupAnalysisOperation() {
 		recreateFile(FULL_CONSTRAINTS_FILE);
 		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
 	}
-	
-	private void initConfigurationFile() {
-		String filePath = "./idl_aux_files/config.properties";
-		createFileIfNotExists(filePath);
-		BufferedReader br = openReader(filePath);
 
-			try {
-				if(br.readLine()==null) {
-					br.close();
-					BufferedWriter bw = openWriter(filePath);
-					
-				    bw.append("compiler: Minizinc\n");
-				    bw.append("solver: Chuffed\n");
-				    bw.append("fileRoute: " + readProperty("aux_files_folder") + "/" + readProperty("idl_files_folder") + "\n");
-				    bw.append("maxResults: 100\n");
-				    
-				    bw.flush();
-				    bw.close();
-				} else {
-					br.close();
-				}
-			
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			updateConf();
-	}
+//	public Map<String,String> randomSetUpRequest() {
+//		Map<String, String> setUpRequest = new HashMap<>();
+//		List<Map<String,String>> allRequest = this.getAllRequest();
+//
+//		if(allRequest.size()!=0) {
+//			setUpRequest = setUpRequest(allRequest.get(ThreadLocalRandom.current().nextInt(0, allRequest.size())));
+//		}
+//		return setUpRequest;
+//	}
+
+//	public List<Map<String,String>> getAllSetUpRequest() {
+//		List<Map<String,String>> allSetUpRequest = new ArrayList<>();
+//
+//		setupAnalysisOperation();
+//		this.constraintMapper.finishConstraintsFile();
+//		resolutor.solveGetAllSolutions().forEach(solution -> allSetUpRequest.add(setUpRequest(solution)));
+//
+//		try {
+//			recreateFile("src/test/resources/foursquare_test_cases.json");
+//			ObjectMapper mapper = new ObjectMapper();
+//			String json = null;
+//			json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(allSetUpRequest);
+//			appendContentToFile("src/test/resources/foursquare_test_cases.json", json);
+//		} catch (JsonProcessingException e) {
+//			e.printStackTrace();
+//		}
+//
+//		return allSetUpRequest;
+//	}
+
+//	/**
+//	 * This method takes as input a solution provided by MiniZinc, i.e. a map of
+//	 * variables with their values (including the pSets) and returns a request ready
+//	 * to be instantiated, i.e. a map without the pSets, containing only the ps
+//	 * whose pSets are equal to 1, replacing parameter names to original names
+//	 * (e.g. type_R -> type) and replacing int values with strings.
+//	 *
+//	 * @param cspSolution Original solution from MiniZinc
+//	 * @return Request ready to be instantiated (e.g. by RESTest)
+//	 */
+//	private Map<String,String> setUpRequest(Map<String,String> cspSolution) {
+//		Map<String,String> request = new HashMap<>();
+//		Iterator<Map.Entry<String, String>> cspVariables = cspSolution.entrySet().iterator();
+//		Map.Entry<String, String> currentCspVariable;
+//		String key;
+//		String value;
+//
+//		while (cspVariables.hasNext()) {
+//			currentCspVariable = cspVariables.next();
+//			key = currentCspVariable.getKey();
+//			value = currentCspVariable.getValue();
+//			if (cspSolution.get(key + "Set") != null) {
+//				if (cspSolution.get(key + "Set").equals("1")) {
+//					String nameMapping = variableMapper.getParameterNamesMapping().get(key);
+//					if (nameMapping != null) {
+//						key = nameMapping;
+//					}
+//					String finalKey = key;
+//					Variable parameter = variableMapper.getVariables().stream().filter(var -> var.getName().equals(finalKey)).findFirst().orElse(null);
+//					if (parameter != null) {
+//						if (parameter.getType().equals("string")) {
+//							String finalValue = value;
+//							Map.Entry<String,Integer> intEntry = variableMapper.getStringIntMapping().entrySet().stream().filter(stringIntMapping -> stringIntMapping.getValue().equals(new Integer(finalValue))).findFirst().orElse(null);
+//							if (intEntry != null)	 {
+//								value = intEntry.getKey();
+//							} else {
+//								value = "default string";
+//							}
+//						}
+//					}
+//					request.put(key, value);
+//				}
+//			}
+//		}
+//
+//		return request;
+//	}
 	
 	
 	

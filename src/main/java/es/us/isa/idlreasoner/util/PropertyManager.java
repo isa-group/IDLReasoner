@@ -5,24 +5,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import static es.us.isa.idlreasoner.util.IDLConfiguration.IDL_AUX_FOLDER;
+
 /**
  *
  * @author Sergio Segura
  */
 public class PropertyManager {
 
-    static String propertyFilePath = "src/main/resources/config.properties";
-    static 	Properties properties = null;
+    private static Properties properties = null;
 
-    static public String readProperty(String name) {
+    public static String readProperty(String name) {
 
         if (properties==null) {
             properties = new Properties();
             try {
-                properties.load(new FileInputStream(propertyFilePath));
-            } catch (FileNotFoundException e) {
-                System.err.println("Error reading property file: " + e.getMessage());
-                e.printStackTrace();
+                properties.load(new FileInputStream(IDL_AUX_FOLDER + "/config.properties"));
             } catch (IOException e) {
                 System.err.println("Error reading property file: " + e.getMessage());
                 e.printStackTrace();

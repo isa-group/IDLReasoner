@@ -1,24 +1,80 @@
 package es.us.isa.idlreasoner.mapper;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import static es.us.isa.idlreasoner.util.Utils.parseParamName;
 
-import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class AbstractMapper {
+public class AbstractMapper {
 
-    List<String> reservedWords;
+    String specificationPath;
+    MapperResources mr;
 
-//    AbstractMapper() {
-//        constraintsFile = recreateConstraintsFile();
-//    }
+    public AbstractMapper(MapperResources mr) {
+        if (mr != null)
+            this.mr = mr;
+        else
+            this.mr = new MapperResources();
+    }
 
-    String changeIfReservedWord(String word) {
-        if(reservedWords.contains(word)) {
-            word = word + "_R";
+    String origToChangedParamName(String origParamName) {
+        String changedParamName = mr.parameterNamesMapping.inverse().get(origParamName);
+        if (changedParamName != null) {
+            return changedParamName;
+        } else {
+            String parsedParamName = parseParamName(origParamName);
+            if (!parsedParamName.equals(origParamName)) {
+                mr.parameterNamesMapping.put(parsedParamName, origParamName);
+                return parsedParamName;
+            }
         }
-        return word;
+        return origParamName;
+    }
 
+    String changedToOrigParamName(String changedParamName) {
+        String origParamName = mr.parameterNamesMapping.get(changedParamName);
+        if (origParamName != null) {
+            return origParamName;
+        }
+        return changedParamName;
+    }
+
+    String origToChangedParamValue(String parameter, String value) {
+        Map.Entry<String, Boolean> paramFeatures = mr.operationParameters.get(parameter);
+        if (paramFeatures != null) {
+            if (paramFeatures.getKey().equals("string")) {
+                Integer intMapping = mr.stringIntMapping.get(value);
+                if (intMapping != null) {
+                    return Integer.toString(intMapping);
+                } else {
+                    int randomInt = ThreadLocalRandom.current().nextInt(1000, 9999);
+                    mr.stringIntMapping.put(value, randomInt);
+                    return Integer.toString(randomInt);
+                }
+            }
+        }
+
+        return value;
+    }
+
+    String changedToOrigParamValue(String parameter, String value) {
+        Map.Entry<String, Boolean> paramFeatures = mr.operationParameters.get(parameter);
+        if (paramFeatures != null) {
+            if (paramFeatures.getKey().equals("string")) {
+                String stringMapping;
+                try {
+                    stringMapping = mr.stringIntMapping.inverse().get(new Integer(value));
+                } catch (NumberFormatException e) {
+                    return value;
+                }
+                if (stringMapping != null) {
+                    return stringMapping;
+                } else {
+                    return "default string";
+                }
+            }
+        }
+
+        return value;
     }
 }
