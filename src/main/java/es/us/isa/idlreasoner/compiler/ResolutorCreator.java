@@ -6,26 +6,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
+
 public class ResolutorCreator {
 	
 	private String osName;
-	private String compiler;
-	private String solver;
-	private String fileRoute;
 	private Resolutor currentCompiler;
-	private String maxResults;
-	
+
 	
 	public ResolutorCreator() {
 
 		this.osName = System.getProperty("os.name");
-		this.extractDataFromProperties();
 
-		if (this.compiler.equals("Minizinc")) {
+		if (COMPILER.equals("Minizinc")) {
 			if (this.osName.contains("Windows")) {
-				this.currentCompiler = new MinizincResolutorWindows(this.solver);
+				this.currentCompiler = new MinizincResolutorWindows(SOLVER);
 			} else {
-				this.currentCompiler = new MinizincResolutor(this.solver);
+				this.currentCompiler = new MinizincResolutor(SOLVER);
 			}
 		} else {
 			this.currentCompiler = new Resolutor();
@@ -37,32 +34,11 @@ public class ResolutorCreator {
 	}
 	
 	public List<Map<String,String>> solveGetAllSolutions() {
-		return this.currentCompiler.solveGetAllSolutions(this.maxResults);
-	}
-
-	
-	private void extractDataFromProperties() {
-
-		InputStream inputStream;
-		
-		try {
-			Properties prop = new Properties();
-			inputStream = new FileInputStream("./idl_aux_files/config.properties");
-			prop.load(inputStream);
-
-			this.compiler = prop.getProperty("compiler");
-			this.solver= prop.getProperty("solver");
-			this.fileRoute = prop.getProperty("fileRoute");
-			this.maxResults = prop.getProperty("maxResults");
-		} catch (Exception e) {
-			System.out.println("Exception: " + e);
-		} 
-		
-
+		return this.currentCompiler.solveGetAllSolutions(MAX_RESULTS);
 	}
 	
 	public Integer getMaxResults() {
-		return Integer.parseInt(this.maxResults);
+		return Integer.parseInt(MAX_RESULTS);
 	}
 	
 

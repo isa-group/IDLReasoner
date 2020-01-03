@@ -6,12 +6,8 @@ import es.us.isa.idlreasoner.mapper.*;
 
 import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 import static es.us.isa.idlreasoner.util.Utils.parseParamName;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -20,23 +16,12 @@ public class Analyzer {
 
 	private ResolutorCreator resolutor;
 	private MiniZincMapper mapper;
-//	private AbstractConstraintMapper constraintMapper;
-//	private AbstractVariableMapper variableMapper;
 	private Map<String, String> restrictions = new HashMap<String, String>();
 
 	public Analyzer(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
-		
-		this.initConfigurationFile();
-		
-		recreateFile(BASE_CONSTRAINTS_FILE);
-		
-		this.resolutor = new ResolutorCreator();
+		initFilesAndConf();
+		resolutor = new ResolutorCreator();
 		mapper = new MiniZincMapper(specificationType, idl, apiSpecificationPath, operationPath, operationType);
-		
-//		this.constraintMapper = mapper.getConstraintMapper();
-//		this.variableMapper = mapper.getVariableMapper();
-
-
 	}
 	
 	public List<Map<String,String>> getAllRequest() {
@@ -136,34 +121,6 @@ public class Analyzer {
 		recreateFile(FULL_CONSTRAINTS_FILE);
 		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
 	}
-	
-	private void initConfigurationFile() {
-		String filePath = "./idl_aux_files/config.properties";
-		createFileIfNotExists(filePath);
-		BufferedReader br = openReader(filePath);
-
-			try {
-				if(br.readLine()==null) {
-					br.close();
-					BufferedWriter bw = openWriter(filePath);
-					
-				    bw.append("compiler: Minizinc\n");
-				    bw.append("solver: Chuffed\n");
-				    bw.append("fileRoute: " + readProperty("aux_files_folder") + "/" + readProperty("idl_files_folder") + "\n");
-				    bw.append("maxResults: 100\n");
-				    
-				    bw.flush();
-				    bw.close();
-				} else {
-					br.close();
-				}
-			
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			updateConf();
-	}
-
 
 //	public Map<String,String> randomSetUpRequest() {
 //		Map<String, String> setUpRequest = new HashMap<>();
