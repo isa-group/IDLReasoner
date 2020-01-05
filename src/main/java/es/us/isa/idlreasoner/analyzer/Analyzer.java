@@ -2,21 +2,25 @@ package es.us.isa.idlreasoner.analyzer;
 
 
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
-import es.us.isa.idlreasoner.mapper.*;
+import es.us.isa.idlreasoner.mapper.MiniZincMapper;
 
-import static es.us.isa.idlreasoner.util.FileManager.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+
+import static es.us.isa.idlreasoner.util.FileManager.copyFile;
+import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.Utils.parseParamName;
-
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 public class Analyzer {
 
 	private ResolutorCreator resolutor;
 	private MiniZincMapper mapper;
-	private Map<String, String> restrictions = new HashMap<String, String>();
+//	private Map<String, String> restrictions = new HashMap<String, String>();
 
 	public Analyzer(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
 		initFilesAndConf();
@@ -81,21 +85,21 @@ public class Analyzer {
 		return isValidSolution(this.resolutor.solve());
 	}
 	
-	public void setParameter(String parameter, String value) {
-		restrictions.put(parameter, value);
-	}
+//	public void setParameter(String parameter, String value) {
+//		restrictions.put(parameter, value);
+//	}
 
-	public void setListParameterToVoid() {
-		restrictions.clear();
-	}
+//	public void setListParameterToVoid() {
+//		restrictions.clear();
+//	}
 
-	public Boolean validRequest() {
+	public Boolean validRequest(Map<String, String> parametersSet) {
 		setupAnalysisOperation();
-		Set<String> restrictionParameters = this.restrictions.keySet();
+		Set<String> parametersSetNames = parametersSet.keySet();
 		Set<String> operationParameters = mapper.getOperationParameters();
 		for(String operationParameter : operationParameters) {
-			if (restrictionParameters.contains(operationParameter)) {
-				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, restrictions.get(operationParameter));
+			if (parametersSetNames.contains(operationParameter)) {
+				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, parametersSet.get(operationParameter));
 				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "1");
 			} else {
 				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "0");
@@ -106,13 +110,13 @@ public class Analyzer {
 		return isValidSolution(this.resolutor.solve());
 	}
 
-	public Boolean validPartialRequest() {
+	public Boolean validPartialRequest(Map<String, String> parametersSet) {
 		setupAnalysisOperation();
-		Set<String> restrictionParameters = this.restrictions.keySet();
+		Set<String> parametersSetNames = parametersSet.keySet();
 		Set<String> operationParameters = mapper.getOperationParameters();
 		for(String operationParameter : operationParameters) {
-			if (restrictionParameters.contains(operationParameter)) {
-				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, restrictions.get(operationParameter));
+			if (parametersSetNames.contains(operationParameter)) {
+				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, parametersSet.get(operationParameter));
 				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "1");
 			}
 		}

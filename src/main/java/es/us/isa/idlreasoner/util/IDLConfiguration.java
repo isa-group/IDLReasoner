@@ -1,7 +1,9 @@
 package es.us.isa.idlreasoner.util;
 
-import java.io.*;
-import java.util.Properties;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 
 import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
