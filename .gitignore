@@ -5,7 +5,6 @@ IDLreasoner.iml
 .vscode
 minizinc
 /out/
-/idl_aux_files/
 /files/
 .classpath
 .project
