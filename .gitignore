@@ -5,10 +5,7 @@ IDLreasoner.iml
 .vscode
 minizinc
 /out/
-/idl_aux_files/base_constraints.mzn
-/idl_aux_files/full_constraints.mzn
-/idl_aux_files/parameter_names_mapping.json
-/idl_aux_files/string_int_mapping.json
+/idl_aux_files/
 /files/
 .classpath
 .project
