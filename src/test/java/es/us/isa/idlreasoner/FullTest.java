@@ -24,6 +24,7 @@ public class FullTest {
     public void isValidIDL() {
     	Analyzer analyzer = new Analyzer("oas","isValididl.idl", "./src/test/resources/OAS_example.yaml", "/requiredAndOptionalParams", "get");
     	assertFalse(analyzer.isValidIDL(), "This IDL should be NOT valid");
+		// assertTrue(analyzer.isSolvable(), "This IDL should be solvable");
     	System.out.println("Test valid IDL passed");
     }
     

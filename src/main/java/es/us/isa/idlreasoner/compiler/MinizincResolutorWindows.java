@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-import static es.us.isa.idlreasoner.util.IDLConfiguration.BASE_CONSTRAINTS_FILE;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.FULL_CONSTRAINTS_FILE;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
 public class MinizincResolutorWindows extends MinizincResolutor{
 	
@@ -29,7 +28,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		}
 		String results = this.callSolver(command);
 		
-		List<String> resultsSplitted = Arrays.asList(results.split("----------"));
+		List<String> resultsSplitted = Arrays.asList(results.split(SOLUTION_SEP));
 		
 		for(String r: resultsSplitted) {
 			res.add(this.mapSolutions(r));
@@ -48,6 +47,11 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	private Map<String,String> mapSolutions(String solutions){
 		Map<String, String> res = new HashMap<String, String>();
 		List<String> solutionsSpliitd = Arrays.asList(solutions.split(";"));
+		// The following happens when the op has no params nor deps. The solution is empty but valid
+		if (solutionsSpliitd.size()==1 && solutionsSpliitd.get(0).contains(SOLUTION_SEP)) {
+			res.put(SOLUTION_SEP, SOLUTION_SEP); // A Map containing this identified as a request for an op without params
+			return res;
+		}
 		String[] aux;
 		for(String sol: solutionsSpliitd) {
 			if(solutionsSpliitd.get(solutionsSpliitd.size()-1)!=sol) {

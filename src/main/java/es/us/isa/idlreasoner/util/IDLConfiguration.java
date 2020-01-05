@@ -7,6 +7,7 @@ import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
 public class IDLConfiguration {
+    public final static String SOLUTION_SEP = "----------";
     public final static String IDL_AUX_FOLDER = "idl_aux_files";
     public static String COMPILER;
     public static String SOLVER;
