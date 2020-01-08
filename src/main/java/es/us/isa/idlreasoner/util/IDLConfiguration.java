@@ -17,6 +17,8 @@ public class IDLConfiguration {
     public static String MAX_RESULTS;
     public static String BASE_CONSTRAINTS_FILE;
     public static String FULL_CONSTRAINTS_FILE;
+    public static String FULL_CONSTRAINTS_FILE_FZN;
+    public static String FULL_CONSTRAINTS_FILE_OZN;
     public static String STRING_INT_MAPPING_FILE;
     public static String PARAMETER_NAMES_MAPPING_FILE;
 
@@ -27,6 +29,8 @@ public class IDLConfiguration {
         MAX_RESULTS = readProperty("maxResults");
         BASE_CONSTRAINTS_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("base_constraints_file");
         FULL_CONSTRAINTS_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("full_constraints_file");
+        FULL_CONSTRAINTS_FILE_FZN = "./" + IDL_AUX_FOLDER + "/" + readProperty("full_constraints_file_fzn");
+        FULL_CONSTRAINTS_FILE_OZN = "./" + IDL_AUX_FOLDER + "/" + readProperty("full_constraints_file_ozn");
         STRING_INT_MAPPING_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("string_int_mapping_file");
         PARAMETER_NAMES_MAPPING_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("parameter_names_mapping_file");
     }
@@ -61,6 +65,8 @@ public class IDLConfiguration {
                 bw.append("\n");
                 bw.append("base_constraints_file=base_constraints.mzn\n");
                 bw.append("full_constraints_file=full_constraints.mzn\n");
+                bw.append("full_constraints_file_fzn=full_constraints.fzn\n");
+                bw.append("full_constraints_file_ozn=full_constraints.ozn\n");
                 bw.append("\n");
                 bw.append("# DO NOT CHANGE THE FOLLOWING 2 VARIABLES!!!\n");
                 bw.append("string_int_mapping_file=string_int_mapping.json\n");

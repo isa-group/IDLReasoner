@@ -22,9 +22,9 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
 		String command;
 		if(!maxResults.trim().equals("")){
-			command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+			command = "\"minizinc/mzn2fzn.exe\" -n "+ maxResults + " " + FULL_CONSTRAINTS_FILE + " && \"minizinc/fzn-gecode.exe\" " + FULL_CONSTRAINTS_FILE_FZN + " | \"minizinc/solns2out.exe\" " + FULL_CONSTRAINTS_FILE_OZN;
 		}else {
-			command = "\"minizinc/minizinc.exe\" -a --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+			command = "\"minizinc/mzn2fzn.exe\" -a " + FULL_CONSTRAINTS_FILE + " && \"minizinc/fzn-gecode.exe\" " + FULL_CONSTRAINTS_FILE_FZN + " | \"minizinc/solns2out.exe\" " + FULL_CONSTRAINTS_FILE_OZN;
 		}
 		String results = this.callSolver(command);
 		
@@ -39,7 +39,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	}
 	
 	public Map<String,String> solve() {
-		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+		String command = "\"minizinc/mzn2fzn.exe\" " + FULL_CONSTRAINTS_FILE + " && \"minizinc/fzn-gecode.exe\" " + FULL_CONSTRAINTS_FILE_FZN + " | \"minizinc/solns2out.exe\" " + FULL_CONSTRAINTS_FILE_OZN;
 		String solutions =  this.callSolver(command);
 		return this.mapSolutions(solutions);
 	}
