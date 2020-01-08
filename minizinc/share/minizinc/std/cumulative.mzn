@@ -1,8 +1,3 @@
-include "all_different.mzn";
-include "disjunctive.mzn";
-include "fzn_cumulative.mzn";
-include "fzn_cumulative_reif.mzn";
-
 /** @group globals.scheduling
   Requires that a set of tasks given by start times \a s, durations \a d, and
   resource requirements \a r, never require more than a global resource bound
@@ -16,19 +11,20 @@ predicate cumulative(array[int] of var int: s,
                      array[int] of var int: r, var int: b) =
     assert(index_set(s) == index_set(d) /\ index_set(s) == index_set(r),
         "cumulative: the 3 array arguments must have identical index sets",
-    assert(lb_array(d) >= 0 /\ lb_array(r) >= 0,
-        "cumulative: durations and resource usages must be non-negative",
-    if is_fixed(b) /\
-       forall(i in index_set(r))
-             (is_fixed(r[i]) /\ fix(r[i]) + lb_array(r) > ub(b))
-    then
-         if forall(i in index_set(d))(is_fixed(d[i]) /\ fix(d[i]) == 1)
-         then
-            all_different(s)
-         else
-            disjunctive(s, d)
-         endif
-    else
-       fzn_cumulative(s, d, r, b)
-    endif
-    ));
+        assert(lb_array(d) >= 0 /\ lb_array(r) >= 0,
+            "cumulative: durations and resource usages must be non-negative",
+            let { 
+               set of int: tasks = 
+                  {i | i in index_set(s) where ub(r[i]) > 0 /\ ub(d[i]) > 0 },
+               set of int: times =
+                  min([ lb(s[i]) | i in tasks ]) ..
+                  max([ ub(s[i]) + ub(d[i]) | i in tasks ]) 
+                } 
+            in
+               forall( t in times ) (
+                  b >= sum( i in tasks ) (
+                     bool2int( s[i] <= t /\ t < s[i] + d[i] ) * r[i]
+                  )
+               )
+        )
+    );

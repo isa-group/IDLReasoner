@@ -1,8 +1,3 @@
-include "fzn_network_flow.mzn";
-include "fzn_network_flow_reif.mzn";
-include "fzn_network_flow_cost.mzn";
-include "fzn_network_flow_cost_reif.mzn";
-
 /** @group globals
   Defines a network flow constraint.
   
@@ -15,7 +10,8 @@ predicate network_flow(array[int,1..2] of int: arc,
 	  	                 array[int] of int: balance,
                        array[int] of var int: flow) = 
 
-    let { 
+    let { int: source_node = 1;
+          int: sink_node = 2;
           set of int: ARCS = index_set_1of2(arc);
           set of int: NODES = index_set(balance);
     } in
@@ -24,7 +20,11 @@ predicate network_flow(array[int,1..2] of int: arc,
 	   lb_array(arc) >= min(NODES) /\ 
 	   ub_array(arc) <= max(NODES),
 	   "network_flow: wrong sizes of input array parameters",
-          fzn_network_flow(arc, balance, flow)
+	   forall (i in NODES) (
+	      sum (j in ARCS where i == arc[j,source_node]) (flow[j]) - 
+        sum (j in ARCS where i == arc[j,sink_node]) (flow[j])
+        = balance[i] 
+     )
 	);
 
 /** @group globals
@@ -41,7 +41,8 @@ predicate network_flow_cost(array[int,1..2] of int: arc,
 	  	      array[int] of int: weight,
             array[int] of var int: flow, var int: cost) = 
 
-    let { 
+    let { int: source_node = 1;
+          int: sink_node = 2;
           set of int: ARCS = index_set_1of2(arc);
           set of int: NODES = index_set(balance);
     } in
@@ -51,5 +52,12 @@ predicate network_flow_cost(array[int,1..2] of int: arc,
 	   lb_array(arc) >= min(NODES) /\ 
 	   ub_array(arc) <= max(NODES),
 	   "network_flow: wrong sizes of input array parameters",
-	fzn_network_flow_cost(arc, balance, weight, flow, cost)
+
+	   cost = sum(i in ARCS) (flow[i] * weight[i]) 
+	   /\
+	   forall (i in NODES) (
+	      sum (j in ARCS where i == arc[j,source_node]) (flow[j]) - 
+        sum (j in ARCS where i == arc[j,sink_node]) (flow[j])
+        = balance[i] 
+     )
 	);

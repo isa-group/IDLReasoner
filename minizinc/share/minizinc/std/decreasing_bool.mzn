@@ -1,9 +1,6 @@
-include "fzn_decreasing_bool.mzn";
-include "fzn_decreasing_bool_reif.mzn";
-
 %-----------------------------------------------------------------------------%
 % Requires that the array 'x' is in decreasing order (duplicates are allowed).
 %-----------------------------------------------------------------------------%
 
 predicate decreasing_bool(array[int] of var bool: x) =
-    fzn_decreasing_bool(x);
+    forall(i in index_set(x) diff { min(index_set(x)) }) (x[i-1] >= x[i]);
