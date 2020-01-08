@@ -129,6 +129,13 @@ public class ValidIDLTest {
     }
 
     @Test
+    public void combinatorial5() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial5.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial5", "get");
+        assertTrue(analyzer.isValidIDL(), "The IDL should be VALID");
+        System.out.println("Test passed: combinatorial5.");
+    }
+
+    @Test
     public void combinatorial9() {
         Analyzer analyzer = new Analyzer("oas","combinatorial9.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial9", "get");
         assertFalse(analyzer.isValidIDL(), "The IDL should be NOT valid");
