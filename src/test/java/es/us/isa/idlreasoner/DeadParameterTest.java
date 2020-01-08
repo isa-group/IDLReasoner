@@ -114,8 +114,8 @@ public class DeadParameterTest {
         Analyzer analyzer = new Analyzer("oas","combinatorial2.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial2", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
         assertTrue(analyzer.isDeadParameter("p2"), "The parameter p2 SHOULD be dead");
-        assertFalse(analyzer.isDeadParameter("p3"), "The parameter p3 should NOT be dead");
-        assertFalse(analyzer.isDeadParameter("p4"), "The parameter p4 should NOT be dead");
+        assertTrue(analyzer.isDeadParameter("p3"), "The parameter p3 SHOULD be dead");
+        assertTrue(analyzer.isDeadParameter("p4"), "The parameter p4 SHOULD be dead");
         assertFalse(analyzer.isDeadParameter("p5"), "The parameter p5 should NOT be dead");
         assertFalse(analyzer.isDeadParameter("p6"), "The parameter p6 should NOT be dead");
         assertTrue(analyzer.isDeadParameter("p7"), "The parameter p7 SHOULD be dead");

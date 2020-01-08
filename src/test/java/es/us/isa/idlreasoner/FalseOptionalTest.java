@@ -113,12 +113,12 @@ public class FalseOptionalTest {
     @Test
     public void combinatorial2() {
         Analyzer analyzer = new Analyzer("oas","combinatorial2.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial2", "get");
-        assertFalse(analyzer.isFalseOptional("p1"), "The parameter p1 should NOT be false optional");
+        assertTrue(analyzer.isFalseOptional("p1"), "The parameter p1 SHOULD be false optional");
         assertFalse(analyzer.isFalseOptional("p2"), "The parameter p2 should NOT be false optional");
         assertFalse(analyzer.isFalseOptional("p3"), "The parameter p3 should NOT be false optional");
         assertFalse(analyzer.isFalseOptional("p4"), "The parameter p4 should NOT be false optional");
         assertFalse(analyzer.isFalseOptional("p5"), "The parameter p5 should NOT be false optional");
-        assertFalse(analyzer.isFalseOptional("p6"), "The parameter p6 should NOT be false optional");
+        assertTrue(analyzer.isFalseOptional("p6"), "The parameter p6 SHOULD be false optional");
         assertFalse(analyzer.isFalseOptional("p7"), "The parameter p7 should NOT be false optional");
         assertFalse(analyzer.isFalseOptional("p8"), "The parameter p8 should NOT be false optional");
         assertFalse(analyzer.isFalseOptional("p9"), "The parameter p9 should NOT be false optional");
