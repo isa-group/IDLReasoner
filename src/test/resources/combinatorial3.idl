@@ -4,5 +4,7 @@ p4>=p5;
 Or(p1==true, p4==1 OR p2);
 OnlyOne(p3, p5);
 p2!=p3;
-OnlyOne(p2 AND p3, p4 AND p5); //
-NOT Or(p2=='ejemplo', p5==4);
+p2==p3;
+OnlyOne(p1 AND p3, p4 AND p5);
+NOT Or(p2=='example', p5==4);
+Or(p3=='value1', p4==1);
