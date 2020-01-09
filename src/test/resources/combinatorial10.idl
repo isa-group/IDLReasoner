@@ -1,0 +1,10 @@
+Or(p1==true, p2=='value1');
+Or(p2=='value2', p4>=4);
+OnlyOne(p2=='value3', p3=='value4');
+OnlyOne(p4<=3, p5>=3);
+ZeroOrOne(p1==false AND p2=='value5', p4==1, p5==2);
+NOT ZeroOrOne(p1==true, p4>1, p5>2);
+p4+p5<=5;
+p4*p5>=4;
+IF Or(p1==false, p4>3) OR NOT ZeroOrOne(p2=='value2', p3=='value5') THEN p2!=p3 AND OnlyOne(p1, p2);
+IF p4+p5<=5 AND p4*p5>=4 THEN p2=='this is the only invalid dependency';

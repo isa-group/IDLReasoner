@@ -138,14 +138,14 @@ public class ValidIDLTest {
     @Test
     public void combinatorial6() {
         Analyzer analyzer = new Analyzer("oas","combinatorial6.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial6", "get");
-        assertFalse(analyzer.isValidIDL(), "The IDL should be VALID");
+        assertFalse(analyzer.isValidIDL(), "The IDL should be NOT valid");
         System.out.println("Test passed: combinatorial6.");
     }
 
     @Test
     public void combinatorial7() {
         Analyzer analyzer = new Analyzer("oas","combinatorial7.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial7", "get");
-        assertFalse(analyzer.isValidIDL(), "The IDL should be VALID");
+        assertFalse(analyzer.isValidIDL(), "The IDL should be NOT valid");
         System.out.println("Test passed: combinatorial7.");
     }
 
@@ -153,6 +153,13 @@ public class ValidIDLTest {
     public void combinatorial9() {
         Analyzer analyzer = new Analyzer("oas","combinatorial9.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial9", "get");
         assertFalse(analyzer.isValidIDL(), "The IDL should be NOT valid");
-        System.out.println("Test passed: combinatorial3.");
+        System.out.println("Test passed: combinatorial9.");
+    }
+
+    @Test
+    public void combinatorial10() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial10.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial10", "get");
+        assertFalse(analyzer.isValidIDL(), "The IDL should be NOT valid");
+        System.out.println("Test passed: combinatorial10.");
     }
 }
