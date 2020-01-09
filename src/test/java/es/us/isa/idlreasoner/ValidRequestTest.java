@@ -281,7 +281,7 @@ public class ValidRequestTest {
         request.put("p2", "value2");
         request.put("p3", "value3");
         request.put("p4", "value4");
-        request.put("p5", "value5");
+        request.put("p5", "value5"); // Violates this dependency: p1==p5;
         assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: combinatorial1_invalid.");
     }
@@ -314,7 +314,7 @@ public class ValidRequestTest {
         request.put("p1", "true");
         request.put("p3", "value4");
         request.put("p4", "1");
-        request.put("p5", "3");
+        request.put("p5", "3"); // Violates this dependency: p4>=p5;
         assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: combinatorial3_invalid.");
     }
@@ -323,7 +323,8 @@ public class ValidRequestTest {
     public void combinatorial4_valid() {
         Analyzer analyzer = new Analyzer("oas","combinatorial4.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial4", "get");
         Map<String, String> request = new HashMap<>();
-
+        request.put("p2", "1000000");
+        request.put("p3", "100000");
         assertTrue(analyzer.validRequest(request), "The request should be VALID");
         System.out.println("Test passed: combinatorial4_valid.");
     }
@@ -331,8 +332,7 @@ public class ValidRequestTest {
     @Test
     public void combinatorial4_invalid() {
         Analyzer analyzer = new Analyzer("oas","combinatorial4.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial4", "get");
-        Map<String, String> request = new HashMap<>();
-
+        Map<String, String> request = new HashMap<>(); // An empty request violates multiple dependencies, for example: NOT ZeroOrOne(p5==1000, p4==10000 OR p3==100000, p2==1000000);
         assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: combinatorial4_invalid.");
     }
@@ -341,7 +341,16 @@ public class ValidRequestTest {
     public void combinatorial5_valid() {
         Analyzer analyzer = new Analyzer("oas","combinatorial5.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial5", "get");
         Map<String, String> request = new HashMap<>();
-
+        request.put("p1", "true");
+        request.put("p2", "something");
+        request.put("p3", "5");
+        request.put("p4", "value5");
+        request.put("p5", "-300");
+        request.put("p6", "false");
+        request.put("p7", "value5");
+        request.put("p8", "1");
+        request.put("p9", "value1");
+        request.put("p10", "value2");
         assertTrue(analyzer.validRequest(request), "The request should be VALID");
         System.out.println("Test passed: combinatorial5_valid.");
     }
@@ -350,7 +359,16 @@ public class ValidRequestTest {
     public void combinatorial5_invalid() {
         Analyzer analyzer = new Analyzer("oas","combinatorial5.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial5", "get");
         Map<String, String> request = new HashMap<>();
-
+        request.put("p1", "true");
+        request.put("p2", "something");
+        request.put("p3", "5");
+        request.put("p4", "value5");
+        request.put("p5", "-300");
+        request.put("p6", "false"); // (See next comment)
+        request.put("p7", "another example"); // p6 and p7 violate this dependency: Or(p1==p6, p4==p7);
+        request.put("p8", "1");
+        request.put("p9", "value1");
+        request.put("p10", "value2");
         assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: combinatorial5_invalid.");
     }
@@ -381,7 +399,16 @@ public class ValidRequestTest {
     public void combinatorial8_valid() {
         Analyzer analyzer = new Analyzer("oas","combinatorial8.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial8", "get");
         Map<String, String> request = new HashMap<>();
-
+        request.put("p1", "false");
+        request.put("p2", "false");
+//        request.put("p3", "5");
+        request.put("p4", "true");
+        request.put("p5", "true");
+        request.put("p6", "one string"); // (See next comment)
+//        request.put("p7", "another example"); // p6 and p7 violate this dependency: Or(p1==p6, p4==p7);
+        request.put("p8", "two strings");
+        request.put("p9", "fixed string");
+        request.put("p10", "three strings");
         assertTrue(analyzer.validRequest(request), "The request should be VALID");
         System.out.println("Test passed: combinatorial8_valid.");
     }
