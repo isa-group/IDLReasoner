@@ -170,6 +170,28 @@ public class FalseOptionalTest {
     }
 
     @Test
+    public void combinatorial6() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial6.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial6", "get");
+        assertFalse(analyzer.isFalseOptional("p1"), "The parameter p1 SHOULD be false optional");
+        assertFalse(analyzer.isFalseOptional("p2"), "The parameter p2 SHOULD be false optional");
+        assertFalse(analyzer.isFalseOptional("p3"), "The parameter p3 SHOULD be false optional");
+        assertFalse(analyzer.isFalseOptional("p4"), "The parameter p4 SHOULD be false optional");
+        assertFalse(analyzer.isFalseOptional("p5"), "The parameter p5 SHOULD be false optional");
+        System.out.println("Test passed: combinatorial6.");
+    }
+
+    @Test
+    public void combinatorial7() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial7.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial7", "get");
+        assertFalse(analyzer.isFalseOptional("p1"), "The parameter p1 SHOULD be false optional");
+        assertFalse(analyzer.isFalseOptional("p2"), "The parameter p2 SHOULD be false optional");
+        assertFalse(analyzer.isFalseOptional("p3"), "The parameter p3 SHOULD be false optional");
+        assertFalse(analyzer.isFalseOptional("p4"), "The parameter p4 SHOULD be false optional");
+        assertFalse(analyzer.isFalseOptional("p5"), "The parameter p5 SHOULD be false optional");
+        System.out.println("Test passed: combinatorial7.");
+    }
+
+    @Test
     public void combinatorial9() {
         Analyzer analyzer = new Analyzer("oas","combinatorial9.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial9", "get");
         assertFalse(analyzer.isFalseOptional("p1"), "The parameter p1 should NOT be false optional");

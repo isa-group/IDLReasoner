@@ -1,0 +1,10 @@
+IF p1=='value1' THEN p2=='value2';
+IF p3<1 THEN p4>5;
+IF NOT (p2<=3 OR p3<=4 OR p2=='value5') AND NOT p1=='value3' THEN p3<=2;
+IF p5<=4 THEN NOT p3<4;
+AllOrNone(p3==3, p3==3);
+AllOrNone(p3 OR p4 OR p4, p1, p2);
+AllOrNone(p1=='invalid value', p2=='another invalid value', p5==10);
+OnlyOne(p5==1, p5==1);
+OnlyOne(p1, p2, p3, p4, p5);
+OnlyOne(p1=='value2' AND p5>-1, p3>3);

@@ -464,7 +464,7 @@ paths:
             - "value5"
         - name: "p2"
           in: "query"
-          required: true
+          required: false
           type: "string"
           enum:
             - "value1"
@@ -474,7 +474,7 @@ paths:
             - "value5"
         - name: "p3"
           in: "query"
-          required: false
+          required: true
           type: "integer"
           enum:
             - 1
@@ -484,7 +484,7 @@ paths:
             - 5
         - name: "p4"
           in: "query"
-          required: false
+          required: true
           type: "integer"
           enum:
             - 1

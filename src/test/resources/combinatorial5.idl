@@ -1,5 +1,5 @@
 IF NOT p1==false THEN p2=='something' AND p3==5;
-Or(p4=='string 1'|'string 2', p5<200, p6==true);
+Or(p4=='string 1'|'string 2', p5<-200, p6==true);
 ZeroOrOne(p7=='another example', p8>=10);
 p3*p5*p8<5;
 Or(p1==p6, p4==p7);
