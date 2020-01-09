@@ -1,18 +1,19 @@
 package es.us.isa.idlreasoner;
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
-
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class DeadParameterTest {
 
-    @Test
-    public void no_params() {
-        // If there are no parameters in the specification, isDeadParameter cannot be tested
-        System.out.println("Test passed: no_params.");
-    }
+//    // If there are no parameters in the specification, isDeadParameter cannot be tested
+//    @Test
+//    public void no_params() {
+//        System.out.println("Test passed: no_params.");
+//    }
 
     @Test
     public void one_param_boolean_no_deps() {

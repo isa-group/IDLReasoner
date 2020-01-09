@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FalseOptionalTest {
 
-    @Test
-    public void no_params() {
-        // If there are no parameters in the specification, isFalseOptional cannot be tested
-        System.out.println("Test passed: no_params.");
-    }
+//    // If there are no parameters in the specification, isFalseOptional cannot be tested
+//    @Test
+//    public void no_params() {
+//        System.out.println("Test passed: no_params.");
+//    }
 
     @Test
     public void one_param_boolean_no_deps() {
