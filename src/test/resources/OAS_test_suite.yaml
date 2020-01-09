@@ -28,7 +28,7 @@ paths:
       parameters:
         - name: "p1"
           in: "query"
-          required: false
+          required: true
           type: "string"
       responses:
         default:
