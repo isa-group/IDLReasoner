@@ -169,6 +169,44 @@ public class DeadParameterTest {
     }
 
     @Test
+    public void combinatorial6() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial6.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial6", "get");
+        assertTrue(analyzer.isDeadParameter("p1"), "The parameter p1 SHOULD be dead");
+        assertTrue(analyzer.isDeadParameter("p2"), "The parameter p2 SHOULD be dead");
+        assertTrue(analyzer.isDeadParameter("p3"), "The parameter p3 SHOULD be dead");
+        assertTrue(analyzer.isDeadParameter("p4"), "The parameter p4 SHOULD be dead");
+        assertTrue(analyzer.isDeadParameter("p5"), "The parameter p5 SHOULD be dead");
+        System.out.println("Test passed: combinatorial6.");
+    }
+
+    @Test
+    public void combinatorial7() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial7.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial7", "get");
+        assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p2"), "The parameter p2 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p3"), "The parameter p3 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p4"), "The parameter p4 should NOT be dead");
+        assertTrue(analyzer.isDeadParameter("p5"), "The parameter p5 SHOULD be dead");
+        System.out.println("Test passed: combinatorial7.");
+    }
+
+    @Test
+    public void combinatorial8() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial8.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial8", "get");
+        assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p2"), "The parameter p2 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p3"), "The parameter p3 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p4"), "The parameter p4 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p5"), "The parameter p5 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p6"), "The parameter p6 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p7"), "The parameter p7 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p8"), "The parameter p8 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p9"), "The parameter p9 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p10"), "The parameter p10 should NOT be dead");
+        System.out.println("Test passed: combinatorial8.");
+    }
+
+    @Test
     public void combinatorial9() {
         Analyzer analyzer = new Analyzer("oas","combinatorial9.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial9", "get");
         assertFalse(analyzer.isDeadParameter("p1"), "The parameter p1 should NOT be dead");
@@ -182,5 +220,16 @@ public class DeadParameterTest {
         assertFalse(analyzer.isDeadParameter("p9"), "The parameter p9 should NOT be dead");
         assertFalse(analyzer.isDeadParameter("p10"), "The parameter p10 should NOT be dead");
         System.out.println("Test passed: combinatorial9.");
+    }
+
+    @Test
+    public void combinatorial10() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial10.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial10", "get");
+        assertTrue(analyzer.isDeadParameter("p1"), "The parameter p1 SHOULD be dead");
+        assertTrue(analyzer.isDeadParameter("p2"), "The parameter p2 SHOULD be dead");
+        assertTrue(analyzer.isDeadParameter("p3"), "The parameter p3 SHOULD be dead");
+        assertTrue(analyzer.isDeadParameter("p4"), "The parameter p4 SHOULD be dead");
+        assertTrue(analyzer.isDeadParameter("p5"), "The parameter p5 SHOULD be dead");
+        System.out.println("Test passed: combinatorial10.");
     }
 }

@@ -1,0 +1,4 @@
+IF p2 THEN p4; // Useless/redundant dependency, but valid
+IF p1 THEN p3==true AND NOT p7 AND p9=='fixed string';
+Or(p1, p3, p5 AND p7, p9 AND p1);
+NOT Or(p3==true, p3==false);
