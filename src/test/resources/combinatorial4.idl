@@ -1,10 +1,5 @@
-AllOrNone(p1, p2);
-ZeroOrOne(p2, p3);
-AllOrNone(p1==10, p5==100);
-ZeroOrOne(p4 AND p5, p4 AND p5 AND p6=='value1');
 ZeroOrOne(p7 AND p8, p7 AND p8 OR p9=='value5');
 AllOrNone(p4 AND p5, p6 AND p7);
 NOT ZeroOrOne(p5==1000, p4==10000 OR p3==100000, p2==1000000);
-NOT AllOrNone(p1, p5, p9);
 IF p1 AND Or(p2, p3) THEN p1+p2+p4<=999 AND OnlyOne(p6, AllOrNone(p7, p8));
 IF NOT (p4==p5 AND ZeroOrOne(p6, p7)) THEN Or(p6=='value1', p7 AND p8=='value3') OR OnlyOne(p1, p3);
