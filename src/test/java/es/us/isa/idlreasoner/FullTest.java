@@ -13,9 +13,9 @@ public class FullTest {
 
     @Test
     public void isFalseOptional() {
-    	Analyzer analyzer = new Analyzer("oas","isFalseOptional1.idl", "./src/test/resources/OAS_example.yaml", "/requiredAndOptionalParams", "get");
-    	assertTrue(analyzer.isFalseOptional("p3"), "The param should be false optional");
-    	assertTrue(analyzer.isFalseOptional("p4"), "The param should be false optional");
+    	Analyzer analyzer = new Analyzer("oas","isValididl.idl", "./src/test/resources/OAS_example.yaml", "/requiredAndOptionalParams", "get");
+        assertFalse(analyzer.isFalseOptional("p3"), "The param should be NOT false optional");
+        assertFalse(analyzer.isFalseOptional("p4"), "The param should be NOT false optional");
     	System.out.println("Test false optional passed");
     	
     }
@@ -23,9 +23,15 @@ public class FullTest {
     @Test
     public void isValidIDL() {
     	Analyzer analyzer = new Analyzer("oas","isValididl.idl", "./src/test/resources/OAS_example.yaml", "/requiredAndOptionalParams", "get");
-    	assertFalse(analyzer.isValidIDL(), "This IDL should be NOT valid");
+    	assertTrue(analyzer.isValidIDL(), "This IDL should be VALID");
 		// assertTrue(analyzer.isSolvable(), "This IDL should be solvable");
     	System.out.println("Test valid IDL passed");
+    }
+
+    @Test
+    public void randomRequest() {
+        Analyzer analyzer = new Analyzer("oas","isValididl.idl", "./src/test/resources/OAS_example.yaml", "/requiredAndOptionalParams", "get");
+        System.out.println(analyzer.randomRequest());
     }
     
 //    @Test
