@@ -144,6 +144,24 @@ paths:
         - 3
         - 4
         - 5
+      - name: "type"
+        in: "query"
+        description: "p4"
+        required: false
+        type: "string"
+        enum:
+          - "value1"
+          - "value2"
+          - "value3"
+      - name: "Accept-Language"
+        in: "query"
+        description: "p4"
+        required: false
+        type: "string"
+        enum:
+          - "fghdfgh"
+          - "drtfyhdtryh"
+          - "rhdrhdrtyh"
       responses:
         200:
           description: "OK"
