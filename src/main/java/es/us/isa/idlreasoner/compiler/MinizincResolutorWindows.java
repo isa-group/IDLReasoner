@@ -22,9 +22,9 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
 		String command;
 		if(!maxResults.trim().equals("")){
-			command = "\"minizinc/mzn2fzn.exe\" -n "+ maxResults + " " + FULL_CONSTRAINTS_FILE + " && \"minizinc/fzn-gecode.exe\" " + FULL_CONSTRAINTS_FILE_FZN + " | \"minizinc/solns2out.exe\" " + FULL_CONSTRAINTS_FILE_OZN;
+			command = "\"minizinc/mzn2fzn.exe\" " + FULL_CONSTRAINTS_FILE + " && \"minizinc/fzn-gecode.exe\" -n " + maxResults + " " + FULL_CONSTRAINTS_FILE_FZN + " | \"minizinc/solns2out.exe\" " + FULL_CONSTRAINTS_FILE_OZN;
 		}else {
-			command = "\"minizinc/mzn2fzn.exe\" -a " + FULL_CONSTRAINTS_FILE + " && \"minizinc/fzn-gecode.exe\" " + FULL_CONSTRAINTS_FILE_FZN + " | \"minizinc/solns2out.exe\" " + FULL_CONSTRAINTS_FILE_OZN;
+			command = "\"minizinc/mzn2fzn.exe\" " + FULL_CONSTRAINTS_FILE + " && \"minizinc/fzn-gecode.exe\" -a " + FULL_CONSTRAINTS_FILE_FZN + " | \"minizinc/solns2out.exe\" " + FULL_CONSTRAINTS_FILE_OZN;
 		}
 		String results = this.callSolver(command);
 		
