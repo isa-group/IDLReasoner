@@ -6,9 +6,6 @@ import es.us.isa.idlreasoner.analyzer.Analyzer;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-import java.util.Map;
-
 public class FullTest {
 
     @Test
@@ -31,6 +28,13 @@ public class FullTest {
     @Test
     public void randomRequest() {
         Analyzer analyzer = new Analyzer("oas","isValididl.idl", "./src/test/resources/OAS_example.yaml", "/requiredAndOptionalParams", "get");
+//        System.out.println(analyzer.getAllRequest());
+//        analyzer.getAllRequests().forEach(System.out::println);
+//        System.out.println("\n\n");
+//        System.out.println(analyzer.getAllRequests().size());
+//        analyzer.getAllUnSetUpRequests().forEach(System.out::println);
+//        System.out.println("\n\n");
+//        System.out.println(analyzer.getAllUnSetUpRequests().size());
         System.out.println(analyzer.randomRequest());
     }
     

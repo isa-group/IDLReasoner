@@ -158,6 +158,10 @@ paths:
         description: "p4"
         required: false
         type: "string"
+        enum:
+          - "fghdfgh"
+          - "drtfyhdtryh"
+          - "rhdrhdrtyh"
       responses:
         200:
           description: "OK"

@@ -55,6 +55,10 @@ public class MiniZincMapper {
 		return vm.mr.operationParameters.keySet();
 	}
 
+	public Map<String,String> setUpRequest(Map<String,String> mznSolution) {
+		return vm.setUpRequest(mznSolution);
+	}
+
 //	public Set<String> getRequiredParameters() {
 //		return vm.mr.operationParameters.entrySet().stream().filter(param -> param.getValue().getValue()).map(Map.Entry::getKey).collect(Collectors.toSet());
 //	}

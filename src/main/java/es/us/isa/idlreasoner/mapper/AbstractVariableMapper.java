@@ -67,4 +67,19 @@ public abstract class AbstractVariableMapper extends AbstractMapper {
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mr.parameterNamesMapping);
         appendContentToFile(PARAMETER_NAMES_MAPPING_FILE, json);
     }
+
+    Map<String,String> setUpRequest(Map<String,String> mznSolution) {
+		Map<String,String> request = new HashMap<>();
+		Iterator<Map.Entry<String, String>> cspVariables = mznSolution.entrySet().iterator();
+		Map.Entry<String, String> currentCspVariable;
+
+		while (cspVariables.hasNext()) {
+			currentCspVariable = cspVariables.next();
+			if (mznSolution.get(currentCspVariable.getKey() + "Set") != null)
+				if (mznSolution.get(currentCspVariable.getKey() + "Set").equals("1"))
+					request.put(changedToOrigParamName(currentCspVariable.getKey()), changedToOrigParamValue(currentCspVariable.getKey(), currentCspVariable.getValue()));
+		}
+
+		return request;
+    }
 }

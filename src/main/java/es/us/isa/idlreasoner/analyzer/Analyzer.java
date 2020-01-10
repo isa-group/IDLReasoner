@@ -4,10 +4,7 @@ package es.us.isa.idlreasoner.analyzer;
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
 import es.us.isa.idlreasoner.mapper.MiniZincMapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static es.us.isa.idlreasoner.util.FileManager.copyFile;
@@ -28,8 +25,13 @@ public class Analyzer {
 		mapper = new MiniZincMapper(specificationType, idl, apiSpecificationPath, operationPath, operationType);
 	}
 	
-	public List<Map<String,String>> getAllRequest() {
+	public List<Map<String,String>> getAllRequests() {
+		List<Map<String,String>> setUpRequests = new ArrayList<>();
+		getAllUnSetUpRequests().forEach(r -> setUpRequests.add(mapper.setUpRequest(r)));
+		return setUpRequests;
+	}
 
+	private List<Map<String,String>> getAllUnSetUpRequests() {
 		setupAnalysisOperation();
 		mapper.finishConstraintsFile();
 		return resolutor.solveGetAllSolutions();
@@ -37,12 +39,13 @@ public class Analyzer {
 	
 	public Map<String,String> randomRequest() {
 		Map<String, String> res = new HashMap<>();
-		List<Map<String,String>> allRequest = this.getAllRequest();
+		List<Map<String,String>> allRequests = getAllUnSetUpRequests();
 		
-		if(allRequest.size()!=0) {
-			res = allRequest.get(ThreadLocalRandom.current().nextInt(0, allRequest.size()));
+		if(allRequests.size()!=0) {
+			res = allRequests.get(ThreadLocalRandom.current().nextInt(0, allRequests.size()));
 		}
-		return res;
+
+		return mapper.setUpRequest(res);
 	}
 
 	public Boolean isDeadParameter(String parameter) {
@@ -125,7 +128,7 @@ public class Analyzer {
 	}
 
 	public Integer numberOfRequest() {
-		return this.getAllRequest().size();
+		return this.getAllRequests().size();
 	}
 
 	/**
