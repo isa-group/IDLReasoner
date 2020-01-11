@@ -15,7 +15,7 @@ public class RandomRequestTest {
     public void no_params() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/noParams", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: no_params.");
     }
@@ -24,7 +24,7 @@ public class RandomRequestTest {
     public void one_param_boolean_no_deps() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamBoolean", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_param_boolean_no_deps.");
     }
@@ -33,7 +33,7 @@ public class RandomRequestTest {
     public void one_param_string_no_deps() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamString", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_param_string_no_deps.");
     }
@@ -42,7 +42,7 @@ public class RandomRequestTest {
     public void one_param_int_no_deps() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamInt", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_param_int_no_deps.");
     }
@@ -51,7 +51,7 @@ public class RandomRequestTest {
     public void one_param_enum_string_no_deps() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumString", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_param_enum_string_no_deps.");
     }
@@ -60,7 +60,7 @@ public class RandomRequestTest {
     public void one_param_enum_int_no_deps() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumInt", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
@@ -69,7 +69,7 @@ public class RandomRequestTest {
     public void one_dep_requires() {
         Analyzer analyzer = new Analyzer("oas","one_dep_requires.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_dep_requires.");
     }
@@ -78,7 +78,7 @@ public class RandomRequestTest {
     public void one_dep_or() {
         Analyzer analyzer = new Analyzer("oas","one_dep_or.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_dep_or.");
     }
@@ -87,7 +87,7 @@ public class RandomRequestTest {
     public void one_dep_onlyone() {
         Analyzer analyzer = new Analyzer("oas","one_dep_onlyone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_dep_onlyone.");
     }
@@ -96,7 +96,7 @@ public class RandomRequestTest {
     public void one_dep_allornone() {
         Analyzer analyzer = new Analyzer("oas","one_dep_allornone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_dep_allornone.");
     }
@@ -105,7 +105,7 @@ public class RandomRequestTest {
     public void one_dep_zeroorone() {
         Analyzer analyzer = new Analyzer("oas","one_dep_zeroorone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_dep_zeroorone.");
     }
@@ -114,7 +114,7 @@ public class RandomRequestTest {
     public void one_dep_arithrel() {
         Analyzer analyzer = new Analyzer("oas","one_dep_arithrel.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_dep_arithrel.");
     }
@@ -123,7 +123,7 @@ public class RandomRequestTest {
     public void one_dep_complex() {
         Analyzer analyzer = new Analyzer("oas","one_dep_complex.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_dep_complex.");
     }
@@ -132,7 +132,7 @@ public class RandomRequestTest {
     public void combinatorial1() {
         Analyzer analyzer = new Analyzer("oas","combinatorial1.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial1", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: combinatorial1.");
     }
@@ -148,7 +148,7 @@ public class RandomRequestTest {
     public void combinatorial3() {
         Analyzer analyzer = new Analyzer("oas","combinatorial3.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial3", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: combinatorial3.");
     }
@@ -157,7 +157,7 @@ public class RandomRequestTest {
     public void combinatorial4() {
         Analyzer analyzer = new Analyzer("oas","combinatorial4.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial4", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: combinatorial4.");
     }
@@ -166,7 +166,7 @@ public class RandomRequestTest {
     public void combinatorial5() {
         Analyzer analyzer = new Analyzer("oas","combinatorial5.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial5", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: combinatorial5.");
     }
@@ -189,7 +189,7 @@ public class RandomRequestTest {
     public void combinatorial8() {
         Analyzer analyzer = new Analyzer("oas","combinatorial8.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial8", "get");
         Map<String, String> validRequest = analyzer.randomRequest();
-        System.out.println(validRequest);
+        // System.out.println(validRequest);
         assertTrue(analyzer.validRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: combinatorial8.");
     }

@@ -113,6 +113,76 @@ paths:
       responses:
         default:
           description: "Default"
+  /oneDependencyEnumParams:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p2"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+        - name: "p3"
+          in: "query"
+          required: true
+          type: "integer"
+          enum:
+            - 1
+            - 2
+      responses:
+        default:
+          description: "Default"
+  /oneDependencyArithRelEnumParams:
+    get:
+      parameters:
+        - name: "p3"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+        - name: "p5"
+          in: "query"
+          required: true
+          type: "integer"
+          enum:
+            - 1
+            - 2
+            - 3
+      responses:
+        default:
+          description: "Default"
+  /oneDependencyComplexEnumParams:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p2"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+        - name: "p3"
+          in: "query"
+          required: false
+          type: "integer"
+          enum:
+            - 1
+            - 2
+      responses:
+        default:
+          description: "Default"
   /combinatorial1:
     get:
       parameters:
