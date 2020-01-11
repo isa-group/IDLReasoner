@@ -118,7 +118,7 @@ public class Analyzer {
 	}
 
 	public Integer numberOfRequest() {
-		return this.getAllRequests().size();
+		return this.getAllUnSetUpRequests().size();
 	}
 
 	/**
