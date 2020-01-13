@@ -1,5 +1,7 @@
 package es.us.isa.idlreasoner.mapper;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import static es.us.isa.idlreasoner.util.Utils.parseParamName;
 
 import java.util.*;
@@ -70,7 +72,11 @@ public class AbstractMapper {
                 if (stringMapping != null) {
                     return stringMapping;
                 } else {
-                    return "default string";
+                    String newStringMapping;
+                    do { newStringMapping = RandomStringUtils.randomAscii(ThreadLocalRandom.current().nextInt(1,10)); }
+                    while (mr.stringIntMapping.get(newStringMapping)!=null);
+                    mr.stringIntMapping.put(newStringMapping, new Integer(value));
+                    return newStringMapping;
                 }
             }
         }
