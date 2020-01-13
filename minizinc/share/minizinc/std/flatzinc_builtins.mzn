@@ -120,10 +120,14 @@ predicate set_subset(var set of int: x, var set of int: y);
 predicate set_superset(var set of int: x, var set of int: y);
 /** @group flatzinc.set Constrains \( \a r \leftrightarrow (\a x \subseteq \a y) \) */
 predicate set_subset_reif(var set of int: x, var set of int: y, var bool: r);
-/** @group flatzinc.set Constrains \a x ≤ \a y (lexicographic order) */
+/** @group flatzinc.set Constrains \a x ≤ \a y (lexicographic order of the sorted lists of elements) */
 predicate set_le(var set of int: x, var set of int: y);
-/** @group flatzinc.set Constrains \a x < \a y (lexicographic order) */
+/** @group flatzinc.set Constrains \( \a r \leftrightarrow (\a x \leq \a y) \) (lexicographic order of the sorted lists of elements) */
+predicate set_le_reif(var set of int: x, var set of int: y, var bool: r);
+/** @group flatzinc.set Constrains \a x < \a y (lexicographic order of the sorted lists of elements) */
 predicate set_lt(var set of int: x, var set of int: y);
+/** @group flatzinc.set Constrains \( \a r \leftrightarrow (\a x < \a y) \) (lexicographic order of the sorted lists of elements) */
+predicate set_lt_reif(var set of int: x, var set of int: y, var bool: r);
 /** @group flatzinc.set Constrains \a x = \a y */
 predicate set_eq(var set of int: x, var set of int: y);
 /** @group flatzinc.set Constrains \a r \( \leftrightarrow \) (\a x = \a y) */
@@ -247,7 +251,7 @@ predicate int2float(var int: x, var float: y);
 predicate array_bool_and(array[int] of var bool: as, var bool: r);
 /** @group flatzinc.bool Constrains \( \a r \leftrightarrow \bigvee_i \a as[i]\) */
 predicate array_bool_or(array[int] of var bool: as, var bool: r);
-/** @group flatzinc.bool Constrains \( \a r \leftrightarrow \oplus_i\ \a as[i]\) */
+/** @group flatzinc.bool Constrains \( \oplus_i\ \a as[i]\) */
 predicate array_bool_xor(array[int] of var bool: as);
 /** @group flatzinc.bool Constrains \a as[\a b] = \a c */
 predicate array_bool_element(var int: b, array[int] of bool: as, var bool: c);

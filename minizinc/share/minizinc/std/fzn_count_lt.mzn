@@ -1,4 +1,8 @@
+include "count_fn.mzn";
+
 predicate fzn_count_lt(array[int] of var int: x, var int: y, var int: c) =
-    c < sum(i in index_set(x)) ( bool2int(x[i] == y) );
+  let { var int: z = count(x,y) } in z > c;
+  % This needs to be written with a let rather than count(x,y) > c
+  % so that the automatic rewriting of the latter doesn't kick in
 
 %-----------------------------------------------------------------------------%

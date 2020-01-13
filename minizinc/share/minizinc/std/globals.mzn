@@ -16,6 +16,14 @@
   
   @groupdef globals.counting Counting constraints
   
+  These constraints count and restrict how many times certain values occur
+  in an array of variables. MiniZinc will automatically generate the basic counting
+  constraints below from expressions such as \[count(i in x)(i=c) <= d\], so you
+  can write models in this much more readable style instead of using these
+  predicates. However, if your model
+  contains multiple counting constraints over the same array, constraints
+  like \[distribute\] or \[global_cardinality\] below may be useful.
+  
   @groupdef globals.packing Packing constraints
   
   @groupdef globals.scheduling Scheduling constraints
@@ -23,6 +31,11 @@
   @groupdef globals.graph Graph constraints
   
   @groupdef globals.extensional Extensional constraints (table, regular etc.)
+
+  @groupdef globals.learning Machine learning constraints
+
+  @groupdef globals.deprecated Deprecated constraints
+
 */
 
 include "all_different.mzn";
@@ -49,12 +62,6 @@ include "cost_mdd.mzn";
 include "cost_regular.mzn";
 include "count.mzn";
 include "count_fn.mzn";
-include "count_eq.mzn";
-include "count_neq.mzn";
-include "count_geq.mzn";
-include "count_gt.mzn";
-include "count_leq.mzn";
-include "count_lt.mzn";
 include "cumulative.mzn";
 include "cumulative_opt.mzn";
 include "dag.mzn";   
@@ -111,6 +118,7 @@ include "regular_set.mzn";
 include "regular_regexp.mzn";
 include "roots.mzn";
 include "roots_fn.mzn";
+include "seq_precede_chain.mzn";
 include "sliding_sum.mzn";
 include "sort.mzn";
 include "sort_fn.mzn";

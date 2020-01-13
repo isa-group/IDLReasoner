@@ -25,6 +25,8 @@ predicate bool_eq(var bool: x, var bool: y) =
 %%  trace(" bool_eq: \(x), \(y) \n") /\
   bool2int(x)==bool2int(y);
 
+predicate bool2int(var bool: x, var int: y) = y = bool2int(x);
+
 %---------------------------- BASIC (HALF)REIFS -----------------------------%
 
 include "options.mzn";
@@ -233,7 +235,8 @@ elseif is_fixed(y) then
       let {
           set of int: s = lb(x)..ub(x),
           set of int: r = {lb(x)*lb(y), lb(x)*ub(y), ub(x)*lb(y), ub(x)*ub(y)},
-          array[s] of var min(r)..max(r): ady = array1d(s, [ d*y | d in s ]) }
+          array[s] of var min(r)..max(r): ady = array1d(s, [
+            if d in dom(x) then d*y else min(r) endif | d in s ]) }
       in
       ady[x] = z                             %% use element()
     endif
