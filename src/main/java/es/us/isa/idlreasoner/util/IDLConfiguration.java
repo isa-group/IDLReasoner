@@ -19,16 +19,25 @@ public class IDLConfiguration {
     public static String FULL_CONSTRAINTS_FILE;
     public static String STRING_INT_MAPPING_FILE;
     public static String PARAMETER_NAMES_MAPPING_FILE;
+    
+    private static WebContentAuxiliar webContent = new WebContentAuxiliar();
 
     private static void updateConf() {
         COMPILER = readProperty("compiler");
         SOLVER = readProperty("solver");
         IDL_FILES_FOLDER = readProperty("fileRoute");
         MAX_RESULTS = readProperty("maxResults");
-        BASE_CONSTRAINTS_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("base_constraints_file");
-        FULL_CONSTRAINTS_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("full_constraints_file");
-        STRING_INT_MAPPING_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("string_int_mapping_file");
-        PARAMETER_NAMES_MAPPING_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("parameter_names_mapping_file");
+        if(webContent.isFromAWebContent()) {
+        	BASE_CONSTRAINTS_FILE = webContent.getPath("/" + IDL_AUX_FOLDER + "/" + readProperty("base_constraints_file"));
+   	        FULL_CONSTRAINTS_FILE = webContent.getPath("/" + IDL_AUX_FOLDER + "/" + readProperty("full_constraints_file"));
+   	        STRING_INT_MAPPING_FILE = webContent.getPath("/" + IDL_AUX_FOLDER + "/" + readProperty("string_int_mapping_file"));
+   	        PARAMETER_NAMES_MAPPING_FILE = webContent.getPath("/" + IDL_AUX_FOLDER + "/" + readProperty("parameter_names_mapping_file"));
+        }else{
+	        BASE_CONSTRAINTS_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("base_constraints_file");
+	        FULL_CONSTRAINTS_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("full_constraints_file");
+	        STRING_INT_MAPPING_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("string_int_mapping_file");
+	        PARAMETER_NAMES_MAPPING_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("parameter_names_mapping_file");
+        }
     }
 
     public static void initFilesAndConf() {
@@ -47,6 +56,9 @@ public class IDLConfiguration {
 
     private static void initConfigurationFile() {
         String filePath = "./idl_aux_files/config.properties";
+        if(webContent.isFromAWebContent()) {
+        	filePath = webContent.getPath("/idl_aux_files/config.properties");
+        }
         createFileIfNotExists(filePath);
         BufferedReader br = openReader(filePath);
 
@@ -57,7 +69,7 @@ public class IDLConfiguration {
                 bw.append("compiler=Minizinc\n");
                 bw.append("solver=Chuffed\n");
                 bw.append("fileRoute=src/test/resources\n");
-                bw.append("maxResults=100\n");
+                bw.append("maxResults=\n");
                 bw.append("\n");
                 bw.append("base_constraints_file=base_constraints.mzn\n");
                 bw.append("full_constraints_file=full_constraints.mzn\n");

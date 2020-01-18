@@ -10,6 +10,7 @@ import static es.us.isa.idlreasoner.util.FileManager.copyFile;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.Utils.parseParamName;
+import static es.us.isa.idlreasoner.util.MinizincFilesDownloader.downloadMinizincFiles;
 
 
 public class Analyzer {
@@ -18,6 +19,7 @@ public class Analyzer {
 	private MiniZincMapper mapper;
 
 	public Analyzer(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
+		downloadMinizincFiles();
 		initFilesAndConf();
 		resolutor = new ResolutorCreator();
 		mapper = new MiniZincMapper(specificationType, idl, apiSpecificationPath, operationPath, operationType);

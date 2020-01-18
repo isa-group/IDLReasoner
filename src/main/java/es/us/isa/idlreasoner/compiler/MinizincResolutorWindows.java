@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import es.us.isa.idlreasoner.util.WebContentAuxiliar;
+
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
 public class MinizincResolutorWindows extends MinizincResolutor{
 	
 	private String solver;
+	private WebContentAuxiliar webContent = new WebContentAuxiliar();
 	
 	public MinizincResolutorWindows(String solver) {
 		super(solver);
@@ -22,9 +25,9 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
 		String command;
 		if(!maxResults.trim().equals("")){
-			command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+			command = getMinizincExe()+ " -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
 		}else {
-			command = "\"minizinc/minizinc.exe\" -a --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+			command = getMinizincExe()+" -a --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
 		}
 		String results = this.callSolver(command);
 		
@@ -39,7 +42,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	}
 	
 	public Map<String,String> solve() {
-		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+		String command = getMinizincExe() + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
 		String solutions =  this.callSolver(command);
 		return this.mapSolutions(solutions);
 	}
@@ -85,6 +88,16 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 		}
 
 
+		return res;
+	}
+	
+	private String getMinizincExe() {
+		String res = "\"minizinc/minizinc.exe\"";
+		if(webContent.isFromAWebContent()) {
+			res = "/minizinc/minizinc.exe";
+			res = webContent.getPath(res);
+			res = "\"" + res + "\"";
+		}
 		return res;
 	}
 

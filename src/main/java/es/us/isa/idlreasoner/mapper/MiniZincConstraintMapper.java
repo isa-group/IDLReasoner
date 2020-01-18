@@ -1,6 +1,8 @@
 package es.us.isa.idlreasoner.mapper;
 
 import com.google.inject.Injector;
+
+import es.us.isa.idlreasoner.util.WebContentAuxiliar;
 import es.us.isa.interparamdep.InterparameterDependenciesLanguageStandaloneSetupGenerated;
 import es.us.isa.interparamdep.generator.InterparameterDependenciesLanguageGenerator;
 import org.eclipse.emf.common.util.URI;
@@ -17,6 +19,8 @@ public class MiniZincConstraintMapper extends AbstractMapper {
     Injector injector = new InterparameterDependenciesLanguageStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
     XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
     private Resource resource;
+    
+    private WebContentAuxiliar webContent = new WebContentAuxiliar();
 
     public MiniZincConstraintMapper(String idlSpecificationPath, MapperResources mr) {
         super(mr);
@@ -25,7 +29,11 @@ public class MiniZincConstraintMapper extends AbstractMapper {
     }
 
     public void mapConstraints() {
-        this.resource = resourceSet.getResource(URI.createFileURI("./"+ IDL_FILES_FOLDER + "/" + specificationPath), true);
+    	String fileRoute = "./"+ IDL_FILES_FOLDER + "/" + specificationPath;
+    	if(webContent.isFromAWebContent()) {
+    		fileRoute= webContent.getPath("/"+ IDL_FILES_FOLDER + "/" + specificationPath);
+    	}
+        this.resource = resourceSet.getResource(URI.createFileURI(fileRoute), true);
         try {
             idlGenerator.doGenerate(resource, null, null);
         } catch (Exception e) {

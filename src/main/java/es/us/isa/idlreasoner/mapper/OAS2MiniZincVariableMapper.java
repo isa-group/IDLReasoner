@@ -19,7 +19,6 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
     public OAS2MiniZincVariableMapper(String apiSpecificationPath, String operationPath, String operationType, MapperResources mr) {
         super(mr);
         this.specificationPath = apiSpecificationPath;
-
         openAPISpec = new OpenAPIV3Parser().read(apiSpecificationPath);
         if(operationType.equals("get"))
             parameters = openAPISpec.getPaths().get(operationPath).getGet().getParameters();
