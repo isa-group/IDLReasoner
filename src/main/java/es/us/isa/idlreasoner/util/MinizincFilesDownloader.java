@@ -19,24 +19,44 @@ public class MinizincFilesDownloader {
 	 * The files are available at the following link:
 	 * https://www.dropbox.com/sh/zl9l928hpt9uxqu/AAD7MyGSXHJluzkx-ms5PuZNa?dl=0
 	 */
-	private static final String ACCESS_TOKEN = "<API_KEY>";
-	private static String minizinc = "./minizinc";
-	private static String minizincFilesDropbox = "/minizinc.zip";
-	private static String minizincFileLocal = "./minizinc.zip";
+	private static final String ACCESS_TOKEN = "API-KEY";
+	private static String minizinc;
+	private static String minizincFilesDropbox;
+	private static String minizincFileLocal;
 	
+	private static String OS = System.getProperty("os.name").toLowerCase();
 	private static WebContentAuxiliar webContent = new WebContentAuxiliar();
 	
 	public static void downloadMinizincFiles() {
 		String destination = System.getProperty("user.dir"); 
 		
+
 		//We check if we are from a webcontent
 		if(webContent.isFromAWebContent()) {
-			minizinc = webContent.getPath("/minizinc");
-			minizincFileLocal = webContent.getPath("/minizinc.zip");
 			destination = webContent.getPath("");
+			if (OS.equals("windows")) {
+				minizincFilesDropbox =  "/minizinc.zip";
+				minizinc = webContent.getPath("/minizinc");
+				minizincFileLocal = webContent.getPath("/minizinc.zip");
+			} else if (OS.equals("linux")){
+				minizincFilesDropbox =  "/minizinc-linux.zip";
+				minizinc = webContent.getPath("/minizinc-linux");
+				minizincFileLocal = webContent.getPath("/minizinc-linux.zip");
+			}
+		}else {
+			if (OS.equals("windows")) {
+				minizinc = "./minizinc";
+				minizincFileLocal = "./minizinc.zip";
+				minizincFilesDropbox =  "/minizinc.zip";
+			} else if (OS.equals("linux")) {
+				minizinc = "./minizinc-linux";
+				minizincFileLocal = "./minizinc-linux.zip";
+				minizincFilesDropbox =  "/minizinc-linux.zip";
+			}
 		}
 		
 		//We check if the Minizinc files are in the project
+		System.out.println(minizinc);
         File dir = new File(minizinc);
         boolean exists = dir.exists();
         

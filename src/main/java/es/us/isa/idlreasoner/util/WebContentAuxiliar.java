@@ -14,7 +14,8 @@ public class WebContentAuxiliar {
 	public boolean isFromAWebContent() {
 		boolean res = false;
 		String relativePath = System.getProperty("user.dir");
-		if(relativePath.equals("C:\\WINDOWS\\system32") || relativePath.equals("C:\\WINDOWS\\System32")) {
+		if(relativePath.equals("C:\\WINDOWS\\system32") || relativePath.equals("C:\\WINDOWS\\System32")
+				|| relativePath.equals("/app")) {
 			res = true;
 		}
 		return res;

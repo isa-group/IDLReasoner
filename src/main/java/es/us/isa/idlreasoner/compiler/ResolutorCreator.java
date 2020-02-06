@@ -21,6 +21,8 @@ public class ResolutorCreator {
 		if (COMPILER.equals("Minizinc")) {
 			if (this.osName.contains("Windows")) {
 				this.currentCompiler = new MinizincResolutorWindows(SOLVER);
+			} else if(this.osName.contains("Linux")){
+				this.currentCompiler = new MinizincResolutorLinux(SOLVER);
 			} else {
 				this.currentCompiler = new MinizincResolutor(SOLVER);
 			}

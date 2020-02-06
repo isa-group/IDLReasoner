@@ -2,6 +2,7 @@ package es.us.isa.idlreasoner.mapper;
 
 import com.google.inject.Injector;
 
+import es.us.isa.idlreasoner.util.FileManager;
 import es.us.isa.idlreasoner.util.WebContentAuxiliar;
 import es.us.isa.interparamdep.InterparameterDependenciesLanguageStandaloneSetupGenerated;
 import es.us.isa.interparamdep.generator.InterparameterDependenciesLanguageGenerator;
@@ -12,6 +13,11 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 
 import static es.us.isa.idlreasoner.util.FileManager.appendContentToFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class MiniZincConstraintMapper extends AbstractMapper {
 
@@ -31,7 +37,7 @@ public class MiniZincConstraintMapper extends AbstractMapper {
     public void mapConstraints() {
     	String fileRoute = "./"+ IDL_FILES_FOLDER + "/" + specificationPath;
     	if(webContent.isFromAWebContent()) {
-    		fileRoute= webContent.getPath("/"+ IDL_FILES_FOLDER + "/" + specificationPath);
+    		fileRoute= webContent.getPath(IDL_FILES_FOLDER +"/"+ specificationPath);
     	}
         this.resource = resourceSet.getResource(URI.createFileURI(fileRoute), true);
         try {
