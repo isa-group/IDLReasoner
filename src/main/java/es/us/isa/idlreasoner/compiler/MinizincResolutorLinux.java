@@ -4,6 +4,8 @@ import static es.us.isa.idlreasoner.util.IDLConfiguration.FULL_CONSTRAINTS_FILE;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.SOLUTION_SEP;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -11,7 +13,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
+import es.us.isa.idlreasoner.util.FileManager;
 import es.us.isa.idlreasoner.util.WebContentAuxiliar;
 
 public class MinizincResolutorLinux extends MinizincResolutor{
@@ -58,7 +62,6 @@ public class MinizincResolutorLinux extends MinizincResolutor{
 	private String callSolver(String command) {
 		String res = "";
 		String[] args = new String[] {"/bin/bash", "-c", command};
-		
 		ProcessBuilder processBuilder = new ProcessBuilder(args);
 
 		try {

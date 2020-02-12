@@ -34,7 +34,7 @@ public class MinizincFilesDownloader {
 		//We check if we are from a webcontent
 		if(webContent.isFromAWebContent()) {
 			destination = webContent.getPath("");
-			if (OS.equals("windows")) {
+			if (OS.contains("windows")) {
 				minizincFilesDropbox =  "/minizinc.zip";
 				minizinc = webContent.getPath("/minizinc");
 				minizincFileLocal = webContent.getPath("/minizinc.zip");
@@ -44,7 +44,7 @@ public class MinizincFilesDownloader {
 				minizincFileLocal = webContent.getPath("/minizinc-linux.zip");
 			}
 		}else {
-			if (OS.equals("windows")) {
+			if (OS.contains("windows")) {
 				minizinc = "./minizinc";
 				minizincFileLocal = "./minizinc.zip";
 				minizincFilesDropbox =  "/minizinc.zip";

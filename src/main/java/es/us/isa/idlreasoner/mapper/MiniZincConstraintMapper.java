@@ -50,14 +50,23 @@ public class MiniZincConstraintMapper extends AbstractMapper {
     }
 
     public void setParamToValue(String parameter, String value) {
-        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(parameter) + " = " + origToChangedParamValue(parameter, value) + ";\n");
+    	String content =  "constraint " + origToChangedParamName(parameter) + " = " + origToChangedParamValue(parameter, value) +";\n";
+    	//On Linux there is a bug with \r and sometimes Linux writes a \r
+    	content = content.replace("\r", "");
+        appendContentToFile(FULL_CONSTRAINTS_FILE, content);
     }
 
     public void setParamToValue(String changedParamName, String origParamName, String value) {
-        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(changedParamName) + " = " + origToChangedParamValue(origParamName, value) + ";\n");
+ 
+    	String content = "constraint " + origToChangedParamName(changedParamName) + " = " + origToChangedParamValue(origParamName, value) + ";\n";
+    	//On Linux there is a bug with \r and sometimes Linux writes a \r
+    	content = content.replace("\r", "");
+        appendContentToFile(FULL_CONSTRAINTS_FILE, content);
     }
 
     public void finishConstraintsFile() {
         appendContentToFile(FULL_CONSTRAINTS_FILE, "solve satisfy;\n");
     }
+    
+  
 }

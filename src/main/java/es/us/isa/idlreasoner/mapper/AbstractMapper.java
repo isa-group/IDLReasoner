@@ -45,7 +45,8 @@ public class AbstractMapper {
         Map.Entry<String, Boolean> paramFeatures = mr.operationParameters.get(parameter);
         if (paramFeatures != null) {
             if (paramFeatures.getKey().equals("string")) {
-                Integer intMapping = mr.stringIntMapping.get(value);
+            	//Trim is here because an error in Linux
+                Integer intMapping = mr.stringIntMapping.get(value.trim());
                 if (intMapping != null) {
                     return Integer.toString(intMapping);
                 } else {
@@ -55,7 +56,6 @@ public class AbstractMapper {
                 }
             }
         }
-
         return value;
     }
 
