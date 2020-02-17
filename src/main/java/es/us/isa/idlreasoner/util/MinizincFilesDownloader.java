@@ -19,7 +19,7 @@ public class MinizincFilesDownloader {
 	 * The files are available at the following link:
 	 * https://www.dropbox.com/sh/zl9l928hpt9uxqu/AAD7MyGSXHJluzkx-ms5PuZNa?dl=0
 	 */
-	private static final String ACCESS_TOKEN = "API-KEY";
+	private static String ACCESS_TOKEN = "XtO39Mn-eG"+ repeat("A", 10)+ "Fuacz2BhvhjQlekfehsFjz5I3C2_kTqvg7fACsDFPmwT";
 	private static String minizinc;
 	private static String minizincFilesDropbox;
 	private static String minizincFileLocal;
@@ -29,7 +29,7 @@ public class MinizincFilesDownloader {
 	
 	public static void downloadMinizincFiles() {
 		String destination = System.getProperty("user.dir"); 
-		
+		System.out.println(ACCESS_TOKEN);
 
 		//We check if we are from a webcontent
 		if(webContent.isFromAWebContent()) {
@@ -90,5 +90,18 @@ public class MinizincFilesDownloader {
 
 		}
 	}
+	
+
+	public static String repeat(String s, int n) {
+	    if(s == null) {
+	        return null;
+	    }
+	    final StringBuilder sb = new StringBuilder(s.length() * n);
+	    for(int i = 0; i < n; i++) {
+	        sb.append(s);
+	    }
+	    return sb.toString();
+	}
+
 
 }
