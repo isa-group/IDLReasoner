@@ -19,62 +19,59 @@ public class MinizincFilesDownloader {
 	 * The files are available at the following link:
 	 * https://www.dropbox.com/sh/zl9l928hpt9uxqu/AAD7MyGSXHJluzkx-ms5PuZNa?dl=0
 	 */
-	private static String ACCESS_TOKEN = "XtO39Mn-eG"+ repeat("A", 10)+ "Fuacz2BhvhjQlekfehsFjz5I3C2_kTqvg7fACsDFPmwT";
+	private static String ACCESS_TOKEN = "<API-KEY>";
 	private static String minizinc;
-	private static String minizincFilesDropbox;
+	private static String downloadDirectory;
 	private static String minizincFileLocal;
-	
+
+	private static String minizincWURL = "http://download1592.mediafire.com/6h1pwkfkkfcg/zz7f9yu9ewrsh80/minizinc.zip";
+	private static String minizincLURL = "https://download1582.mediafire.com/5228ipxk783g/rluflqq2dubvj7d/minizinc-linux.zip";
 	private static String OS = System.getProperty("os.name").toLowerCase();
 	private static WebContentAuxiliar webContent = new WebContentAuxiliar();
+	private String url;
 	
 	public static void downloadMinizincFiles() {
-		String destination = System.getProperty("user.dir"); 
-		System.out.println(ACCESS_TOKEN);
+		String destination = System.getProperty("user.dir");
 
 		//We check if we are from a webcontent
 		if(webContent.isFromAWebContent()) {
+			downloadDirectory = webContent.getPath("/");
 			destination = webContent.getPath("");
 			if (OS.contains("windows")) {
-				minizincFilesDropbox =  "/minizinc.zip";
 				minizinc = webContent.getPath("/minizinc");
 				minizincFileLocal = webContent.getPath("/minizinc.zip");
 			} else if (OS.equals("linux")){
-				minizincFilesDropbox =  "/minizinc-linux.zip";
 				minizinc = webContent.getPath("/minizinc-linux");
 				minizincFileLocal = webContent.getPath("/minizinc-linux.zip");
 			}
 		}else {
+			downloadDirectory = "./";
 			if (OS.contains("windows")) {
 				minizinc = "./minizinc";
 				minizincFileLocal = "./minizinc.zip";
-				minizincFilesDropbox =  "/minizinc.zip";
 			} else if (OS.equals("linux")) {
 				minizinc = "./minizinc-linux";
 				minizincFileLocal = "./minizinc-linux.zip";
-				minizincFilesDropbox =  "/minizinc-linux.zip";
 			}
 		}
 		
 		//We check if the Minizinc files are in the project
-		System.out.println(minizinc);
         File dir = new File(minizinc);
         boolean exists = dir.exists();
-        
-        if(!exists) {
-			// Create Dropbox client
-			DbxRequestConfig config = DbxRequestConfig.newBuilder(minizinc).build();
-			DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
-			
+        if(!exists) {        
+        	
 			//Download Zip file
-			try {
-				OutputStream outputStream = new FileOutputStream(minizincFileLocal);
-				client.files().download(minizincFilesDropbox)
-						.download(outputStream);
-				outputStream.close();
-			} catch (DbxException | IOException e) {
-				e.printStackTrace();
-			}
-			
+            	try {
+            		if(OS.contains("windows")) {
+            			HttpDownloadUtility.downloadFile(minizincWURL, downloadDirectory);
+            		}else if (OS.equals("linux")) {
+                    	HttpDownloadUtility.downloadFile(minizincLURL,downloadDirectory);
+                	}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        
 			//UnZip the Zip file
 			try {
 			    ZipFile zipFile = new ZipFile(minizincFileLocal);
