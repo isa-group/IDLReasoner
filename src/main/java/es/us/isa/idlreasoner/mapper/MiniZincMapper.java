@@ -1,8 +1,11 @@
 package es.us.isa.idlreasoner.mapper;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
+import static es.us.isa.idlreasoner.util.IDLConfiguration.IDL_AUX_FILE;
+import static es.us.isa.idlreasoner.util.IDLConfiguration.IDL_FILES_FOLDER;
 import static es.us.isa.idlreasoner.util.PropertyManager.readProperty;
 
 public class MiniZincMapper {
@@ -15,7 +18,7 @@ public class MiniZincMapper {
 
 		// ConstraintMapper: must be created BEFORE the VariableMapper
 		if(compiler.toLowerCase().equals("minizinc"))
-			this.cm = new MiniZincConstraintMapper(idl, null);
+			this.cm = new MiniZincConstraintMapper("./"+ IDL_FILES_FOLDER + "/" + idl, null);
 		else {
 			System.err.println("Compiler " + compiler + " not supported.");
 			System.exit(-1);
@@ -28,6 +31,33 @@ public class MiniZincMapper {
 			System.err.println("Specification type " + specificationType + " and or compiler " + compiler + " not supported.");
 			System.exit(-1);
 		}
+	}
+
+	public MiniZincMapper(String specificationType, String apiSpecificationPath, String operationPath, String operationType) {
+		String compiler = readProperty("compiler");
+
+		// Create IDL file from IDL4OAS document:
+		if(specificationType.toLowerCase().equals("oas") && compiler.toLowerCase().equals("minizinc")) {
+			try {
+				OAS2MiniZincVariableMapper.generateIDLfromIDL4OAS(apiSpecificationPath, operationPath, operationType);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.err.println("Specification type " + specificationType + " and or compiler " + compiler + " not supported.");
+			System.exit(-1);
+		}
+
+		// ConstraintMapper: must be created BEFORE the VariableMapper
+		if(compiler.toLowerCase().equals("minizinc"))
+			this.cm = new MiniZincConstraintMapper(IDL_AUX_FILE, null);
+		else {
+			System.err.println("Compiler " + compiler + " not supported.");
+			System.exit(-1);
+		}
+
+		// VariableMapper: must be created AFTER the ConstraintMapper
+		this.vm = new OAS2MiniZincVariableMapper(apiSpecificationPath, operationPath, operationType, cm.mr);
 	}
 
 	public Boolean isOptionalParameter(String paramName) {

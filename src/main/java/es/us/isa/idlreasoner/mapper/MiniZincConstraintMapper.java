@@ -25,7 +25,7 @@ public class MiniZincConstraintMapper extends AbstractMapper {
     }
 
     public void mapConstraints() {
-        this.resource = resourceSet.getResource(URI.createFileURI("./"+ IDL_FILES_FOLDER + "/" + specificationPath), true);
+        this.resource = resourceSet.getResource(URI.createFileURI(specificationPath), true);
         try {
             idlGenerator.doGenerate(resource, null, null);
         } catch (Exception e) {

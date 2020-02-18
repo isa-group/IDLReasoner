@@ -42,6 +42,9 @@ paths:
         enum:
         - "mi gente"
         - "mis gentes"
+      x-dependencies:
+      - IF p1 THEN p2;
+      - IF p3 THEN NOT p4;
       responses:
         200:
           description: "OK"

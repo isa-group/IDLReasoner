@@ -22,6 +22,12 @@ public class Analyzer {
 		resolutor = new ResolutorCreator();
 		mapper = new MiniZincMapper(specificationType, idl, apiSpecificationPath, operationPath, operationType);
 	}
+
+	public Analyzer(String specificationType, String apiSpecificationPath, String operationPath, String operationType) {
+		initFilesAndConf();
+		resolutor = new ResolutorCreator();
+		mapper = new MiniZincMapper(specificationType, apiSpecificationPath, operationPath, operationType);
+	}
 	
 	public List<Map<String,String>> getAllRequests() {
 		List<Map<String,String>> setUpRequests = new ArrayList<>();

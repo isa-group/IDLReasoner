@@ -1,6 +1,7 @@
 package es.us.isa.idlreasoner.mapper;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.parser.OpenAPIV3Parser;
@@ -21,20 +22,7 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         this.specificationPath = apiSpecificationPath;
 
         openAPISpec = new OpenAPIV3Parser().read(apiSpecificationPath);
-        if(operationType.equals("get"))
-            parameters = openAPISpec.getPaths().get(operationPath).getGet().getParameters();
-        if(operationType.equals("delete"))
-            parameters = openAPISpec.getPaths().get(operationPath).getDelete().getParameters();
-        if(operationType.equals("post"))
-            parameters = openAPISpec.getPaths().get(operationPath).getPost().getParameters();
-        if(operationType.equals("put"))
-            parameters = openAPISpec.getPaths().get(operationPath).getPut().getParameters();
-        if(operationType.equals("patch"))
-            parameters = openAPISpec.getPaths().get(operationPath).getPatch().getParameters();
-        if(operationType.equals("head"))
-            parameters = openAPISpec.getPaths().get(operationPath).getHead().getParameters();
-        if(operationType.equals("options"))
-            parameters = openAPISpec.getPaths().get(operationPath).getOptions().getParameters();
+        parameters = getOasOperation(openAPISpec, operationPath, operationType).getParameters(); // NullPointerException would be thrown on purpose, to stop program
 
         try {
             mapVariables();
@@ -147,6 +135,40 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
     private void mapPSetZero(BufferedWriter pSetZeroOut, String paramName, String paramValue) throws IOException {
         pSetZeroOut.append("constraint ((" + origToChangedParamName(paramName) + "Set==0) -> (" + origToChangedParamName(paramName) + "==" + paramValue + "));\n");
+    }
+
+    private static Operation getOasOperation(OpenAPI openAPISpec, String operationPath, String operationType) {
+        if(operationType.equals("get"))
+            return openAPISpec.getPaths().get(operationPath).getGet();
+        if(operationType.equals("delete"))
+            return openAPISpec.getPaths().get(operationPath).getDelete();
+        if(operationType.equals("post"))
+            return openAPISpec.getPaths().get(operationPath).getPost();
+        if(operationType.equals("put"))
+            return openAPISpec.getPaths().get(operationPath).getPut();
+        if(operationType.equals("patch"))
+            return openAPISpec.getPaths().get(operationPath).getPatch();
+        if(operationType.equals("head"))
+            return openAPISpec.getPaths().get(operationPath).getHead();
+        if(operationType.equals("options"))
+            return openAPISpec.getPaths().get(operationPath).getOptions();
+
+        return null; // This should never happen
+    }
+
+    public static void generateIDLfromIDL4OAS(String apiSpecificationPath, String operationPath, String operationType) throws IOException {
+        OpenAPI oasSpec = new OpenAPIV3Parser().read(apiSpecificationPath);
+        Operation oasOp = getOasOperation(oasSpec, operationPath, operationType);
+
+        List<String> IDLdeps = (List<String>)oasOp.getExtensions().get("x-dependencies");
+        if (IDLdeps != null) {
+            BufferedWriter out = openWriter(IDL_AUX_FILE);
+            for (String IDLdep : IDLdeps) {
+                out.append(IDLdep + "\n");
+            }
+            out.flush();
+            out.close();
+        }
     }
 
 }
