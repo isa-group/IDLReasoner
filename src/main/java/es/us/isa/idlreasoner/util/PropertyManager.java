@@ -20,7 +20,7 @@ public class PropertyManager {
         if (properties==null) {
             properties = new Properties();
             try {
-                properties.load(new FileInputStream(IDL_AUX_FOLDER + "/config.properties"));
+                properties.load(new FileInputStream("src/main/resources/idl-reasoner.properties"));
             } catch (IOException e) {
                 System.err.println("Error reading property file: " + e.getMessage());
                 e.printStackTrace();

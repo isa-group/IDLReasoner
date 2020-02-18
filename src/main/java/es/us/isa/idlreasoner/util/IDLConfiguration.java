@@ -49,7 +49,7 @@ public class IDLConfiguration {
     }
 
     private static void initConfigurationFile() {
-        String filePath = "./idl_aux_files/config.properties";
+        String filePath = "src/main/resources/idl-reasoner.properties";
         createFileIfNotExists(filePath);
         BufferedReader br = openReader(filePath);
 
