@@ -81,6 +81,10 @@ public class MiniZincMapper {
 		cm.finishConstraintsFile();
 	}
 
+	public void appendConstraintsRedundantSolutions() {
+		vm.appendConstraintsRedundantSolutions();
+	}
+
 	public Set<String> getOperationParameters() {
 		return vm.mr.operationParameters.keySet();
 	}

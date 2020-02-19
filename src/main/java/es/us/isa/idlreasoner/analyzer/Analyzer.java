@@ -37,6 +37,7 @@ public class Analyzer {
 
 	private List<Map<String,String>> getAllUnSetUpRequests() {
 		setupAnalysisOperation();
+		mapper.appendConstraintsRedundantSolutions();
 		mapper.finishConstraintsFile();
 		return resolutor.solveGetAllSolutions();
 	}

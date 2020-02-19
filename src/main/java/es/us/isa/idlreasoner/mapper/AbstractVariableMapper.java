@@ -14,11 +14,17 @@ import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
 public abstract class AbstractVariableMapper extends AbstractMapper {
 
+    String constraintsRedundantSolutions = ""; // Set of constraints to avoid redundant solutions when calling randomRequest
+
     public AbstractVariableMapper(MapperResources mr) {
         super(mr);
     }
 
     abstract public void mapVariables() throws IOException;
+
+    public void appendConstraintsRedundantSolutions() {
+        appendContentToFile(FULL_CONSTRAINTS_FILE, constraintsRedundantSolutions);
+    }
 
     List<String> savePreviousBaseConstraintsFileContent() throws IOException {
         List<String> previousContent = new ArrayList<>();

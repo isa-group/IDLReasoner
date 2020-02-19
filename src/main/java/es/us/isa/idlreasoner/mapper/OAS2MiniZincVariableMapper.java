@@ -43,8 +43,8 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         BufferedWriter out = openWriter(BASE_CONSTRAINTS_FILE);
         BufferedWriter requiredVarsOut = openWriter(BASE_CONSTRAINTS_FILE);
         // In order for MiniZinc not to return duplicated solutions when a parameter is not set, we establish constraints for each parameter such as: pSet==0 -> p==0
-        BufferedWriter pSetZeroOut = openWriter(BASE_CONSTRAINTS_FILE);
-        pSetZeroOut.append("%%% The following constraints are to avoid redundant solutions returned by MiniZinc %%%\n");
+        constraintsRedundantSolutions += "%%% The following constraints are to avoid redundant solutions returned by MiniZinc %%%\n";
+
         String var;
         String varSet;
         Integer intMapping;
@@ -54,7 +54,7 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
             if(schema.getType().equals("boolean")) {
                 var = "var bool: ";
-                mapPSetZero(pSetZeroOut, parameter.getName(), "false");
+                mapPSetZero(parameter.getName(), "false");
             } else if(schema.getEnum() != null) {
                 if (schema.getType().equals("string")) {
                     var = "var {";
@@ -69,7 +69,7 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
                     }
                     var = var.substring(0, var.length()-2); // trim last comma and space
                     var += "}: ";
-                    mapPSetZero(pSetZeroOut, parameter.getName(), Integer.toString(mr.stringToIntCounter-1));
+                    mapPSetZero(parameter.getName(), Integer.toString(mr.stringToIntCounter-1));
                 } else if (schema.getType().equals("integer")) {
                     var = "var {";
                     for (Object o : schema.getEnum()) {
@@ -77,22 +77,22 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
                     }
                     var = var.substring(0, var.length()-2); // trim last comma and space
                     var += "}: ";
-                    mapPSetZero(pSetZeroOut, parameter.getName(), schema.getEnum().get(0).toString());
+                    mapPSetZero(parameter.getName(), schema.getEnum().get(0).toString());
                 } else {
                     // TODO: Manage mapping of float enum
                     var = "var float: ";
-                    mapPSetZero(pSetZeroOut, parameter.getName(), "1");
+                    mapPSetZero(parameter.getName(), "1");
                 }
             } else if(schema.getType().equals("string")) {
                 var = "var 0..10000: "; // If string, add enough possible values (10000)
-                mapPSetZero(pSetZeroOut, parameter.getName(), "1");
+                mapPSetZero(parameter.getName(), "1");
             } else if(schema.getType().equals("integer")) {
                 var = "var int: ";
-                mapPSetZero(pSetZeroOut, parameter.getName(), "1");
+                mapPSetZero(parameter.getName(), "1");
             } else {
                 // TODO: Manage mapping of float
                 var = "var float: ";
-                mapPSetZero(pSetZeroOut, parameter.getName(), "1");
+                mapPSetZero(parameter.getName(), "1");
             }
             var += origToChangedParamName(parameter.getName())+";\n";
             out.append(var);
@@ -113,16 +113,13 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
 
         out.newLine();
         requiredVarsOut.newLine();
-        pSetZeroOut.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-        pSetZeroOut.newLine();
+        constraintsRedundantSolutions += "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n";
 
         out.flush();
         requiredVarsOut.flush();
-        pSetZeroOut.flush();
 
         out.close();
         requiredVarsOut.close();
-        pSetZeroOut.close();
 
         exportStringIntMappingToFile();
         exportParameterNamesMappingToFile();
@@ -133,8 +130,8 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         requiredVarsOut.append("constraint " + origToChangedParamName(parameter.getName())+"Set = 1;\n");
     }
 
-    private void mapPSetZero(BufferedWriter pSetZeroOut, String paramName, String paramValue) throws IOException {
-        pSetZeroOut.append("constraint ((" + origToChangedParamName(paramName) + "Set==0) -> (" + origToChangedParamName(paramName) + "==" + paramValue + "));\n");
+    private void mapPSetZero(String paramName, String paramValue) {
+        constraintsRedundantSolutions += "constraint ((" + origToChangedParamName(paramName) + "Set==0) -> (" + origToChangedParamName(paramName) + "==" + paramValue + "));\n";
     }
 
     private static Operation getOasOperation(OpenAPI openAPISpec, String operationPath, String operationType) {
