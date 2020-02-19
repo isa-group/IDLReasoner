@@ -49,7 +49,9 @@ public class AbstractMapper {
                 if (intMapping != null) {
                     return Integer.toString(intMapping);
                 } else {
-                    int randomInt = ThreadLocalRandom.current().nextInt(1000, 9999);
+                    int randomInt;
+                    do { randomInt = ThreadLocalRandom.current().nextInt(1000, 9999); }
+                    while (mr.stringIntMapping.inverse().get(randomInt)!=null);
                     mr.stringIntMapping.put(value, randomInt);
                     return Integer.toString(randomInt);
                 }

@@ -138,19 +138,19 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
     }
 
     private static Operation getOasOperation(OpenAPI openAPISpec, String operationPath, String operationType) {
-        if(operationType.equals("get"))
+        if(operationType.toLowerCase().equals("get"))
             return openAPISpec.getPaths().get(operationPath).getGet();
-        if(operationType.equals("delete"))
+        if(operationType.toLowerCase().equals("delete"))
             return openAPISpec.getPaths().get(operationPath).getDelete();
-        if(operationType.equals("post"))
+        if(operationType.toLowerCase().equals("post"))
             return openAPISpec.getPaths().get(operationPath).getPost();
-        if(operationType.equals("put"))
+        if(operationType.toLowerCase().equals("put"))
             return openAPISpec.getPaths().get(operationPath).getPut();
-        if(operationType.equals("patch"))
+        if(operationType.toLowerCase().equals("patch"))
             return openAPISpec.getPaths().get(operationPath).getPatch();
-        if(operationType.equals("head"))
+        if(operationType.toLowerCase().equals("head"))
             return openAPISpec.getPaths().get(operationPath).getHead();
-        if(operationType.equals("options"))
+        if(operationType.toLowerCase().equals("options"))
             return openAPISpec.getPaths().get(operationPath).getOptions();
 
         return null; // This should never happen
