@@ -27,6 +27,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 			command = "\"minizinc/minizinc.exe\" -a --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
 		}
 		String results = this.callSolver(command);
+		results = fixIfErrors(results, command);
 		
 		List<String> resultsSplitted = Arrays.asList(results.split(SOLUTION_SEP));
 		
@@ -41,6 +42,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	public Map<String,String> solve() {
 		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
 		String solutions =  this.callSolver(command);
+		solutions = fixIfErrors(solutions, command);
 		return this.mapSolutions(solutions);
 	}
 	
@@ -86,6 +88,15 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 
 
 		return res;
+	}
+
+	private String fixIfErrors(String solutions, String command) {
+		if (solutions.contains("=====ERROR=====") && solver.toLowerCase().equals("chuffed")) {
+			String newCommand = command.replace(solver, "Gecode");
+			return this.callSolver(newCommand);
+		}
+
+		return solutions;
 	}
 
 	
