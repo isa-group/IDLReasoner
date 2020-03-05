@@ -89,6 +89,9 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
             } else if(schema.getType().equals("integer")) {
                 var = "var int: ";
                 mapPSetZero(parameter.getName(), "1");
+            } else if (schema.getType().equals("array")) {
+                var = "var 0..10000: "; // If array, treat it as a string, add enough possible values (10000)
+                mapPSetZero(parameter.getName(), "1");
             } else {
                 // TODO: Manage mapping of float
                 var = "var float: ";

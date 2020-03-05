@@ -44,7 +44,7 @@ public class AbstractMapper {
     String origToChangedParamValue(String parameter, String value) {
         Map.Entry<String, Boolean> paramFeatures = mr.operationParameters.get(parameter);
         if (paramFeatures != null) {
-            if (paramFeatures.getKey().equals("string")) {
+            if (paramFeatures.getKey().equals("string") || paramFeatures.getKey().equals("array")) {
                 Integer intMapping = mr.stringIntMapping.get(value);
                 if (intMapping != null) {
                     return Integer.toString(intMapping);
@@ -64,7 +64,7 @@ public class AbstractMapper {
     String changedToOrigParamValue(String parameter, String value) {
         Map.Entry<String, Boolean> paramFeatures = mr.operationParameters.get(parameter);
         if (paramFeatures != null) {
-            if (paramFeatures.getKey().equals("string")) {
+            if (paramFeatures.getKey().equals("string") || paramFeatures.getKey().equals("array")) {
                 String stringMapping;
                 try {
                     stringMapping = mr.stringIntMapping.inverse().get(new Integer(value));
