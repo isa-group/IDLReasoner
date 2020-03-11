@@ -78,10 +78,12 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
                     var = var.substring(0, var.length()-2); // trim last comma and space
                     var += "}: ";
                     mapPSetZero(parameter.getName(), schema.getEnum().get(0).toString());
+//                } else if (schema.getType().equals("number")) {
+//                    // TODO: Manage mapping of float enum
+//                    var = "var float: ";
+//                    mapPSetZero(parameter.getName(), "1");
                 } else {
-                    // TODO: Manage mapping of float enum
-                    var = "var float: ";
-                    mapPSetZero(parameter.getName(), "1");
+                    throw new IllegalArgumentException("The enum parameter type '" + schema.getType() + "' is not allowed for IDLReasoner to work.");
                 }
             } else if(schema.getType().equals("string")) {
                 var = "var 0..10000: "; // If string, add enough possible values (10000)
@@ -92,10 +94,11 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
             } else if (schema.getType().equals("array")) {
                 var = "var 0..10000: "; // If array, treat it as a string, add enough possible values (10000)
                 mapPSetZero(parameter.getName(), "1");
-            } else {
-                // TODO: Manage mapping of float
-                var = "var float: ";
+            } else if (schema.getType().equals("number")) {
+                var = "var int: ";
                 mapPSetZero(parameter.getName(), "1");
+            } else {
+                throw new IllegalArgumentException("The parameter type '" + schema.getType() + "' is not allowed for IDLReasoner to work.");
             }
             var += origToChangedParamName(parameter.getName())+";\n";
             out.append(var);

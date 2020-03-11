@@ -55,6 +55,8 @@ public class AbstractMapper {
                     mr.stringIntMapping.put(value, randomInt);
                     return Integer.toString(randomInt);
                 }
+            } else if (paramFeatures.getKey().equals("number")) {
+                return value.replaceAll("\\.\\d+", "");
             }
         }
 
