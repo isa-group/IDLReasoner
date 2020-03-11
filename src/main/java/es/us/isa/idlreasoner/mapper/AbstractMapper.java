@@ -2,7 +2,7 @@ package es.us.isa.idlreasoner.mapper;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import static es.us.isa.interparamdep.generator.Utils.parseParamName;
+import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -24,7 +24,7 @@ public class AbstractMapper {
         if (changedParamName != null) {
             return changedParamName;
         } else {
-            String parsedParamName = parseParamName(origParamName);
+            String parsedParamName = parseSpecParamName(origParamName);
             if (!parsedParamName.equals(origParamName)) {
                 mr.parameterNamesMapping.put(parsedParamName, origParamName);
                 return parsedParamName;

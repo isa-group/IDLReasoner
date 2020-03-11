@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static es.us.isa.idlreasoner.util.FileManager.copyFile;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-import static es.us.isa.interparamdep.generator.Utils.parseParamName;
+import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
 
 
 public class Analyzer {
@@ -56,7 +56,7 @@ public class Analyzer {
 	public Boolean isDeadParameter(String parameter) {
 		setupAnalysisOperation();
 
-		mapper.setParamToValue(parseParamName(parameter)+"Set", "1");
+		mapper.setParamToValue(parseSpecParamName(parameter)+"Set", "1");
 		mapper.finishConstraintsFile();
 
 		return !isValidSolution(this.resolutor.solve());
@@ -66,7 +66,7 @@ public class Analyzer {
 		setupAnalysisOperation();
 
 		if (mapper.isOptionalParameter(parameter)) {
-			mapper.setParamToValue(parseParamName(parameter)+"Set", "0");
+			mapper.setParamToValue(parseSpecParamName(parameter)+"Set", "0");
 			mapper.finishConstraintsFile();
 			return !isValidSolution(this.resolutor.solve());
 		} else {
@@ -99,10 +99,10 @@ public class Analyzer {
 		Set<String> operationParameters = mapper.getOperationParameters();
 		for(String operationParameter : operationParameters) {
 			if (parametersSetNames.contains(operationParameter)) {
-				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, parametersSet.get(operationParameter));
-				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "1");
+				mapper.setParamToValue(parseSpecParamName(operationParameter), operationParameter, parametersSet.get(operationParameter));
+				mapper.setParamToValue(parseSpecParamName(operationParameter)+"Set", "1");
 			} else {
-				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "0");
+				mapper.setParamToValue(parseSpecParamName(operationParameter)+"Set", "0");
 
 			}
 		}
@@ -116,8 +116,8 @@ public class Analyzer {
 		Set<String> operationParameters = mapper.getOperationParameters();
 		for(String operationParameter : operationParameters) {
 			if (parametersSetNames.contains(operationParameter)) {
-				mapper.setParamToValue(parseParamName(operationParameter), operationParameter, parametersSet.get(operationParameter));
-				mapper.setParamToValue(parseParamName(operationParameter)+"Set", "1");
+				mapper.setParamToValue(parseSpecParamName(operationParameter), operationParameter, parametersSet.get(operationParameter));
+				mapper.setParamToValue(parseSpecParamName(operationParameter)+"Set", "1");
 			}
 		}
 		mapper.finishConstraintsFile();

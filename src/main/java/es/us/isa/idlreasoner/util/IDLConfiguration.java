@@ -40,10 +40,8 @@ public class IDLConfiguration {
             createFileIfNotExists(STRING_INT_MAPPING_FILE);
             appendContentToFile(STRING_INT_MAPPING_FILE, "{ }");
         }
-        if (!(new File(PARAMETER_NAMES_MAPPING_FILE)).exists()) {
-            createFileIfNotExists(PARAMETER_NAMES_MAPPING_FILE);
-            appendContentToFile(PARAMETER_NAMES_MAPPING_FILE, "{ }");
-        }
+        recreateFile(PARAMETER_NAMES_MAPPING_FILE);
+        appendContentToFile(PARAMETER_NAMES_MAPPING_FILE, "{ }");
         recreateFile(IDL_AUX_FILE);
         recreateFile(BASE_CONSTRAINTS_FILE);
     }
