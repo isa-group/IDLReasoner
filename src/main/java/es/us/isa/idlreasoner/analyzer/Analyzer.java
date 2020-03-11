@@ -147,5 +147,6 @@ public class Analyzer {
 	private void setupAnalysisOperation() {
 		recreateFile(FULL_CONSTRAINTS_FILE);
 		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
+		mapper.resetMapperResources();
 	}
 }

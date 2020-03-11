@@ -31,6 +31,7 @@ public class MiniZincMapper {
 			System.err.println("Specification type " + specificationType + " and or compiler " + compiler + " not supported.");
 			System.exit(-1);
 		}
+
 	}
 
 	public MiniZincMapper(String specificationType, String apiSpecificationPath, String operationPath, String operationType) {
@@ -58,6 +59,7 @@ public class MiniZincMapper {
 
 		// VariableMapper: must be created AFTER the ConstraintMapper
 		this.vm = new OAS2MiniZincVariableMapper(apiSpecificationPath, operationPath, operationType, cm.mr);
+
 	}
 
 	public Boolean isOptionalParameter(String paramName) {
@@ -91,6 +93,10 @@ public class MiniZincMapper {
 
 	public Map<String,String> setUpRequest(Map<String,String> mznSolution) {
 		return vm.setUpRequest(mznSolution);
+	}
+
+	public void resetMapperResources() {
+		vm.mr.resetStringIntMapping();
 	}
 
 //	public Set<String> getRequiredParameters() {
