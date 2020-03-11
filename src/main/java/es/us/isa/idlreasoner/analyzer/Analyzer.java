@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static es.us.isa.idlreasoner.util.FileManager.copyFile;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-import static es.us.isa.idlreasoner.util.Utils.parseParamName;
+import static es.us.isa.interparamdep.generator.Utils.parseParamName;
 
 
 public class Analyzer {

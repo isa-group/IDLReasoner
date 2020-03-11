@@ -2,7 +2,7 @@ package es.us.isa.idlreasoner.mapper;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import static es.us.isa.idlreasoner.util.Utils.parseParamName;
+import static es.us.isa.interparamdep.generator.Utils.parseParamName;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
