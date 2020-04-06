@@ -334,18 +334,42 @@ paths:
           in: "query"
           required: false
           type: "integer"
+          enum:
+            - 100
+            - 1000
+            - 10000
+            - 100000
+            - 1000000
         - name: "p3"
           in: "query"
           required: false
           type: "integer"
+          enum:
+            - 100
+            - 1000
+            - 10000
+            - 100000
+            - 1000000
         - name: "p4"
           in: "query"
           required: false
           type: "integer"
+          enum:
+            - 100
+            - 1000
+            - 10000
+            - 100000
+            - 1000000
         - name: "p5"
           in: "query"
           required: false
           type: "integer"
+          enum:
+            - 100
+            - 1000
+            - 10000
+            - 100000
+            - 1000000
         - name: "p6"
           in: "query"
           required: false
