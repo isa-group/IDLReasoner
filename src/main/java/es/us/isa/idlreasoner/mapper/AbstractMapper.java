@@ -81,6 +81,11 @@ public abstract class AbstractMapper {
                 }
             } else if (paramFeatures.getKey().equals("number")) {
                 return value.replaceAll("\\.\\d+", "");
+            } else if (paramFeatures.getKey().equals("boolean")) {
+                if (value.equals("true"))
+                    return "1";
+                else if (value.equals("false"))
+                    return "0";
             }
         }
 
@@ -106,6 +111,11 @@ public abstract class AbstractMapper {
                     stringIntMapping.put(newStringMapping, new Integer(value));
                     return newStringMapping;
                 }
+            } else if (paramFeatures.getKey().equals("boolean")) {
+                if (value.equals("1"))
+                    return "true";
+                else if (value.equals("0"))
+                    return "false";
             }
         }
 

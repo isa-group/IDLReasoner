@@ -48,8 +48,8 @@ public class OAS2MiniZincMapper extends AbstractMapper {
             List<?> paramEnum = ((AbstractSerializableParameter) parameter).getEnum();
 
             if(paramType.equals("boolean")) {
-                var = "var bool: ";
-                mapPSetZero(parameter.getName(), "false");
+                var = "var 0..1: ";
+                mapPSetZero(parameter.getName(), "0");
             } else if(paramEnum != null) {
                 if (paramType.equals("string")) {
                     var = "var {";
