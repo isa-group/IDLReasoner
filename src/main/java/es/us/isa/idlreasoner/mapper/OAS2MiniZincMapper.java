@@ -11,30 +11,24 @@ import java.util.*;
 
 import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
+import static es.us.isa.idlreasoner.util.Utils.savePreviousBaseConstraintsFileContent;
 
-public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
+public class OAS2MiniZincMapper extends AbstractMapper {
 
-    private Swagger openAPISpec;
     private List<Parameter> parameters;
 
-    public OAS2MiniZincVariableMapper(String apiSpecificationPath, String operationPath, String operationType, MapperResources mr) {
-        super(mr);
+    public OAS2MiniZincMapper(String apiSpecificationPath, String operationPath, String operationType) {
+        super();
         this.specificationPath = apiSpecificationPath;
 
-        openAPISpec = new SwaggerParser().read(apiSpecificationPath);
+        Swagger openAPISpec = new SwaggerParser().read(apiSpecificationPath);
         parameters = getOasOperation(openAPISpec, operationPath, operationType).getParameters(); // NullPointerException would be thrown on purpose, to stop program
-
-        try {
-            mapVariables();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void mapVariables() throws IOException {
         if (parameters == null || parameters.size() == 0)
             return;
-        mr.operationParameters.clear();
+        operationParameters.clear();
         List<String> previousContent = savePreviousBaseConstraintsFileContent();
         recreateFile(BASE_CONSTRAINTS_FILE);
         initializeStringIntMapping();
@@ -60,17 +54,17 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
                 if (paramType.equals("string")) {
                     var = "var {";
                     for (Object o : paramEnum) {
-                        intMapping = mr.stringIntMapping.get(o.toString());
+                        intMapping = stringIntMapping.get(o.toString());
                         if (intMapping != null) {
                             var += intMapping + ", ";
                         } else {
-                            mr.stringIntMapping.put(o.toString(), mr.stringToIntCounter);
-                            var += mr.stringToIntCounter++ + ", ";
+                            stringIntMapping.put(o.toString(), stringToIntCounter);
+                            var += stringToIntCounter++ + ", ";
                         }
                     }
                     var = var.substring(0, var.length()-2); // trim last comma and space
                     var += "}: ";
-                    mapPSetZero(parameter.getName(), Integer.toString(mr.stringToIntCounter-1));
+                    mapPSetZero(parameter.getName(), Integer.toString(stringToIntCounter-1));
                 } else if (paramType.equals("integer")) {
                     var = "var {";
                     for (Object o : paramEnum) {
@@ -87,13 +81,13 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
                     throw new IllegalArgumentException("The enum parameter type '" + paramType + "' is not allowed for IDLReasoner to work.");
                 }
             } else if(paramType.equals("string")) {
-                var = "var 0..10000: "; // If string, add enough possible values (10000)
+                var = "var 0.." + MAX_STRING_INT_MAPPING + ": "; // If string, add enough possible values (MAX_STRING_INT_MAPPING)
                 mapPSetZero(parameter.getName(), "1");
             } else if(paramType.equals("integer")) {
                 var = "var int: ";
                 mapPSetZero(parameter.getName(), "1");
             } else if (paramType.equals("array")) {
-                var = "var 0..10000: "; // If array, treat it as a string, add enough possible values (10000)
+                var = "var 0.." + MAX_STRING_INT_MAPPING + ": "; // If array, treat it as a string, add enough possible values (MAX_STRING_INT_MAPPING)
                 mapPSetZero(parameter.getName(), "1");
             } else if (paramType.equals("number")) {
                 var = "var int: ";
@@ -110,7 +104,7 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
             if (parameter.getRequired()) {
                 mapRequiredVar(requiredVarsOut, parameter);
             }
-            mr.operationParameters.put(parameter.getName(), new AbstractMap.SimpleEntry<>(paramType, parameter.getRequired()));
+            operationParameters.put(parameter.getName(), new AbstractMap.SimpleEntry<>(paramType, parameter.getRequired()));
         }
 
         out.newLine();
@@ -137,10 +131,6 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         requiredVarsOut.append("constraint " + origToChangedParamName(parameter.getName())+"Set = 1;\n");
     }
 
-    private void mapPSetZero(String paramName, String paramValue) {
-        constraintsRedundantSolutions += "constraint ((" + origToChangedParamName(paramName) + "Set==0) -> (" + origToChangedParamName(paramName) + "==" + paramValue + "));\n";
-    }
-
     private static Operation getOasOperation(Swagger openAPISpec, String operationPath, String operationType) {
         if(operationType.toLowerCase().equals("get"))
             return openAPISpec.getPaths().get(operationPath).getGet();
@@ -160,11 +150,9 @@ public class OAS2MiniZincVariableMapper extends AbstractVariableMapper {
         return null; // This should never happen
     }
 
-    public static void generateIDLfromIDL4OAS(String apiSpecificationPath, String operationPath, String operationType) throws IOException {
+    static void generateIDLfromIDL4OAS(String apiSpecificationPath, String operationPath, String operationType) throws IOException {
         Swagger oasSpec = new SwaggerParser().read(apiSpecificationPath);
         Operation oasOp = getOasOperation(oasSpec, operationPath, operationType);
-
-//        List<String> IDLdeps = (List<String>)oasOp.getExtensions().get("x-dependencies");
 
         List<String> IDLdeps = null;
         try {

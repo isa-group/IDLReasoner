@@ -1,11 +1,12 @@
 package es.us.isa.idlreasoner.analyzer;
 
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
-import es.us.isa.idlreasoner.mapper.MiniZincMapper;
+import es.us.isa.idlreasoner.mapper.AbstractMapper;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static es.us.isa.idlreasoner.mapper.MapperCreator.createMapper;
 import static es.us.isa.idlreasoner.util.FileManager.copyFile;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
@@ -15,20 +16,20 @@ import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
 public class Analyzer {
 
 	private ResolutorCreator resolutor;
-	private MiniZincMapper mapper;
+	private AbstractMapper mapper;
 
-	public Analyzer(String specificationType, String idl, String apiSpecificationPath, String operationPath, String operationType) {
+	public Analyzer(String specificationType, String idlPath, String apiSpecificationPath, String operationPath, String operationType) {
 		initFilesAndConf();
 		resolutor = new ResolutorCreator();
-		mapper = new MiniZincMapper(specificationType, idl, apiSpecificationPath, operationPath, operationType);
+		mapper = createMapper(specificationType, idlPath, apiSpecificationPath, operationPath, operationType);
 	}
 
 	public Analyzer(String specificationType, String apiSpecificationPath, String operationPath, String operationType) {
 		initFilesAndConf();
 		resolutor = new ResolutorCreator();
-		mapper = new MiniZincMapper(specificationType, apiSpecificationPath, operationPath, operationType);
+		mapper = createMapper(specificationType, apiSpecificationPath, operationPath, operationType);
 	}
-	
+
 	public List<Map<String,String>> getAllRequests() {
 		List<Map<String,String>> setUpRequests = new ArrayList<>();
 		getAllUnSetUpRequests().forEach(r -> setUpRequests.add(mapper.setUpRequest(r)));
@@ -147,6 +148,6 @@ public class Analyzer {
 	private void setupAnalysisOperation() {
 		recreateFile(FULL_CONSTRAINTS_FILE);
 		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
-		mapper.resetMapperResources();
+		mapper.resetStringIntMapping();
 	}
 }
