@@ -57,7 +57,7 @@ The ResolutorCreator class is the class where the resolver specified in the conf
 			
 			if(this.osName.contains("Windows")) {
 
-				this.curentCompiler = new MinizincResolutorWindows(this.fileRoute, this.solver);
+				this.curentCompiler = new WindowsResolutor(this.fileRoute, this.solver);
 				
 			}else{
 				

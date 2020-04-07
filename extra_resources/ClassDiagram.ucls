@@ -100,7 +100,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="es.us.isa.idlreasoner.compiler.MinizincResolutorWindows" project="IDL-Analyzer" 
+  <class id="11" language="java" name="es.us.isa.idlreasoner.compiler.WindowsResolutor" project="IDL-Analyzer"
     file="/IDL-Analyzer/src/main/java/es/us/isa/idlreasoner/compiler/MinizincResolutorWindows.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1398" y="855"/>    

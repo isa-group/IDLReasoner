@@ -7,24 +7,17 @@ import java.util.*;
 
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
-public class MinizincResolutorWindows extends MinizincResolutor{
-	
-	private String solver;
-	
-	public MinizincResolutorWindows(String solver) {
-		super(solver);
-		this.solver = solver;
-	}
+public class WindowsResolutor implements IResolutor {
 
-	private String Wconsole = "cmd.exe";
-	
-	public List<Map<String,String>> solveGetAllSolutions(String maxResults) {
+	public WindowsResolutor() {}
+
+	public List<Map<String,String>> solveGetAllSolutions() {
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
 		String command;
-		if(!maxResults.trim().equals("")){
-			command = "\"minizinc/minizinc.exe\" -n "+ maxResults + " --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+		if(!MAX_RESULTS.trim().equals("")){
+			command = "\"minizinc/minizinc.exe\" -n "+ MAX_RESULTS + " --solver " + SOLVER + " " + FULL_CONSTRAINTS_FILE;
 		}else {
-			command = "\"minizinc/minizinc.exe\" -a --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+			command = "\"minizinc/minizinc.exe\" -a --solver " + SOLVER + " " + FULL_CONSTRAINTS_FILE;
 		}
 		String results = this.callSolver(command);
 		results = fixIfErrors(results, command);
@@ -40,7 +33,7 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	}
 	
 	public Map<String,String> solve() {
-		String command = "\"minizinc/minizinc.exe\" --solver " + solver + " " + FULL_CONSTRAINTS_FILE;
+		String command = "\"minizinc/minizinc.exe\" --solver " + SOLVER + " " + FULL_CONSTRAINTS_FILE;
 		String solutions =  this.callSolver(command);
 		solutions = fixIfErrors(solutions, command);
 		return this.mapSolutions(solutions);
@@ -48,15 +41,15 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	
 	private Map<String,String> mapSolutions(String solutions){
 		Map<String, String> res = new HashMap<String, String>();
-		List<String> solutionsSpliitd = Arrays.asList(solutions.split(";"));
+		List<String> solutionsSplit = Arrays.asList(solutions.split(";"));
 		// The following happens when the op has no params nor deps. The solution is empty but valid
-		if (solutionsSpliitd.size()==1 && solutionsSpliitd.get(0).contains(SOLUTION_SEP)) {
+		if (solutionsSplit.size()==1 && solutionsSplit.get(0).contains(SOLUTION_SEP)) {
 			res.put(SOLUTION_SEP, SOLUTION_SEP); // A Map containing this identified as a request for an op without params
 			return res;
 		}
 		String[] aux;
-		for(String sol: solutionsSpliitd) {
-			if(solutionsSpliitd.get(solutionsSpliitd.size()-1)!=sol) {
+		for(String sol: solutionsSplit) {
+			if(solutionsSplit.get(solutionsSplit.size()-1)!=sol) {
 				aux = sol.split("=");
 				res.put(aux[0].trim(), aux[1].trim());
 			}
@@ -66,11 +59,8 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 	
 	private String callSolver(String command) {
 		String res = "";
-		
 		ProcessBuilder processBuilder = new ProcessBuilder();
-
-		
-		processBuilder.command(Wconsole, "/c", command);
+		processBuilder.command("cmd.exe", "/c", command);
 	
 		try {
 
@@ -86,13 +76,12 @@ public class MinizincResolutorWindows extends MinizincResolutor{
 			e.printStackTrace();
 		}
 
-
 		return res;
 	}
 
 	private String fixIfErrors(String solutions, String command) {
-		if (solutions.contains("=====ERROR=====") && solver.toLowerCase().equals("chuffed")) {
-			String newCommand = command.replace(solver, "Gecode");
+		if (solutions.contains("=====ERROR=====") && SOLVER.toLowerCase().equals("chuffed")) {
+			String newCommand = command.replace(SOLVER, "Gecode");
 			return this.callSolver(newCommand);
 		}
 

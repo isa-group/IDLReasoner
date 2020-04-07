@@ -1,11 +1,13 @@
 package es.us.isa.idlreasoner.analyzer;
 
+import es.us.isa.idlreasoner.compiler.IResolutor;
 import es.us.isa.idlreasoner.compiler.ResolutorCreator;
 import es.us.isa.idlreasoner.mapper.AbstractMapper;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static es.us.isa.idlreasoner.compiler.ResolutorCreator.createResolutor;
 import static es.us.isa.idlreasoner.mapper.MapperCreator.createMapper;
 import static es.us.isa.idlreasoner.util.FileManager.copyFile;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
@@ -15,18 +17,18 @@ import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
 
 public class Analyzer {
 
-	private ResolutorCreator resolutor;
+	private IResolutor resolutor;
 	private AbstractMapper mapper;
 
 	public Analyzer(String specificationType, String idlPath, String apiSpecificationPath, String operationPath, String operationType) {
 		initFilesAndConf();
-		resolutor = new ResolutorCreator();
+		resolutor = createResolutor();
 		mapper = createMapper(specificationType, idlPath, apiSpecificationPath, operationPath, operationType);
 	}
 
 	public Analyzer(String specificationType, String apiSpecificationPath, String operationPath, String operationType) {
 		initFilesAndConf();
-		resolutor = new ResolutorCreator();
+		resolutor = createResolutor();
 		mapper = createMapper(specificationType, apiSpecificationPath, operationPath, operationType);
 	}
 
