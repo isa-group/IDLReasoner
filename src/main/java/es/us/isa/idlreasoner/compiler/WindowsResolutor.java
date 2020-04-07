@@ -19,6 +19,8 @@ public class WindowsResolutor extends Resolutor {
 		}else {
 			command = "\"minizinc/minizinc.exe\" -a --solver " + SOLVER + " " + FULL_CONSTRAINTS_FILE;
 		}
+		if (ENUM_DATA)
+			command += " " + DATA_FILE;
 		String results = this.callSolver(command);
 		results = fixIfErrors(results, command);
 		
@@ -38,6 +40,8 @@ public class WindowsResolutor extends Resolutor {
 			command = "\"minizinc/minizinc.exe\" -r " + (new Date().getTime())/1000 + " --solver Gecode " + FULL_CONSTRAINTS_FILE;
 		else
 			command = "\"minizinc/minizinc.exe\" --solver " + SOLVER + " " + FULL_CONSTRAINTS_FILE;
+		if (ENUM_DATA)
+			command += " " + DATA_FILE;
 		String solutions =  this.callSolver(command);
 		solutions = fixIfErrors(solutions, command);
 		return this.mapSolutions(solutions);

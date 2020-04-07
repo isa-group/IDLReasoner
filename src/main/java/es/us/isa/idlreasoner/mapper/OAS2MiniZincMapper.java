@@ -36,6 +36,9 @@ public class OAS2MiniZincMapper extends AbstractMapper {
 
         BufferedWriter out = openWriter(BASE_CONSTRAINTS_FILE);
         BufferedWriter requiredVarsOut = openWriter(BASE_CONSTRAINTS_FILE);
+        BufferedWriter dataOut = null;
+        if (ENUM_DATA)
+            dataOut = openWriter(DATA_FILE);
         // In order for MiniZinc not to return duplicated solutions when a parameter is not set, we establish constraints for each parameter such as: pSet==0 -> p==0
         constraintsRedundantSolutions += "%%% The following constraints are to avoid redundant solutions returned by MiniZinc %%%\n";
 
@@ -80,17 +83,21 @@ public class OAS2MiniZincMapper extends AbstractMapper {
                 } else {
                     throw new IllegalArgumentException("The enum parameter type '" + paramType + "' is not allowed for IDLReasoner to work.");
                 }
-            } else if(paramType.equals("string")) {
-                var = "var 0.." + MAX_STRING_INT_MAPPING + ": "; // If string, add enough possible values (MAX_STRING_INT_MAPPING)
-                mapPSetZero(parameter.getName(), "1");
-            } else if(paramType.equals("integer")) {
-                var = "var int: ";
-                mapPSetZero(parameter.getName(), "1");
-            } else if (paramType.equals("array")) {
-                var = "var 0.." + MAX_STRING_INT_MAPPING + ": "; // If array, treat it as a string, add enough possible values (MAX_STRING_INT_MAPPING)
-                mapPSetZero(parameter.getName(), "1");
-            } else if (paramType.equals("number")) {
-                var = "var int: ";
+            } else if(paramType.equals("string") || paramType.equals("array") || paramType.equals("integer") || paramType.equals("number")) {
+                if (ENUM_DATA) {
+                    var = "set of int: data_" + origToChangedParamName(parameter.getName()) + ";\n";
+                    var += "var data_" + origToChangedParamName(parameter.getName()) + ": ";
+                    dataOut.append("data_" + origToChangedParamName(parameter.getName()));
+                    if(paramType.equals("string") || paramType.equals("array"))
+                        dataOut.append(" = 0.." + MAX_STRING_INT_MAPPING + ";\n");
+                    else
+                        dataOut.append(" = -1000..1000;\n");
+                } else {
+                    if(paramType.equals("string") || paramType.equals("array"))
+                        var = "var 0.." + MAX_STRING_INT_MAPPING + ": "; // If string or array, add enough possible values (MAX_STRING_INT_MAPPING)
+                    else
+                        var = "var int: ";
+                }
                 mapPSetZero(parameter.getName(), "1");
             } else {
                 throw new IllegalArgumentException("The parameter type '" + paramType + "' is not allowed for IDLReasoner to work.");
@@ -121,6 +128,11 @@ public class OAS2MiniZincMapper extends AbstractMapper {
 
         out.close();
         requiredVarsOut.close();
+
+        if (ENUM_DATA) {
+            dataOut.flush();
+            dataOut.close();
+        }
 
         exportStringIntMappingToFile();
         exportParameterNamesMappingToFile();

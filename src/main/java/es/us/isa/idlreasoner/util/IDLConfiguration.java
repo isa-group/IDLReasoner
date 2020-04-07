@@ -14,18 +14,22 @@ public class IDLConfiguration {
     public static String STRING_INT_MAPPING_FILE = "./" + IDL_AUX_FOLDER + "/string_int_mapping.json";;
     public static String PARAMETER_NAMES_MAPPING_FILE = "./" + IDL_AUX_FOLDER + "/parameter_names_mapping.json";;
     public static String SOLVER;
+    public static Boolean ENUM_DATA;
     public static String IDL_FILES_FOLDER;
     public static String MAX_RESULTS;
     public static String BASE_CONSTRAINTS_FILE;
     public static String FULL_CONSTRAINTS_FILE;
+    public static String DATA_FILE;
     public static String IDL_AUX_FILE;
 
     private static void updateConf() {
         SOLVER = readProperty("solver");
+        ENUM_DATA = Boolean.parseBoolean(readProperty("enumData"));
         IDL_FILES_FOLDER = readProperty("idlFolder");
         MAX_RESULTS = readProperty("maxResults");
         BASE_CONSTRAINTS_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("base_constraints_file");
         FULL_CONSTRAINTS_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("full_constraints_file");
+        DATA_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("data_file");
         IDL_AUX_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("idl_aux_file");
     }
 
@@ -40,6 +44,8 @@ public class IDLConfiguration {
         appendContentToFile(PARAMETER_NAMES_MAPPING_FILE, "{ }");
         recreateFile(IDL_AUX_FILE);
         recreateFile(BASE_CONSTRAINTS_FILE);
+        if (ENUM_DATA)
+            recreateFile(DATA_FILE);
     }
 
     private static void initConfigurationFile() {
@@ -54,9 +60,11 @@ public class IDLConfiguration {
                 bw.append("solver=Gecode\n");
                 bw.append("idlFolder=src/test/resources\n");
                 bw.append("maxResults=100\n");
+                bw.append("enumData=false\n");
                 bw.append("\n");
                 bw.append("base_constraints_file=base_constraints.mzn\n");
                 bw.append("full_constraints_file=full_constraints.mzn\n");
+                bw.append("data_file=data.dzn\n");
                 bw.append("idl_aux_file=constraints.idl\n");
 
                 bw.flush();
