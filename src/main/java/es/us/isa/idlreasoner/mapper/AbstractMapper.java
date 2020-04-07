@@ -21,9 +21,8 @@ import java.util.stream.Collectors;
 public abstract class AbstractMapper {
 
     String specificationPath;
-
-    private final int MIN_STRING_INT_MAPPING = 1000;
-    final int MAX_STRING_INT_MAPPING = 1000000;
+    private int MIN_STRING_INT_MAPPING = 10;
+    final int MAX_STRING_INT_MAPPING = 1000;
 
     Map<String, Map.Entry<String, Boolean>> operationParameters; // <name, <type, required>>
     BiMap<String, String> parameterNamesMapping;
@@ -142,6 +141,11 @@ public abstract class AbstractMapper {
         appendContentToFile(FULL_CONSTRAINTS_FILE, "solve satisfy;\n");
     }
 
+    public void finishConstraintsFileWithSearch() {
+        appendContentToFile(FULL_CONSTRAINTS_FILE, "include \"gecode.mzn\";\n" +
+                "solve ::int_default_search(random, indomain_random) satisfy;\n");
+    }
+
     public void resetStringIntMapping() {
         stringIntMapping = HashBiMap.create(stringIntMapping.entrySet().stream()
                 .filter(entry -> entry.getValue() < stringToIntCounter)
@@ -179,6 +183,7 @@ public abstract class AbstractMapper {
         } else {
             stringToIntCounter = 0;
         }
+        MIN_STRING_INT_MAPPING += stringToIntCounter;
     }
 
     void exportStringIntMappingToFile() throws IOException {

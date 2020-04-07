@@ -11,9 +11,16 @@ public class MapperCreator {
     public static AbstractMapper createMapper(String specificationType, String idlPath, String apiSpecificationPath, String operationPath, String operationType) {
         AbstractMapper mapper = null;
 
-		if(specificationType.toLowerCase().equals("oas"))
+		if(specificationType.toLowerCase().equals("oas")) {
+            if (idlPath == null) {
+                try {
+                    OAS2MiniZincMapper.generateIDLfromIDL4OAS(apiSpecificationPath, operationPath, operationType);
+                } catch (IOException e) {
+                    terminate("There was an error while creating the file containing dependencies. Try again.", e);
+                }
+            }
             mapper = new OAS2MiniZincMapper(apiSpecificationPath, operationPath, operationType);
-		else
+        } else
             terminate("Specification type " + specificationType + " not supported.");
 
 		// DependenciesMapper
@@ -26,19 +33,5 @@ public class MapperCreator {
         }
 
         return mapper;
-    }
-
-    public static AbstractMapper createMapper(String specificationType, String apiSpecificationPath, String operationPath, String operationType) {
-		// Create IDL file from IDL4OAS document:
-		if(specificationType.toLowerCase().equals("oas")) {
-			try {
-				OAS2MiniZincMapper.generateIDLfromIDL4OAS(apiSpecificationPath, operationPath, operationType);
-			} catch (IOException e) {
-                terminate("There was an error while creating the file containing dependencies. Try again.", e);
-			}
-		} else
-		    terminate("Specification type " + specificationType + " not supported.");
-
-		return createMapper(specificationType, null, apiSpecificationPath, operationPath, operationType);
     }
 }

@@ -1,7 +1,6 @@
 package es.us.isa.idlreasoner.analyzer;
 
-import es.us.isa.idlreasoner.compiler.IResolutor;
-import es.us.isa.idlreasoner.compiler.ResolutorCreator;
+import es.us.isa.idlreasoner.compiler.Resolutor;
 import es.us.isa.idlreasoner.mapper.AbstractMapper;
 
 import java.util.*;
@@ -17,19 +16,19 @@ import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
 
 public class Analyzer {
 
-	private IResolutor resolutor;
+	private Resolutor resolutor;
 	private AbstractMapper mapper;
+	private boolean needReloadConstraintsFile; // When false, random requests are generated faster
 
 	public Analyzer(String specificationType, String idlPath, String apiSpecificationPath, String operationPath, String operationType) {
 		initFilesAndConf();
+		needReloadConstraintsFile = true;
 		resolutor = createResolutor();
 		mapper = createMapper(specificationType, idlPath, apiSpecificationPath, operationPath, operationType);
 	}
 
 	public Analyzer(String specificationType, String apiSpecificationPath, String operationPath, String operationType) {
-		initFilesAndConf();
-		resolutor = createResolutor();
-		mapper = createMapper(specificationType, apiSpecificationPath, operationPath, operationType);
+		this(specificationType, null, apiSpecificationPath, operationPath, operationType);
 	}
 
 	public List<Map<String,String>> getAllRequests() {
@@ -45,7 +44,7 @@ public class Analyzer {
 		return resolutor.solveGetAllSolutions();
 	}
 	
-	public Map<String,String> randomRequest() {
+	public Map<String,String> pseudoRandomRequest() {
 		Map<String, String> res = new HashMap<>();
 		List<Map<String,String>> allRequests = getAllUnSetUpRequests();
 		
@@ -54,6 +53,22 @@ public class Analyzer {
 		}
 
 		return mapper.setUpRequest(res);
+	}
+
+	public Map<String,String> randomRequest() {
+		if (needReloadConstraintsFile) {
+			setupAnalysisOperation();
+			mapper.finishConstraintsFileWithSearch();
+			resolutor.setRandomSearch(true);
+			needReloadConstraintsFile = false;
+		}
+
+		Map<String, String> res = resolutor.solve();
+
+		if (isValidSolution(res))
+			return mapper.setUpRequest(res);
+		else
+			return null;
 	}
 
 	public Boolean isDeadParameter(String parameter) {
@@ -148,6 +163,10 @@ public class Analyzer {
 	}
 
 	private void setupAnalysisOperation() {
+		if (!needReloadConstraintsFile)
+			needReloadConstraintsFile = true;
+		if (resolutor.isRandomSearch())
+			resolutor.setRandomSearch(false);
 		recreateFile(FULL_CONSTRAINTS_FILE);
 		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
 		mapper.resetStringIntMapping();

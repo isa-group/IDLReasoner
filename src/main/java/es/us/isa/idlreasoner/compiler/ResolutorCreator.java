@@ -8,8 +8,8 @@ import static es.us.isa.idlreasoner.util.Utils.terminate;
 
 public class ResolutorCreator {
 
-	public static IResolutor createResolutor() {
-		IResolutor resolutor = null;
+	public static Resolutor createResolutor() {
+		Resolutor resolutor = null;
 
 		if (System.getProperty("os.name").contains("Windows"))
 			resolutor = new WindowsResolutor();
