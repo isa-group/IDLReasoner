@@ -3,6 +3,7 @@ package es.us.isa.idlreasoner.analyzer;
 import es.us.isa.idlreasoner.compiler.Resolutor;
 import es.us.isa.idlreasoner.mapper.AbstractMapper;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -12,6 +13,7 @@ import static es.us.isa.idlreasoner.util.FileManager.copyFile;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
+import static es.us.isa.idlreasoner.util.Utils.terminate;
 
 
 public class Analyzer {
@@ -171,4 +173,31 @@ public class Analyzer {
 		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
 		mapper.resetStringIntMapping();
 	}
+
+	public void updateData(Map<String, List<String>> data) {
+		if (ENUM_DATA) {
+			recreateFile(DATA_FILE);
+			try {
+				mapper.initializeStringIntMapping();
+				mapper.updateDataFile(data);
+			} catch (IOException e) {
+				terminate("There was an error while creating the data file. Try again.", e);
+			}
+			mapper.fixStringToIntCounter();
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

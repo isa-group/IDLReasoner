@@ -11,7 +11,9 @@ import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.PARAMETER_NAMES_MAPPING_FILE;
 import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
+import static es.us.isa.idlreasoner.util.Utils.terminate;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -21,13 +23,14 @@ import java.util.stream.Collectors;
 public abstract class AbstractMapper {
 
     String specificationPath;
-    private int MIN_STRING_INT_MAPPING = 10;
+//    private int MIN_STRING_INT_MAPPING = 10;
     final int MAX_STRING_INT_MAPPING = 1000;
 
     Map<String, Map.Entry<String, Boolean>> operationParameters; // <name, <type, required>>
     BiMap<String, String> parameterNamesMapping;
     BiMap<String, Integer> stringIntMapping;
     Integer stringToIntCounter;
+    Integer STRING_TO_INT_FIXED_COUNTER; // Counter up to which string-int entries should be preserved when resetting the bimap
 
     DependenciesMapper dm;
 
@@ -72,11 +75,12 @@ public abstract class AbstractMapper {
                 if (intMapping != null) {
                     return Integer.toString(intMapping);
                 } else {
-                    int randomInt;
-                    do { randomInt = ThreadLocalRandom.current().nextInt(MIN_STRING_INT_MAPPING, MAX_STRING_INT_MAPPING); }
-                    while (stringIntMapping.inverse().get(randomInt)!=null);
-                    stringIntMapping.put(value, randomInt);
-                    return Integer.toString(randomInt);
+//                    int randomInt;
+//                    do { randomInt = ThreadLocalRandom.current().nextInt(MIN_STRING_INT_MAPPING, MAX_STRING_INT_MAPPING); }
+//                    while (stringIntMapping.inverse().get(randomInt)!=null);
+                    while (stringIntMapping.inverse().get(stringToIntCounter) != null) stringToIntCounter++;
+                    stringIntMapping.put(value, stringToIntCounter);
+                    return Integer.toString(stringToIntCounter++);
                 }
             } else if (paramFeatures.getKey().equals("number")) {
                 return value.replaceAll("\\.\\d+", "");
@@ -148,8 +152,13 @@ public abstract class AbstractMapper {
 
     public void resetStringIntMapping() {
         stringIntMapping = HashBiMap.create(stringIntMapping.entrySet().stream()
-                .filter(entry -> entry.getValue() < stringToIntCounter)
+                .filter(entry -> entry.getValue() < STRING_TO_INT_FIXED_COUNTER)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        stringToIntCounter = STRING_TO_INT_FIXED_COUNTER;
+    }
+
+    public void fixStringToIntCounter() {
+        STRING_TO_INT_FIXED_COUNTER = stringToIntCounter;
     }
 
     public Set<String> getOperationParameters() {
@@ -171,7 +180,7 @@ public abstract class AbstractMapper {
         parameterNamesMapping = HashBiMap.create(mapper.readValue(new File(PARAMETER_NAMES_MAPPING_FILE), typeRef));
     }
 
-    void initializeStringIntMapping() throws IOException {
+    public void initializeStringIntMapping() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String, Integer>> typeRef = new TypeReference<HashMap<String, Integer>>() {};
         stringIntMapping = HashBiMap.create(mapper.readValue(new File(STRING_INT_MAPPING_FILE), typeRef));
@@ -183,7 +192,8 @@ public abstract class AbstractMapper {
         } else {
             stringToIntCounter = 0;
         }
-        MIN_STRING_INT_MAPPING += stringToIntCounter;
+        fixStringToIntCounter();
+//        MIN_STRING_INT_MAPPING += stringToIntCounter;
     }
 
     void exportStringIntMappingToFile() throws IOException {
@@ -214,4 +224,33 @@ public abstract class AbstractMapper {
 
         return request;
     }
+
+    public void updateDataFile(Map<String, List<String>> data) throws IOException {
+        BufferedWriter dataOut = openWriter(DATA_FILE);
+        String line;
+
+        for (Map.Entry<String, List<String>> paramData: data.entrySet()) {
+            line = "data_" + origToChangedParamName(paramData.getKey()) + " = {";
+            for (String paramValue: paramData.getValue())
+                line += origToChangedParamValue(paramData.getKey(), paramValue) + ", ";
+            line = line.substring(0, line.length()-2); // trim last comma and space
+            line += "};\n";
+            dataOut.append(line);
+        }
+
+        dataOut.flush();
+        dataOut.close();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

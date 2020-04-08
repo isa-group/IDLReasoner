@@ -44,11 +44,13 @@ public class OAS2MiniZincMapper extends AbstractMapper {
 
         String var;
         String varSet;
+        String varData;
         Integer intMapping;
 
         for (Parameter parameter : parameters) {
             String paramType = ((AbstractSerializableParameter)parameter).getType();
             List<?> paramEnum = ((AbstractSerializableParameter) parameter).getEnum();
+            varData = "";
 
             if(paramType.equals("boolean")) {
                 var = "var 0..1: ";
@@ -87,11 +89,11 @@ public class OAS2MiniZincMapper extends AbstractMapper {
                 if (ENUM_DATA) {
                     var = "set of int: data_" + origToChangedParamName(parameter.getName()) + ";\n";
                     var += "var data_" + origToChangedParamName(parameter.getName()) + ": ";
-                    dataOut.append("data_" + origToChangedParamName(parameter.getName()));
+                    varData = "data_" + origToChangedParamName(parameter.getName());
                     if(paramType.equals("string") || paramType.equals("array"))
-                        dataOut.append(" = 0.." + MAX_STRING_INT_MAPPING + ";\n");
+                        varData += " = 0.." + MAX_STRING_INT_MAPPING + ";\n";
                     else
-                        dataOut.append(" = -1000..1000;\n");
+                        varData += " = -1000..1000;\n";
                 } else {
                     if(paramType.equals("string") || paramType.equals("array"))
                         var = "var 0.." + MAX_STRING_INT_MAPPING + ": "; // If string or array, add enough possible values (MAX_STRING_INT_MAPPING)
@@ -107,6 +109,9 @@ public class OAS2MiniZincMapper extends AbstractMapper {
 
             varSet = "var 0..1: " + origToChangedParamName(parameter.getName())+"Set;\n";
             out.append(varSet);
+
+            if (ENUM_DATA && !"".equals(varData))
+                dataOut.append(varData);
 
             if (parameter.getRequired()) {
                 mapRequiredVar(requiredVarsOut, parameter);
@@ -136,6 +141,7 @@ public class OAS2MiniZincMapper extends AbstractMapper {
 
         exportStringIntMappingToFile();
         exportParameterNamesMappingToFile();
+        fixStringToIntCounter();
     }
 
 

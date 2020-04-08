@@ -7,6 +7,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
+import static es.us.isa.idlreasoner.util.Utils.terminate;
+
 public class DependenciesMapper {
 
     private String idlSpecificationPath;
@@ -24,9 +26,7 @@ public class DependenciesMapper {
         try {
             idlGenerator.doGenerate(resource, null, null);
         } catch (Exception e) {
-            System.err.println("There was an error processing the IDL file. Check that it does not contain any errors.\n");
-            e.printStackTrace();
-            System.exit(-1);
+            terminate("There was an error processing the IDL file. Check that it does not contain any errors.\n", e);
         }
     }
 }
