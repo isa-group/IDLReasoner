@@ -9,11 +9,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-//import static es.us.isa.idlreasoner.util.IDLConfiguration.PARAMETER_NAMES_MAPPING_FILE;
 import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
-import static es.us.isa.idlreasoner.util.Utils.terminate;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -84,9 +81,6 @@ public abstract class AbstractMapper {
                 if (intMapping != null) {
                     return Integer.toString(intMapping);
                 } else {
-//                    int randomInt;
-//                    do { randomInt = ThreadLocalRandom.current().nextInt(MIN_STRING_INT_MAPPING, MAX_STRING_INT_MAPPING); }
-//                    while (stringIntMapping.inverse().get(randomInt)!=null);
                     while (stringIntMapping.inverse().get(stringToIntCounter) != null) stringToIntCounter++;
                     stringIntMapping.put(value, stringToIntCounter);
                     return Integer.toString(stringToIntCounter++);
@@ -136,17 +130,14 @@ public abstract class AbstractMapper {
 
     public void setParamToValue(String parameter, String value) {
         currentProblem += "constraint " + origToChangedParamName(parameter) + " = " + origToChangedParamValue(parameter, value) + ";\n";
-//        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(parameter) + " = " + origToChangedParamValue(parameter, value) + ";\n");
     }
 
     public void setParamToValue(String changedParamName, String origParamName, String value) {
         currentProblem += "constraint " + origToChangedParamName(changedParamName) + " = " + origToChangedParamValue(origParamName, value) + ";\n";
-//        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(changedParamName) + " = " + origToChangedParamValue(origParamName, value) + ";\n");
     }
 
     public void appendConstraintsRedundantSolutions() {
         currentProblem += redundantSolutionsConstraints;
-//        appendContentToFile(FULL_CONSTRAINTS_FILE, redundantSolutionsConstraints);
     }
 
     void mapRedundantConstraint(String changedParamName, String paramValue) {
@@ -160,13 +151,11 @@ public abstract class AbstractMapper {
     public void finishConstraintsFile() {
         currentProblem += "solve satisfy;\n";
         writeContentToFile(BASE_CONSTRAINTS_FILE, currentProblem);
-//        appendContentToFile(FULL_CONSTRAINTS_FILE, "solve satisfy;\n");
     }
 
     public void finishConstraintsFileWithSearch() {
         currentProblem += RANDOM_SEARCH;
         writeContentToFile(BASE_CONSTRAINTS_FILE, currentProblem);
-//        appendContentToFile(FULL_CONSTRAINTS_FILE, RANDOM_SEARCH);
     }
 
     public void resetStringIntMapping() {
@@ -193,12 +182,6 @@ public abstract class AbstractMapper {
         }
     }
 
-//    void initializeParameterNamesMapping() throws IOException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
-//        parameterNamesMapping = HashBiMap.create(mapper.readValue(new File(PARAMETER_NAMES_MAPPING_FILE), typeRef));
-//    }
-
     public void initializeStringIntMapping() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String, Integer>> typeRef = new TypeReference<HashMap<String, Integer>>() {};
@@ -212,7 +195,6 @@ public abstract class AbstractMapper {
             stringToIntCounter = 0;
         }
         fixStringToIntCounter();
-//        MIN_STRING_INT_MAPPING += stringToIntCounter;
     }
 
     void exportStringIntMappingToFile() throws IOException {
@@ -221,13 +203,6 @@ public abstract class AbstractMapper {
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(stringIntMapping);
         appendContentToFile(STRING_INT_MAPPING_FILE, json);
     }
-
-//    void exportParameterNamesMappingToFile() throws IOException {
-//        recreateFile(PARAMETER_NAMES_MAPPING_FILE);
-//        ObjectMapper mapper = new ObjectMapper();
-//        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(parameterNamesMapping);
-//        appendContentToFile(PARAMETER_NAMES_MAPPING_FILE, json);
-//    }
 
     public Map<String,String> setUpRequest(Map<String,String> mznSolution) {
         if (mznSolution == null)

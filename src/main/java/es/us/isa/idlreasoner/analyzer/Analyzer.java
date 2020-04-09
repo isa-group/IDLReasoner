@@ -9,7 +9,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static es.us.isa.idlreasoner.compiler.ResolutorCreator.createResolutor;
 import static es.us.isa.idlreasoner.mapper.MapperCreator.createMapper;
-import static es.us.isa.idlreasoner.util.FileManager.copyFile;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
@@ -142,29 +141,11 @@ public class Analyzer {
 		return this.getAllUnSetUpRequests().size();
 	}
 
-//	/**
-//	 * Evaluates whether a map containing the parameters to be set in a request
-//	 * (i.e. a solution returned by the solver) is right or not. If the operation
-//	 * contains no parameters nor dependencies, an empty map should be considered
-//	 * right. Since an empty map is considered as "no solution", instead, a map
-//	 * containing just one entry (SOLUTION_SEP -> SOLUTION_SEP) is returned.
-//	 * @param solution Map containing the parameters settings
-//	 * @return True if the solution is valid, false otherwise
-//	 */
-//	private Boolean isValidSolution(Map<String, String> solution) {
-//		if (solution.size()==1 && solution.get(SOLUTION_SEP).equals(SOLUTION_SEP))
-//			return true;
-//		else
-//			return solution.size()!=0;
-//	}
-
 	private void setupAnalysisOperation() {
 		if (!needReloadConstraintsFile)
 			needReloadConstraintsFile = true;
 		if (resolutor.isRandomSearch())
 			resolutor.setRandomSearch(false);
-//		recreateFile(FULL_CONSTRAINTS_FILE);
-//		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
 		mapper.resetCurrentProblem();
 		mapper.resetStringIntMapping();
 	}

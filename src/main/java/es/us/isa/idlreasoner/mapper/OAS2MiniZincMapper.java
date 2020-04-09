@@ -29,13 +29,7 @@ public class OAS2MiniZincMapper extends AbstractMapper {
             return;
         operationParameters.clear();
 
-//        recreateFile(BASE_CONSTRAINTS_FILE);
         initializeStringIntMapping();
-//        initializeParameterNamesMapping();
-
-//        BufferedWriter out = openWriter(BASE_CONSTRAINTS_FILE);
-//        BufferedWriter requiredVarsOut = openWriter(BASE_CONSTRAINTS_FILE);
-//        BufferedWriter dataOut = openWriter(DATA_FILE);
 
         StringBuilder currentVariables = new StringBuilder();
         variables = "";
@@ -77,7 +71,7 @@ public class OAS2MiniZincMapper extends AbstractMapper {
                     for (Object o : paramEnum) {
                         varData.append(o).append(", ");
                     }
-                    mapRedundantConstraint(parameter.getName(), paramEnum.get(0).toString());
+                    mapRedundantConstraint(changedParamName, paramEnum.get(0).toString());
 //                } else if (schema.getType().equals("number")) {
 //                    // TODO: Manage mapping of float enum
 //                    var = "var float: ";
@@ -89,10 +83,10 @@ public class OAS2MiniZincMapper extends AbstractMapper {
                 varData.append("};\n");
             } else if(paramType.equals("string") || paramType.equals("array")) {
                 varData.append("0.." + MAX_STRING_INT_MAPPING + ";\n"); // If string or array, add enough possible values (MAX_STRING_INT_MAPPING)
-                mapRedundantConstraint(parameter.getName(), "1");
+                mapRedundantConstraint(changedParamName, "1");
             } else if (paramType.equals("integer") || paramType.equals("number")) {
                 varData.append("-1000..1000;\n");
-                mapRedundantConstraint(parameter.getName(), "1");
+                mapRedundantConstraint(changedParamName, "1");
             } else {
                 throw new IllegalArgumentException("The parameter type '" + paramType + "' is not allowed for IDLReasoner to work.");
             }
@@ -105,15 +99,6 @@ public class OAS2MiniZincMapper extends AbstractMapper {
             currentVariablesData.append(varData.toString());
             currentVariablesData.append(varSetData);
 
-
-//            out.append(var);
-//            out.append(varSet);
-//            if (parameter.getRequired()) {
-//                mapRequiredVar(requiredVarsOut, parameter);
-//            }
-//            dataOut.append(varData.toString());
-//            dataOut.append(varSetData);
-
             operationParameters.put(parameter.getName(), new AbstractMap.SimpleEntry<>(paramType, parameter.getRequired()));
         }
 
@@ -124,34 +109,12 @@ public class OAS2MiniZincMapper extends AbstractMapper {
         variablesData = currentVariablesData.toString();
 
         // Create MinZinc base file and data file
-        appendContentToFile(BASE_CONSTRAINTS_FILE, baseProblem);
-        appendContentToFile(DATA_FILE, variablesData);
-
-
-//        out.newLine();
-//        out.append(previousContent);
-//
-//        out.newLine();
-//        requiredVarsOut.newLine();
-//        redundantSolutionsConstraints += "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n";
-//
-//        out.flush();
-//        requiredVarsOut.flush();
-//        dataOut.flush();
-//
-//        out.close();
-//        requiredVarsOut.close();
-//        dataOut.close();
+        writeContentToFile(BASE_CONSTRAINTS_FILE, baseProblem);
+        writeContentToFile(DATA_FILE, variablesData);
 
         exportStringIntMappingToFile();
-//        exportParameterNamesMappingToFile();
         fixStringToIntCounter();
     }
-
-
-//    private void mapRequiredVar(BufferedWriter requiredVarsOut, Parameter parameter) throws IOException {
-//        requiredVarsOut.append("constraint " + origToChangedParamName(parameter.getName())+"Set = 1;\n");
-//    }
 
     private static Operation getOasOperation(Swagger openAPISpec, String operationPath, String operationType) {
         if(operationType.toLowerCase().equals("get"))

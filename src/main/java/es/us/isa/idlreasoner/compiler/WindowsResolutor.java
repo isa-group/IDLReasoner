@@ -47,7 +47,6 @@ public class WindowsResolutor extends Resolutor {
 		Map<String, String> res = new HashMap<String, String>();
 		List<String> solutionsSplit = Arrays.asList(solutions.split(";"));
 		if (solutionsSplit.size()==1) {
-//			res.put(SOLUTION_SEP, SOLUTION_SEP); // A Map containing this identified as a request for an op without params
 			if (solutionsSplit.get(0).contains(SOLUTION_SEP) || "".equals(solutionsSplit.get(0))) // This happens when the op has no params nor deps. The solution is empty but valid
 				return res;
 			else
