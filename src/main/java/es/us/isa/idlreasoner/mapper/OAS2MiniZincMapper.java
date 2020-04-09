@@ -36,47 +36,42 @@ public class OAS2MiniZincMapper extends AbstractMapper {
 
         BufferedWriter out = openWriter(BASE_CONSTRAINTS_FILE);
         BufferedWriter requiredVarsOut = openWriter(BASE_CONSTRAINTS_FILE);
-        BufferedWriter dataOut = null;
-        if (ENUM_DATA)
-            dataOut = openWriter(DATA_FILE);
+        BufferedWriter dataOut = openWriter(DATA_FILE);
+
         // In order for MiniZinc not to return duplicated solutions when a parameter is not set, we establish constraints for each parameter such as: pSet==0 -> p==0
         constraintsRedundantSolutions += "%%% The following constraints are to avoid redundant solutions returned by MiniZinc %%%\n";
 
-        String var;
-        String varSet;
-        String varData;
-        Integer intMapping;
-
-        for (Parameter parameter : parameters) {
+        for (Parameter parameter: parameters) {
             String paramType = ((AbstractSerializableParameter)parameter).getType();
             List<?> paramEnum = ((AbstractSerializableParameter) parameter).getEnum();
-            varData = "";
+            String changedParamName = origToChangedParamName(parameter.getName());
+            String var = "set of int: data_" + changedParamName + ";\n"
+                       + "var data_" + changedParamName + ": " + changedParamName + ";\n";
+            String varSet = "set of int: data_" + changedParamName + "Set;\n"
+                          + "var data_" + changedParamName + "Set: " + changedParamName + "Set;\n";
+            String varData = "data_" + changedParamName + " = ";
+            String varSetData = "data_" + changedParamName + "Set = {0, 1};\n";
 
             if(paramType.equals("boolean")) {
-                var = "var 0..1: ";
-                mapPSetZero(parameter.getName(), "0");
+                varData += "{0, 1};\n";
+                mapPSetZero(changedParamName, "0");
             } else if(paramEnum != null) {
+                varData += "{";
                 if (paramType.equals("string")) {
-                    var = "var {";
                     for (Object o : paramEnum) {
-                        intMapping = stringIntMapping.get(o.toString());
+                        Integer intMapping = stringIntMapping.get(o.toString());
                         if (intMapping != null) {
-                            var += intMapping + ", ";
+                            varData += intMapping + ", ";
                         } else {
                             stringIntMapping.put(o.toString(), stringToIntCounter);
-                            var += stringToIntCounter++ + ", ";
+                            varData += stringToIntCounter++ + ", ";
                         }
                     }
-                    var = var.substring(0, var.length()-2); // trim last comma and space
-                    var += "}: ";
-                    mapPSetZero(parameter.getName(), Integer.toString(stringToIntCounter-1));
+                    mapPSetZero(changedParamName, Integer.toString(stringToIntCounter - 1));
                 } else if (paramType.equals("integer")) {
-                    var = "var {";
                     for (Object o : paramEnum) {
-                        var += o + ", ";
+                        varData += o + ", ";
                     }
-                    var = var.substring(0, var.length()-2); // trim last comma and space
-                    var += "}: ";
                     mapPSetZero(parameter.getName(), paramEnum.get(0).toString());
 //                } else if (schema.getType().equals("number")) {
 //                    // TODO: Manage mapping of float enum
@@ -85,37 +80,27 @@ public class OAS2MiniZincMapper extends AbstractMapper {
                 } else {
                     throw new IllegalArgumentException("The enum parameter type '" + paramType + "' is not allowed for IDLReasoner to work.");
                 }
-            } else if(paramType.equals("string") || paramType.equals("array") || paramType.equals("integer") || paramType.equals("number")) {
-                if (ENUM_DATA) {
-                    var = "set of int: data_" + origToChangedParamName(parameter.getName()) + ";\n";
-                    var += "var data_" + origToChangedParamName(parameter.getName()) + ": ";
-                    varData = "data_" + origToChangedParamName(parameter.getName());
-                    if(paramType.equals("string") || paramType.equals("array"))
-                        varData += " = 0.." + MAX_STRING_INT_MAPPING + ";\n";
-                    else
-                        varData += " = -1000..1000;\n";
-                } else {
-                    if(paramType.equals("string") || paramType.equals("array"))
-                        var = "var 0.." + MAX_STRING_INT_MAPPING + ": "; // If string or array, add enough possible values (MAX_STRING_INT_MAPPING)
-                    else
-                        var = "var int: ";
-                }
+                varData = varData.substring(0, varData.length() - 2); // trim last comma and space
+                varData += "};\n";
+            } else if(paramType.equals("string") || paramType.equals("array")) {
+                varData += "0.." + MAX_STRING_INT_MAPPING + ";\n"; // If string or array, add enough possible values (MAX_STRING_INT_MAPPING)
+                mapPSetZero(parameter.getName(), "1");
+            } else if (paramType.equals("integer") || paramType.equals("number")) {
+                varData += "-1000..1000;\n";
                 mapPSetZero(parameter.getName(), "1");
             } else {
                 throw new IllegalArgumentException("The parameter type '" + paramType + "' is not allowed for IDLReasoner to work.");
             }
-            var += origToChangedParamName(parameter.getName())+";\n";
+
+            // Save contents
             out.append(var);
-
-            varSet = "var 0..1: " + origToChangedParamName(parameter.getName())+"Set;\n";
             out.append(varSet);
-
-            if (ENUM_DATA && !"".equals(varData))
-                dataOut.append(varData);
-
             if (parameter.getRequired()) {
                 mapRequiredVar(requiredVarsOut, parameter);
             }
+            dataOut.append(varData);
+            dataOut.append(varSetData);
+
             operationParameters.put(parameter.getName(), new AbstractMap.SimpleEntry<>(paramType, parameter.getRequired()));
         }
 
@@ -130,14 +115,11 @@ public class OAS2MiniZincMapper extends AbstractMapper {
 
         out.flush();
         requiredVarsOut.flush();
+        dataOut.flush();
 
         out.close();
         requiredVarsOut.close();
-
-        if (ENUM_DATA) {
-            dataOut.flush();
-            dataOut.close();
-        }
+        dataOut.close();
 
         exportStringIntMappingToFile();
         exportParameterNamesMappingToFile();

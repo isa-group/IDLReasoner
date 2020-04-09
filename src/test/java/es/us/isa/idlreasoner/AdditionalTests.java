@@ -100,12 +100,22 @@ public class AdditionalTests {
     public void randomRequestCustomDataTest() {
         Analyzer analyzer = new Analyzer("oas","combinatorial8.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial8", "get");
 
+        List<String> p1Data = Arrays.asList("true", "false");
+        List<String> p2Data = Arrays.asList("true", "false");
+        List<String> p3Data = Arrays.asList("true", "false");
+        List<String> p4Data = Arrays.asList("true", "false");
+        List<String> p5Data = Arrays.asList("true", "false");
         List<String> p6Data = Arrays.asList("a", "b", "c", "d", "e");
         List<String> p7Data = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
         List<String> p8Data = Arrays.asList("z", "f", "g", "h");
         List<String> p9Data = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
         List<String> p10Data = Arrays.asList("z", "f", "g", "h");
         Map <String, List<String>> inputData = new HashMap<>();
+        inputData.put("p1", p1Data);
+        inputData.put("p2", p2Data);
+        inputData.put("p3", p3Data);
+        inputData.put("p4", p4Data);
+        inputData.put("p5", p5Data);
         inputData.put("p6", p6Data);
         inputData.put("p7", p7Data);
         inputData.put("p8", p8Data);
@@ -130,12 +140,22 @@ public class AdditionalTests {
     public void customDataTwiceTest() {
         Analyzer analyzer = new Analyzer("oas","combinatorial8.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial8", "get");
 
+        List<String> p1Data = Arrays.asList("true", "false");
+        List<String> p2Data = Arrays.asList("true", "false");
+        List<String> p3Data = Arrays.asList("true", "false");
+        List<String> p4Data = Arrays.asList("true", "false");
+        List<String> p5Data = Arrays.asList("true", "false");
         List<String> p6Data = Arrays.asList("a", "f", "example");
         List<String> p7Data = Arrays.asList("b", "f");
         List<String> p8Data = Arrays.asList("c", "f", "something");
         List<String> p9Data = Arrays.asList("d", "f", "fixed string");
         List<String> p10Data = Arrays.asList("e", "f", "example");
         Map <String, List<String>> inputData = new HashMap<>();
+        inputData.put("p1", p1Data);
+        inputData.put("p2", p2Data);
+        inputData.put("p3", p3Data);
+        inputData.put("p4", p4Data);
+        inputData.put("p5", p5Data);
         inputData.put("p6", p6Data);
         inputData.put("p7", p7Data);
         inputData.put("p8", p8Data);
@@ -144,12 +164,22 @@ public class AdditionalTests {
         analyzer.updateData(inputData);
         Map<String, String> validRandomRequest = analyzer.randomRequest();
 
+        List<String> p1Data2 = Arrays.asList("true", "false");
+        List<String> p2Data2 = Arrays.asList("true", "false");
+        List<String> p3Data2 = Arrays.asList("true", "false");
+        List<String> p4Data2 = Arrays.asList("true", "false");
+        List<String> p5Data2 = Arrays.asList("true", "false");
         List<String> p6Data2 = Arrays.asList("z", "u");
         List<String> p7Data2 = Arrays.asList("y", "u");
         List<String> p8Data2 = Arrays.asList("x", "u");
         List<String> p9Data2 = Arrays.asList("w", "u");
         List<String> p10Data2 = Arrays.asList("v", "u");
         Map <String, List<String>> inputData2 = new HashMap<>();
+        inputData2.put("p1", p1Data2);
+        inputData2.put("p2", p2Data2);
+        inputData2.put("p3", p3Data2);
+        inputData2.put("p4", p4Data2);
+        inputData2.put("p5", p5Data2);
         inputData2.put("p6", p6Data2);
         inputData2.put("p7", p7Data2);
         inputData2.put("p8", p8Data2);
@@ -168,5 +198,10 @@ public class AdditionalTests {
             assertNotEquals(validRandomRequest.get("p9"), validRandomRequest2.get("p9"));
         if (validRandomRequest.get("p10") != null || validRandomRequest2.get("p10") != null)
             assertNotEquals(validRandomRequest.get("p10"), validRandomRequest2.get("p10"));
+    }
+
+    @Test
+    public void conflictiveParameterNamesTest() {
+
     }
 }

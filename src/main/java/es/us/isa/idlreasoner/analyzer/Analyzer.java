@@ -175,16 +175,14 @@ public class Analyzer {
 	}
 
 	public void updateData(Map<String, List<String>> data) {
-		if (ENUM_DATA) {
-			recreateFile(DATA_FILE);
-			try {
-				mapper.initializeStringIntMapping();
-				mapper.updateDataFile(data);
-			} catch (IOException e) {
-				terminate("There was an error while creating the data file. Try again.", e);
-			}
-			mapper.fixStringToIntCounter();
+		recreateFile(DATA_FILE);
+		try {
+			mapper.initializeStringIntMapping();
+			mapper.updateDataFile(data);
+		} catch (IOException e) {
+			terminate("There was an error while creating the data file. Try again.", e);
 		}
+		mapper.fixStringToIntCounter();
 	}
 
 

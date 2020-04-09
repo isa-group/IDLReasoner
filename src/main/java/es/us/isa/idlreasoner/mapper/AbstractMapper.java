@@ -137,8 +137,8 @@ public abstract class AbstractMapper {
         appendContentToFile(FULL_CONSTRAINTS_FILE, constraintsRedundantSolutions);
     }
 
-    void mapPSetZero(String paramName, String paramValue) {
-        constraintsRedundantSolutions += "constraint ((" + origToChangedParamName(paramName) + "Set==0) -> (" + origToChangedParamName(paramName) + "==" + paramValue + "));\n";
+    void mapPSetZero(String changedParamName, String paramValue) {
+        constraintsRedundantSolutions += "constraint ((" + changedParamName + "Set==0) -> (" + changedParamName + "==" + paramValue + "));\n";
     }
 
     public void finishConstraintsFile() {
@@ -227,15 +227,22 @@ public abstract class AbstractMapper {
 
     public void updateDataFile(Map<String, List<String>> data) throws IOException {
         BufferedWriter dataOut = openWriter(DATA_FILE);
-        String line;
 
-        for (Map.Entry<String, List<String>> paramData: data.entrySet()) {
-            line = "data_" + origToChangedParamName(paramData.getKey()) + " = {";
-            for (String paramValue: paramData.getValue())
-                line += origToChangedParamValue(paramData.getKey(), paramValue) + ", ";
-            line = line.substring(0, line.length()-2); // trim last comma and space
-            line += "};\n";
-            dataOut.append(line);
+        for (Map.Entry<String, Map.Entry<String, Boolean>> operationParameter: operationParameters.entrySet()) {
+            List<String> paramValues = data.get(operationParameter.getKey());
+            String changedParamName = origToChangedParamName(operationParameter.getKey());
+            String varData = "data_" + changedParamName + " = {";
+            if (paramValues != null) {
+                for (String paramValue: paramValues)
+                    varData += origToChangedParamValue(operationParameter.getKey(), paramValue) + ", ";
+                varData = varData.substring(0, varData.length()-2); // trim last comma and space
+                varData += "};\n"
+                         + "data_" + changedParamName + "Set = {0, 1};\n";
+            } else {
+                varData += "0};\n"
+                         + "data_" + changedParamName + "Set = {0};\n";
+            }
+            dataOut.append(varData);
         }
 
         dataOut.flush();
