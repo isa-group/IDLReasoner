@@ -31,15 +31,51 @@ public class FileManager {
         return file;
     }
 
-    public static void appendContentToFile(String filePath, String content) {
-        File file = new File(filePath);
+    public static String readFile(String filePath) {
+        StringBuilder content = new StringBuilder();
+        BufferedReader reader = openReader(filePath);
+
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(file, true));
-            out.append(content);
-            out.flush();
-            out.close();
+            String line = reader.readLine();
+            while (line != null) {
+                content.append(line).append("\n");
+                line = reader.readLine();
+            }
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        return content.toString();
+    }
+
+    public static void appendContentToFile(String filePath, String content) {
+        File file = new File(filePath);
+        while (true) {
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(file, true));
+                out.append(content);
+                out.flush();
+                out.close();
+                break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void writeContentToFile(String filePath, String content) {
+        File file = new File(filePath);
+        while (true) {
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(file, false));
+                out.append(content);
+                out.flush();
+                out.close();
+                break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

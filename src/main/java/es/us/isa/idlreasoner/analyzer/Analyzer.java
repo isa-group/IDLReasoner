@@ -118,7 +118,6 @@ public class Analyzer {
 				mapper.setParamToValue(parseSpecParamName(operationParameter)+"Set", "1");
 			} else {
 				mapper.setParamToValue(parseSpecParamName(operationParameter)+"Set", "0");
-
 			}
 		}
 		mapper.finishConstraintsFile();
@@ -164,8 +163,9 @@ public class Analyzer {
 			needReloadConstraintsFile = true;
 		if (resolutor.isRandomSearch())
 			resolutor.setRandomSearch(false);
-		recreateFile(FULL_CONSTRAINTS_FILE);
-		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
+//		recreateFile(FULL_CONSTRAINTS_FILE);
+//		copyFile(BASE_CONSTRAINTS_FILE, FULL_CONSTRAINTS_FILE);
+		mapper.resetCurrentProblem();
 		mapper.resetStringIntMapping();
 	}
 

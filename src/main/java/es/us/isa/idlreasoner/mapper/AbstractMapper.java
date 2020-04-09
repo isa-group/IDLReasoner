@@ -9,7 +9,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.PARAMETER_NAMES_MAPPING_FILE;
+//import static es.us.isa.idlreasoner.util.IDLConfiguration.PARAMETER_NAMES_MAPPING_FILE;
 import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
 import static es.us.isa.idlreasoner.util.Utils.terminate;
 
@@ -34,7 +34,16 @@ public abstract class AbstractMapper {
 
     DependenciesMapper dm;
 
-    String constraintsRedundantSolutions = ""; // Set of constraints to avoid redundant solutions when calling randomRequest
+    // The following Strings represent different extracts of the MiniZinc problem:
+    String variables = "";
+    String variablesData = ""; // Data to instantiate model (data.dzn)
+    String idlConstraints = "";
+    String requiredVarsConstraints = "";
+    String redundantSolutionsConstraints = ""; // Set of constraints to avoid redundant solutions when calling pseudoRandomRequest
+    String baseProblem = "";
+    String currentProblem = "";
+    final String RANDOM_SEARCH = "include \"gecode.mzn\";\n" +
+            "solve ::int_default_search(random, indomain_random) satisfy;\n";
 
     public AbstractMapper() {
         operationParameters = new HashMap<>();
@@ -126,28 +135,38 @@ public abstract class AbstractMapper {
     }
 
     public void setParamToValue(String parameter, String value) {
-        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(parameter) + " = " + origToChangedParamValue(parameter, value) + ";\n");
+        currentProblem += "constraint " + origToChangedParamName(parameter) + " = " + origToChangedParamValue(parameter, value) + ";\n";
+//        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(parameter) + " = " + origToChangedParamValue(parameter, value) + ";\n");
     }
 
     public void setParamToValue(String changedParamName, String origParamName, String value) {
-        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(changedParamName) + " = " + origToChangedParamValue(origParamName, value) + ";\n");
+        currentProblem += "constraint " + origToChangedParamName(changedParamName) + " = " + origToChangedParamValue(origParamName, value) + ";\n";
+//        appendContentToFile(FULL_CONSTRAINTS_FILE, "constraint " + origToChangedParamName(changedParamName) + " = " + origToChangedParamValue(origParamName, value) + ";\n");
     }
 
     public void appendConstraintsRedundantSolutions() {
-        appendContentToFile(FULL_CONSTRAINTS_FILE, constraintsRedundantSolutions);
+        currentProblem += redundantSolutionsConstraints;
+//        appendContentToFile(FULL_CONSTRAINTS_FILE, redundantSolutionsConstraints);
     }
 
-    void mapPSetZero(String changedParamName, String paramValue) {
-        constraintsRedundantSolutions += "constraint ((" + changedParamName + "Set==0) -> (" + changedParamName + "==" + paramValue + "));\n";
+    void mapRedundantConstraint(String changedParamName, String paramValue) {
+        redundantSolutionsConstraints += "constraint ((" + changedParamName + "Set==0) -> (" + changedParamName + "==" + paramValue + "));\n";
+    }
+
+    void mapRequiredVar(String changedParamName) {
+        requiredVarsConstraints += "constraint " + changedParamName + "Set = 1;\n";
     }
 
     public void finishConstraintsFile() {
-        appendContentToFile(FULL_CONSTRAINTS_FILE, "solve satisfy;\n");
+        currentProblem += "solve satisfy;\n";
+        writeContentToFile(BASE_CONSTRAINTS_FILE, currentProblem);
+//        appendContentToFile(FULL_CONSTRAINTS_FILE, "solve satisfy;\n");
     }
 
     public void finishConstraintsFileWithSearch() {
-        appendContentToFile(FULL_CONSTRAINTS_FILE, "include \"gecode.mzn\";\n" +
-                "solve ::int_default_search(random, indomain_random) satisfy;\n");
+        currentProblem += RANDOM_SEARCH;
+        writeContentToFile(BASE_CONSTRAINTS_FILE, currentProblem);
+//        appendContentToFile(FULL_CONSTRAINTS_FILE, RANDOM_SEARCH);
     }
 
     public void resetStringIntMapping() {
@@ -174,11 +193,11 @@ public abstract class AbstractMapper {
         }
     }
 
-    void initializeParameterNamesMapping() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
-        parameterNamesMapping = HashBiMap.create(mapper.readValue(new File(PARAMETER_NAMES_MAPPING_FILE), typeRef));
-    }
+//    void initializeParameterNamesMapping() throws IOException {
+//        ObjectMapper mapper = new ObjectMapper();
+//        TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
+//        parameterNamesMapping = HashBiMap.create(mapper.readValue(new File(PARAMETER_NAMES_MAPPING_FILE), typeRef));
+//    }
 
     public void initializeStringIntMapping() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -203,12 +222,12 @@ public abstract class AbstractMapper {
         appendContentToFile(STRING_INT_MAPPING_FILE, json);
     }
 
-    void exportParameterNamesMappingToFile() throws IOException {
-        recreateFile(PARAMETER_NAMES_MAPPING_FILE);
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(parameterNamesMapping);
-        appendContentToFile(PARAMETER_NAMES_MAPPING_FILE, json);
-    }
+//    void exportParameterNamesMappingToFile() throws IOException {
+//        recreateFile(PARAMETER_NAMES_MAPPING_FILE);
+//        ObjectMapper mapper = new ObjectMapper();
+//        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(parameterNamesMapping);
+//        appendContentToFile(PARAMETER_NAMES_MAPPING_FILE, json);
+//    }
 
     public Map<String,String> setUpRequest(Map<String,String> mznSolution) {
         if (mznSolution == null)
@@ -227,39 +246,30 @@ public abstract class AbstractMapper {
         return request;
     }
 
-    public void updateDataFile(Map<String, List<String>> data) throws IOException {
-        BufferedWriter dataOut = openWriter(DATA_FILE);
+    public void updateDataFile(Map<String, List<String>> data) {
+        StringBuilder newVariablesData = new StringBuilder();
 
         for (Map.Entry<String, Map.Entry<String, Boolean>> operationParameter: operationParameters.entrySet()) {
             List<String> paramValues = data.get(operationParameter.getKey());
             String changedParamName = origToChangedParamName(operationParameter.getKey());
-            String varData = "data_" + changedParamName + " = {";
+            StringBuilder varData = new StringBuilder("data_" + changedParamName + " = {");
             if (paramValues != null) {
                 for (String paramValue: paramValues)
-                    varData += origToChangedParamValue(operationParameter.getKey(), paramValue) + ", ";
-                varData = varData.substring(0, varData.length()-2); // trim last comma and space
-                varData += "};\n"
-                         + "data_" + changedParamName + "Set = {0, 1};\n";
+                    varData.append(origToChangedParamValue(operationParameter.getKey(), paramValue)).append(", ");
+                varData = new StringBuilder(varData.substring(0, varData.length() - 2)); // trim last comma and space
+                varData.append("};\n" + "data_").append(changedParamName).append("Set = {0, 1};\n");
             } else {
-                varData += "0};\n"
-                         + "data_" + changedParamName + "Set = {0};\n";
+                varData.append("0};\n" + "data_").append(changedParamName).append("Set = {0};\n");
             }
-            dataOut.append(varData);
+            newVariablesData.append(varData);
         }
 
-        dataOut.flush();
-        dataOut.close();
+        variablesData = newVariablesData.toString();
+        appendContentToFile(DATA_FILE, variablesData);
     }
 
 
-
-
-
-
-
-
-
-
-
-
+    public void resetCurrentProblem() {
+        currentProblem = baseProblem;
+    }
 }
