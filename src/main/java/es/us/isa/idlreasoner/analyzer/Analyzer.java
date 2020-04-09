@@ -65,12 +65,7 @@ public class Analyzer {
 			needReloadConstraintsFile = false;
 		}
 
-		Map<String, String> res = resolutor.solve();
-
-		if (isValidSolution(res))
-			return mapper.setUpRequest(res);
-		else
-			return null;
+		return mapper.setUpRequest(resolutor.solve());
 	}
 
 	public Boolean isDeadParameter(String parameter) {
@@ -79,7 +74,7 @@ public class Analyzer {
 		mapper.setParamToValue(parseSpecParamName(parameter)+"Set", "1");
 		mapper.finishConstraintsFile();
 
-		return !isValidSolution(this.resolutor.solve());
+		return resolutor.solve() == null;
 	}
 
 	public Boolean isFalseOptional(String parameter) {
@@ -88,7 +83,7 @@ public class Analyzer {
 		if (mapper.isOptionalParameter(parameter)) {
 			mapper.setParamToValue(parseSpecParamName(parameter)+"Set", "0");
 			mapper.finishConstraintsFile();
-			return !isValidSolution(this.resolutor.solve());
+			return resolutor.solve() == null;
 		} else {
 			return false;
 		}
@@ -110,7 +105,7 @@ public class Analyzer {
 	private Boolean isSolvableIDL() {
 		setupAnalysisOperation();
 		mapper.finishConstraintsFile();
-		return isValidSolution(this.resolutor.solve());
+		return resolutor.solve() != null;
 	}
 
 	public Boolean validRequest(Map<String, String> parametersSet) {
@@ -127,7 +122,7 @@ public class Analyzer {
 			}
 		}
 		mapper.finishConstraintsFile();
-		return isValidSolution(this.resolutor.solve());
+		return resolutor.solve() != null;
 	}
 
 	public Boolean validPartialRequest(Map<String, String> parametersSet) {
@@ -141,28 +136,28 @@ public class Analyzer {
 			}
 		}
 		mapper.finishConstraintsFile();
-		return isValidSolution(this.resolutor.solve());
+		return resolutor.solve() != null;
 	}
 
 	public Integer numberOfRequest() {
 		return this.getAllUnSetUpRequests().size();
 	}
 
-	/**
-	 * Evaluates whether a map containing the parameters to be set in a request
-	 * (i.e. a solution returned by the solver) is right or not. If the operation
-	 * contains no parameters nor dependencies, an empty map should be considered
-	 * right. Since an empty map is considered as "no solution", instead, a map
-	 * containing just one entry (SOLUTION_SEP -> SOLUTION_SEP) is returned.
-	 * @param solution Map containing the parameters settings
-	 * @return True if the solution is valid, false otherwise
-	 */
-	private Boolean isValidSolution(Map<String, String> solution) {
-		if (solution.size()==1 && solution.get(SOLUTION_SEP).equals(SOLUTION_SEP))
-			return true;
-		else
-			return solution.size()!=0;
-	}
+//	/**
+//	 * Evaluates whether a map containing the parameters to be set in a request
+//	 * (i.e. a solution returned by the solver) is right or not. If the operation
+//	 * contains no parameters nor dependencies, an empty map should be considered
+//	 * right. Since an empty map is considered as "no solution", instead, a map
+//	 * containing just one entry (SOLUTION_SEP -> SOLUTION_SEP) is returned.
+//	 * @param solution Map containing the parameters settings
+//	 * @return True if the solution is valid, false otherwise
+//	 */
+//	private Boolean isValidSolution(Map<String, String> solution) {
+//		if (solution.size()==1 && solution.get(SOLUTION_SEP).equals(SOLUTION_SEP))
+//			return true;
+//		else
+//			return solution.size()!=0;
+//	}
 
 	private void setupAnalysisOperation() {
 		if (!needReloadConstraintsFile)

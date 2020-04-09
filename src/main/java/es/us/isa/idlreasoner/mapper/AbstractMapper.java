@@ -211,6 +211,8 @@ public abstract class AbstractMapper {
     }
 
     public Map<String,String> setUpRequest(Map<String,String> mznSolution) {
+        if (mznSolution == null)
+            return null;
         Map<String,String> request = new HashMap<>();
         Iterator<Map.Entry<String, String>> cspVariables = mznSolution.entrySet().iterator();
         Map.Entry<String, String> currentCspVariable;

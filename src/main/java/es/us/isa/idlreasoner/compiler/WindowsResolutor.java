@@ -22,9 +22,9 @@ public class WindowsResolutor extends Resolutor {
 		String results = this.callSolver(command);
 		results = fixIfErrors(results, command);
 		
-		List<String> resultsSplitted = Arrays.asList(results.split(SOLUTION_SEP));
+		List<String> resultsSplit = Arrays.asList(results.split(SOLUTION_SEP));
 		
-		for(String r: resultsSplitted) {
+		for(String r: resultsSplit) {
 			res.add(this.mapSolutions(r));
 		}
 		
@@ -46,14 +46,16 @@ public class WindowsResolutor extends Resolutor {
 	private Map<String,String> mapSolutions(String solutions){
 		Map<String, String> res = new HashMap<String, String>();
 		List<String> solutionsSplit = Arrays.asList(solutions.split(";"));
-		// The following happens when the op has no params nor deps. The solution is empty but valid
-		if (solutionsSplit.size()==1 && solutionsSplit.get(0).contains(SOLUTION_SEP)) {
-			res.put(SOLUTION_SEP, SOLUTION_SEP); // A Map containing this identified as a request for an op without params
-			return res;
+		if (solutionsSplit.size()==1) {
+//			res.put(SOLUTION_SEP, SOLUTION_SEP); // A Map containing this identified as a request for an op without params
+			if (solutionsSplit.get(0).contains(SOLUTION_SEP) || "".equals(solutionsSplit.get(0))) // This happens when the op has no params nor deps. The solution is empty but valid
+				return res;
+			else
+				return null; // No solution
 		}
 		String[] aux;
 		for(String sol: solutionsSplit) {
-			if(solutionsSplit.get(solutionsSplit.size()-1)!=sol) {
+			if(!solutionsSplit.get(solutionsSplit.size() - 1).equals(sol)) {
 				aux = sol.split("=");
 				res.put(aux[0].trim(), aux[1].trim());
 			}
@@ -80,11 +82,11 @@ public class WindowsResolutor extends Resolutor {
 			e.printStackTrace();
 		}
 
-		return res;
+		return res.equals("") ? "NO SOLUTION" : res;
 	}
 
 	private String fixIfErrors(String solutions, String command) {
-		if (solutions.contains("=====ERROR=====") && SOLVER.toLowerCase().equals("chuffed")) {
+		if (SOLVER.toLowerCase().equals("chuffed") && solutions.contains("=====ERROR=====")) {
 			String newCommand = command.replace(SOLVER, "Gecode");
 			return this.callSolver(newCommand);
 		}
