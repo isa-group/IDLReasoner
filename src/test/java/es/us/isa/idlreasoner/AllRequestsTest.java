@@ -18,7 +18,7 @@ public class AllRequestsTest {
         allRequests.add(new HashMap<>());
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: no_params.");
     }
@@ -33,7 +33,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p1", "false"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_boolean_no_deps.");
     }
@@ -51,7 +51,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p1", "value5"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_string_no_deps.");
     }
@@ -69,7 +69,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p1", "5"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
@@ -99,7 +99,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p1", "true", "p2", "value2", "p3", "2"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
@@ -125,7 +125,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p1", "true", "p2", "value2", "p3", "2"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
@@ -153,7 +153,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p1", "true", "p2", "value2", "p3", "2"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
@@ -173,7 +173,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p2", "value2", "p3", "2"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
@@ -195,7 +195,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p1", "true", "p2", "value2", "p3", "2"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
@@ -217,7 +217,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p2", "value2", "p3", "2"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
@@ -238,7 +238,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p3", "3", "p5", "3"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }
@@ -267,7 +267,7 @@ public class AllRequestsTest {
         allRequests.add(ImmutableMap.of("p3", "2"));
         allRequests.forEach(request -> assertTrue(allAnalyzerRequests.contains(request), "The following request is missing: " + request));
         assertEquals(allAnalyzerRequests.size(), (new HashSet<>(allAnalyzerRequests).size()), "All requests should be different");
-        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.validRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
+        allAnalyzerRequests.forEach(analyzerRequest -> assertTrue(analyzer.isValidRequest(analyzerRequest), "The following request is not valid: " + analyzerRequest));
         assertEquals(allAnalyzerRequests.size(), allRequests.size(), "The number of requests returned by getAllRequests() should be the same as the requests tested");
         System.out.println("Test passed: one_param_enum_int_no_deps.");
     }

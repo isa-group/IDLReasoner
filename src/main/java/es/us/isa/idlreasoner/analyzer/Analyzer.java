@@ -45,7 +45,7 @@ public class Analyzer {
 		return resolutor.solveGetAllSolutions();
 	}
 	
-	public Map<String,String> pseudoRandomRequest() {
+	public Map<String,String> getPseudoRandomValidRequest() {
 		Map<String, String> res = new HashMap<>();
 		List<Map<String,String>> allRequests = getAllUnSetUpRequests();
 		
@@ -56,14 +56,15 @@ public class Analyzer {
 		return mapper.setUpRequest(res);
 	}
 
-	public Map<String,String> randomRequest() {
-		if (needReloadConstraintsFile) {
-			setupAnalysisOperation();
-			mapper.finishConstraintsFileWithSearch();
-			resolutor.setRandomSearch(true);
-			needReloadConstraintsFile = false;
-		}
+	public Map<String,String> getRandomValidRequest() {
+		setupRandomRequestOperation(true);
+		return mapper.setUpRequest(resolutor.solve());
+	}
 
+	public Map<String,String> getRandomInvalidRequest() {
+		setupRandomRequestOperation(false);
+		if (!mapper.hasDeps())
+			return null;
 		return mapper.setUpRequest(resolutor.solve());
 	}
 
@@ -107,7 +108,7 @@ public class Analyzer {
 		return resolutor.solve() != null;
 	}
 
-	public Boolean validRequest(Map<String, String> parametersSet) {
+	public Boolean isValidRequest(Map<String, String> parametersSet) {
 		setupAnalysisOperation();
 		Set<String> parametersSetNames = parametersSet.keySet();
 		Set<String> operationParameters = mapper.getOperationParameters();
@@ -123,7 +124,7 @@ public class Analyzer {
 		return resolutor.solve() != null;
 	}
 
-	public Boolean validPartialRequest(Map<String, String> parametersSet) {
+	public Boolean isValidPartialRequest(Map<String, String> parametersSet) {
 		setupAnalysisOperation();
 		Set<String> parametersSetNames = parametersSet.keySet();
 		Set<String> operationParameters = mapper.getOperationParameters();
@@ -148,6 +149,17 @@ public class Analyzer {
 			resolutor.setRandomSearch(false);
 		mapper.resetCurrentProblem();
 		mapper.resetStringIntMapping();
+	}
+
+	private void setupRandomRequestOperation(boolean valid) {
+		if (needReloadConstraintsFile) {
+			setupAnalysisOperation();
+			if (!valid)
+				mapper.inverseConstraints();
+			mapper.finishConstraintsFileWithSearch();
+			resolutor.setRandomSearch(true);
+			needReloadConstraintsFile = false;
+		}
 	}
 
 	public void updateData(Map<String, List<String>> data) {

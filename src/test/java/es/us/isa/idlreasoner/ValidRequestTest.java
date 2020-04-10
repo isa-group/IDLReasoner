@@ -15,7 +15,7 @@ public class ValidRequestTest {
     public void no_params_valid() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/noParams", "get");
         Map<String, String> request = new HashMap<>();
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: no_params_valid.");
     }
 
@@ -30,7 +30,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamBoolean", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "false");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_param_boolean_no_deps_valid.");
     }
 
@@ -39,7 +39,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamBoolean", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "not boolean");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_param_boolean_no_deps_invalid.");
     }
 
@@ -48,7 +48,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamString", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "a string");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_param_string_no_deps_valid.");
     }
 
@@ -56,7 +56,7 @@ public class ValidRequestTest {
     public void one_param_string_no_deps_invalid() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamString", "get");
         Map<String, String> request = new HashMap<>();
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_param_string_no_deps_invalid.");
     }
 
@@ -65,7 +65,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamInt", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "10");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_param_int_no_deps_valid.");
     }
 
@@ -74,7 +74,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamInt", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "not an integer");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_param_int_no_deps_invalid.");
     }
 
@@ -83,7 +83,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumString", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "value1");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_param_enum_string_no_deps_valid.");
     }
 
@@ -92,7 +92,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumString", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "string not in enum alternatives");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_param_enum_string_no_deps_invalid.");
     }
 
@@ -101,7 +101,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumInt", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "1");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_param_enum_int_no_deps_valid.");
     }
 
@@ -110,7 +110,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumInt", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "6");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_param_enum_int_no_deps_invalid.");
     }
 
@@ -120,7 +120,7 @@ public class ValidRequestTest {
         Map<String, String> request = new HashMap<>();
         request.put("p1", "true");
         request.put("p2", "a string");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_dep_requires_valid.");
     }
 
@@ -132,7 +132,7 @@ public class ValidRequestTest {
         request.put("p3", "1");
         request.put("p4", "value1");
         request.put("p5", "2");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_dep_requires_invalid.");
     }
 
@@ -141,7 +141,7 @@ public class ValidRequestTest {
         Analyzer analyzer = new Analyzer("oas","one_dep_or.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> request = new HashMap<>();
         request.put("p1", "true");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_dep_or_valid.");
     }
 
@@ -149,7 +149,7 @@ public class ValidRequestTest {
     public void one_dep_or_invalid() {
         Analyzer analyzer = new Analyzer("oas","one_dep_or.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> request = new HashMap<>();
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_dep_or_invalid.");
     }
 
@@ -159,7 +159,7 @@ public class ValidRequestTest {
         Map<String, String> request = new HashMap<>();
         request.put("p1", "false");
         request.put("p3", "100");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_dep_onlyone_valid.");
     }
 
@@ -169,7 +169,7 @@ public class ValidRequestTest {
         Map<String, String> request = new HashMap<>();
         request.put("p3", "10");
         request.put("p5", "1");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_dep_onlyone_invalid.");
     }
 
@@ -180,7 +180,7 @@ public class ValidRequestTest {
         request.put("p3", "-5");
         request.put("p4", "value5");
         request.put("p5", "1");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_dep_allornone_valid.");
     }
 
@@ -192,7 +192,7 @@ public class ValidRequestTest {
         request.put("p3", "10");
         request.put("p4", "value5");
         request.put("p5", "1");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_dep_allornone_invalid.");
     }
 
@@ -200,7 +200,7 @@ public class ValidRequestTest {
     public void one_dep_zeroorone_valid() {
         Analyzer analyzer = new Analyzer("oas","one_dep_zeroorone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> request = new HashMap<>();
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_dep_zeroorone_valid.");
     }
 
@@ -213,7 +213,7 @@ public class ValidRequestTest {
         request.put("p3", "1");
         request.put("p4", "1");
         request.put("p5", "1");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_dep_zeroorone_invalid.");
     }
 
@@ -223,7 +223,7 @@ public class ValidRequestTest {
         Map<String, String> request = new HashMap<>();
         request.put("p3", "1");
         request.put("p5", "1");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_dep_arithrel_valid.");
     }
 
@@ -233,7 +233,7 @@ public class ValidRequestTest {
         Map<String, String> request = new HashMap<>();
         request.put("p3", "2");
         request.put("p5", "1");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_dep_arithrel_invalid.");
     }
 
@@ -245,7 +245,7 @@ public class ValidRequestTest {
         request.put("p2", "string");
         request.put("p4", "value1");
         request.put("p5", "4");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: one_dep_complex_valid.");
     }
 
@@ -256,7 +256,7 @@ public class ValidRequestTest {
         request.put("p1", "false");
         request.put("p2", "string");
         request.put("p3", "-1000");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: one_dep_complex_invalid.");
     }
 
@@ -269,7 +269,7 @@ public class ValidRequestTest {
         request.put("p3", "value3");
         request.put("p4", "value4");
         request.put("p5", "value1");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: combinatorial1_valid.");
     }
 
@@ -282,7 +282,7 @@ public class ValidRequestTest {
         request.put("p3", "value3");
         request.put("p4", "value4");
         request.put("p5", "value5"); // Violates this dependency: p1==p5;
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: combinatorial1_invalid.");
     }
 
@@ -303,7 +303,7 @@ public class ValidRequestTest {
         Map<String, String> request = new HashMap<>();
         request.put("p1", "true");
         request.put("p3", "value1");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: combinatorial3_valid.");
     }
 
@@ -315,7 +315,7 @@ public class ValidRequestTest {
         request.put("p3", "value4");
         request.put("p4", "1");
         request.put("p5", "3"); // Violates this dependency: p4>=p5;
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: combinatorial3_invalid.");
     }
 
@@ -325,7 +325,7 @@ public class ValidRequestTest {
         Map<String, String> request = new HashMap<>();
         request.put("p2", "1000000");
         request.put("p3", "100000");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: combinatorial4_valid.");
     }
 
@@ -333,7 +333,7 @@ public class ValidRequestTest {
     public void combinatorial4_invalid() {
         Analyzer analyzer = new Analyzer("oas","combinatorial4.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial4", "get");
         Map<String, String> request = new HashMap<>(); // An empty request violates multiple dependencies, for example: NOT ZeroOrOne(p5==1000, p4==10000 OR p3==100000, p2==1000000);
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: combinatorial4_invalid.");
     }
 
@@ -351,7 +351,7 @@ public class ValidRequestTest {
         request.put("p8", "1");
         request.put("p9", "value1");
         request.put("p10", "value2");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: combinatorial5_valid.");
     }
 
@@ -369,7 +369,7 @@ public class ValidRequestTest {
         request.put("p8", "1");
         request.put("p9", "value1");
         request.put("p10", "value2");
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: combinatorial5_invalid.");
     }
 
@@ -407,7 +407,7 @@ public class ValidRequestTest {
         request.put("p8", "something");
         request.put("p9", "fixed string");
         request.put("p10", "something");
-        assertTrue(analyzer.validRequest(request), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(request), "The request should be VALID");
         System.out.println("Test passed: combinatorial8_valid.");
     }
 
@@ -423,7 +423,7 @@ public class ValidRequestTest {
         request.put("p8", "something"); // (See next comment)
         request.put("p9", "fixed string");
         request.put("p10", "something different from p8"); // Violates this dependency: AllOrNone(p6!=p8, p8==p10);
-        assertFalse(analyzer.validRequest(request), "The request should be NOT valid");
+        assertFalse(analyzer.isValidRequest(request), "The request should be NOT valid");
         System.out.println("Test passed: combinatorial8_invalid.");
     }
 

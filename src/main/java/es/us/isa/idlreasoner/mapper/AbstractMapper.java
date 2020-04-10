@@ -148,6 +148,12 @@ public abstract class AbstractMapper {
         requiredVarsConstraints += "constraint " + changedParamName + "Set = 1;\n";
     }
 
+    public void inverseConstraints() {
+        currentProblem = variables
+                + "\n" + idlConstraints.replaceAll("constraint", "constraint not")
+                + "\n" + requiredVarsConstraints;
+    }
+
     public void finishConstraintsFile() {
         currentProblem += "solve satisfy;\n";
         writeContentToFile(BASE_CONSTRAINTS_FILE, currentProblem);
@@ -246,5 +252,9 @@ public abstract class AbstractMapper {
 
     public void resetCurrentProblem() {
         currentProblem = baseProblem;
+    }
+
+    public Boolean hasDeps() {
+        return !idlConstraints.equals("");
     }
 }

@@ -15,7 +15,7 @@ public class ValidPartialRequestTest {
     public void no_params_valid() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/noParams", "get");
         Map<String, String> partialRequest = new HashMap<>();
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: no_params_valid.");
     }
 
@@ -30,7 +30,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamBoolean", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "false");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_param_boolean_no_deps_valid.");
     }
 
@@ -39,7 +39,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamBoolean", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "not boolean");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_param_boolean_no_deps_invalid.");
     }
 
@@ -47,7 +47,7 @@ public class ValidPartialRequestTest {
     public void one_param_string_no_deps_valid() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamString", "get");
         Map<String, String> partialRequest = new HashMap<>();
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_param_string_no_deps_valid.");
     }
 
@@ -62,7 +62,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamInt", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "10");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_param_int_no_deps_valid.");
     }
 
@@ -71,7 +71,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamInt", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "not an integer");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_param_int_no_deps_invalid.");
     }
 
@@ -80,7 +80,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumString", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "value1");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_param_enum_string_no_deps_valid.");
     }
 
@@ -89,7 +89,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumString", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "string not in enum alternatives");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_param_enum_string_no_deps_invalid.");
     }
 
@@ -98,7 +98,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumInt", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "1");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_param_enum_int_no_deps_valid.");
     }
 
@@ -107,7 +107,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneParamEnumInt", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "6");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_param_enum_int_no_deps_invalid.");
     }
 
@@ -116,7 +116,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","one_dep_requires.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "true");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_dep_requires_valid.");
     }
 
@@ -125,7 +125,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","one_dep_requires.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p5", "6");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_dep_requires_invalid.");
     }
 
@@ -133,7 +133,7 @@ public class ValidPartialRequestTest {
     public void one_dep_or_valid() {
         Analyzer analyzer = new Analyzer("oas","one_dep_or.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> partialRequest = new HashMap<>();
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_dep_or_valid.");
     }
 
@@ -142,7 +142,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","one_dep_or.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p4", "value6");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_dep_or_invalid.");
     }
 
@@ -150,7 +150,7 @@ public class ValidPartialRequestTest {
     public void one_dep_onlyone_valid() {
         Analyzer analyzer = new Analyzer("oas","one_dep_onlyone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> partialRequest = new HashMap<>();
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_dep_onlyone_valid.");
     }
 
@@ -160,7 +160,7 @@ public class ValidPartialRequestTest {
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "true");
         partialRequest.put("p2", "a string");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_dep_onlyone_invalid.");
     }
 
@@ -171,7 +171,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p3", "-5");
         partialRequest.put("p4", "value5");
         partialRequest.put("p5", "1");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_dep_allornone_valid.");
     }
 
@@ -183,7 +183,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p3", "a string, not an int");
         partialRequest.put("p4", "value5");
         partialRequest.put("p5", "1");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_dep_allornone_invalid.");
     }
 
@@ -191,7 +191,7 @@ public class ValidPartialRequestTest {
     public void one_dep_zeroorone_valid() {
         Analyzer analyzer = new Analyzer("oas","one_dep_zeroorone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> partialRequest = new HashMap<>();
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_dep_zeroorone_valid.");
     }
 
@@ -204,7 +204,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p3", "1");
         partialRequest.put("p4", "1");
         partialRequest.put("p5", "1");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_dep_zeroorone_invalid.");
     }
 
@@ -214,7 +214,7 @@ public class ValidPartialRequestTest {
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p3", "1");
         partialRequest.put("p5", "1");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_dep_arithrel_valid.");
     }
 
@@ -224,7 +224,7 @@ public class ValidPartialRequestTest {
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p3", "2");
         partialRequest.put("p5", "1");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_dep_arithrel_invalid.");
     }
 
@@ -233,7 +233,7 @@ public class ValidPartialRequestTest {
         Analyzer analyzer = new Analyzer("oas","one_dep_complex.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "false");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: one_dep_complex_valid.");
     }
 
@@ -244,7 +244,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p1", "false");
         partialRequest.put("p2", "string");
         partialRequest.put("p3", "-1000");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: one_dep_complex_invalid.");
     }
 
@@ -256,7 +256,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p2", "value2");
         partialRequest.put("p3", "value3");
         partialRequest.put("p4", "value4");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: combinatorial1_valid.");
     }
 
@@ -269,7 +269,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p3", "value3");
         partialRequest.put("p4", "value4");
         partialRequest.put("p5", "value5"); // Violates this dependency: p1==p5;
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: combinatorial1_invalid.");
     }
 
@@ -288,7 +288,7 @@ public class ValidPartialRequestTest {
     public void combinatorial3_valid() {
         Analyzer analyzer = new Analyzer("oas","combinatorial3.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial3", "get");
         Map<String, String> partialRequest = new HashMap<>();
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: combinatorial3_valid.");
     }
 
@@ -300,7 +300,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p3", "value4");
         partialRequest.put("p4", "1");
         partialRequest.put("p5", "3"); // Violates this dependency: p4>=p5;
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: combinatorial3_invalid.");
     }
 
@@ -312,7 +312,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p3", "100000");
         partialRequest.put("p4", "10000");
         partialRequest.put("p5", "1000");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: combinatorial4_valid.");
     }
 
@@ -325,7 +325,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p4", "10000");
         partialRequest.put("p5", "1000");
         partialRequest.put("p8", "value5"); // If this parameter was removed, the request would be partially valid, since including p6 AND p7 would make it fully valid. As p8 is present, including p6 AND p7 would violate: ZeroOrOne(p7 AND p8, p7 AND p8 OR p9=='value5');
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: combinatorial4_invalid.");
     }
 
@@ -340,7 +340,7 @@ public class ValidPartialRequestTest {
     public void combinatorial5_valid() {
         Analyzer analyzer = new Analyzer("oas","combinatorial5.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial5", "get");
         Map<String, String> partialRequest = new HashMap<>();
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: combinatorial5_valid.");
     }
 
@@ -362,7 +362,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p8", "1");
         partialRequest.put("p9", "value1");
         partialRequest.put("p10", "value2");
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: combinatorial5_invalid.");
     }
 
@@ -404,7 +404,7 @@ public class ValidPartialRequestTest {
         partialRequest.put("p8", "something");
         partialRequest.put("p9", "fixed string");
         partialRequest.put("p10", "something");
-        assertTrue(analyzer.validPartialRequest(partialRequest), "The partial request should be VALID");
+        assertTrue(analyzer.isValidPartialRequest(partialRequest), "The partial request should be VALID");
         System.out.println("Test passed: combinatorial8_valid.");
     }
 
@@ -418,7 +418,7 @@ public class ValidPartialRequestTest {
         Map<String, String> partialRequest = new HashMap<>();
         partialRequest.put("p1", "false");
         partialRequest.put("p7", "a string"); // Violates this dependency: AllOrNone(p6!=p8, p8==p10);
-        assertFalse(analyzer.validPartialRequest(partialRequest), "The partial request should be NOT valid");
+        assertFalse(analyzer.isValidPartialRequest(partialRequest), "The partial request should be NOT valid");
         System.out.println("Test passed: combinatorial8_invalid.");
     }
 
