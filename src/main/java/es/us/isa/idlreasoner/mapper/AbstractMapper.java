@@ -99,7 +99,7 @@ public abstract class AbstractMapper {
     }
 
     private String changedToOrigParamValue(String parameter, String value) {
-        Map.Entry<String, Boolean> paramFeatures = operationParameters.get(parameter);
+        Map.Entry<String, Boolean> paramFeatures = operationParameters.get(changedToOrigParamName(parameter));
         if (paramFeatures != null) {
             if (paramFeatures.getKey().equals("string") || paramFeatures.getKey().equals("array")) {
                 String stringMapping;
