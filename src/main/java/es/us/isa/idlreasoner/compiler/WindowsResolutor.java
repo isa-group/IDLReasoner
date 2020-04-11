@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
@@ -35,7 +36,7 @@ public class WindowsResolutor extends Resolutor {
 	public Map<String,String> solve() {
 		String command;
 		if (randomSearch)
-			command = "\"minizinc/minizinc.exe\" -r " + (new Date().getTime())/1000 + " --solver Gecode " + BASE_CONSTRAINTS_FILE + " " + DATA_FILE;
+			command = "\"minizinc/minizinc.exe\" -r " + ThreadLocalRandom.current().nextInt(1, 2146) + Long.toString((new Date().getTime())/1000).substring(4) + " --solver Gecode " + BASE_CONSTRAINTS_FILE + " " + DATA_FILE;
 		else
 			command = "\"minizinc/minizinc.exe\" --solver " + SOLVER + " " + BASE_CONSTRAINTS_FILE + " " + DATA_FILE;
 		String solutions =  this.callSolver(command);
