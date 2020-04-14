@@ -759,3 +759,95 @@ paths:
       responses:
         default:
           description: "Default"
+  /conflictiveParameterNames:
+    get:
+      parameters:
+        - name: "type"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "constraint"
+          in: "query"
+          required: true
+          type: "boolean"
+        - name: "with_underscore"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "Accept-Language"
+          in: "query"
+          required: true
+          type: "boolean"
+        - name: "index:set"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "something[one]"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "something[two]"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "b.b"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "p9"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "p10"
+          in: "query"
+          required: true
+          type: "string"
+      responses:
+        default:
+          description: "Default"
+  /conflictiveParameterNames2:
+    get:
+      parameters:
+        - name: "type"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "constraint"
+          in: "query"
+          required: true
+          type: "boolean"
+        - name: "with_underscore"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "Accept-Language"
+          in: "query"
+          required: true
+          type: "boolean"
+        - name: "index:set"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "something[one]"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "something[two]"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "b.b"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "c.c"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "p10"
+          in: "query"
+          required: true
+          type: "string"
+      responses:
+        default:
+          description: "Default"

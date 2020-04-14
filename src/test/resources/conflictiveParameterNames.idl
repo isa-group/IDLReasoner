@@ -1,0 +1,10 @@
+IF constraint THEN [Accept-Language]; // Useless/redundant dependency, but valid
+IF type THEN (with_underscore==true OR (NOT with_underscore)) AND NOT [something[two]] AND p9=='fixed string';
+Or(type, with_underscore, [index:set] AND [something[two]], p9 AND type);
+NOT Or(type==true, constraint==true, with_underscore==false);
+NOT AllOrNone([something[two]] AND p9, b.b=='something', [index:set] AND p10=='example');
+AllOrNone(type, [index:set]);
+NOT ZeroOrOne(type, [index:set], [something[two]], constraint==false, [something[one]]=='example');
+ZeroOrOne(type, with_underscore);
+AllOrNone([something[one]]!=b.b, b.b==p10);
+ZeroOrOne(OnlyOne([index:set]==false, [Accept-Language]==true), OnlyOne([Accept-Language], [Accept-Language]==true), OnlyOne([Accept-Language]==true, [something[one]]));

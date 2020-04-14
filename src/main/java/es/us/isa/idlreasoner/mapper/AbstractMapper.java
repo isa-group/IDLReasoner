@@ -150,7 +150,7 @@ public abstract class AbstractMapper {
 
     public void inverseConstraints() {
         currentProblem = variables
-                + "\n" + idlConstraints.replaceAll("constraint", "constraint not")
+                + "\n" + idlConstraints.replaceAll("^constraint", "constraint not")
                 + "\n" + requiredVarsConstraints;
     }
 

@@ -1,6 +1,8 @@
 package es.us.isa.idlreasoner;
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
+import es.us.isa.idlreasoner.compiler.Resolutor;
+import es.us.isa.idlreasoner.compiler.WindowsResolutor;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -308,7 +310,162 @@ public class AdditionalTests {
     }
 
     @Test
-    public void conflictiveParameterNamesTest() {
+    public void conflictiveParameterNamesTest1() {
+        Analyzer analyzer = new Analyzer("oas","conflictiveParameterNames.idl", "./src/test/resources/OAS_test_suite.yaml", "/conflictiveParameterNames", "get");
 
+        assertFalse(analyzer.isDeadParameter("type"), "The parameter type should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("constraint"), "The parameter constraint should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("with_underscore"), "The parameter with_underscore should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("Accept-Language"), "The parameter Accept-Language should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("index:set"), "The parameter index:set should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("something[one]"), "The parameter something[one] should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("something[two]"), "The parameter something[two] should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("b.b"), "The parameter b.b should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p9"), "The parameter p9 should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p10"), "The parameter p10 should NOT be dead");
+
+        Map<String, String> validRequest = new HashMap<>();
+        validRequest.put("type", "false");
+        validRequest.put("constraint", "false");
+        validRequest.put("Accept-Language", "true");
+        validRequest.put("index:set", "true");
+        validRequest.put("something[one]", "one string");
+        validRequest.put("b.b", "something");
+        validRequest.put("p9", "fixed string");
+        validRequest.put("p10", "something");
+        assertTrue(analyzer.isValidRequest(validRequest), "The request should be VALID");
+
+        assertFalse(analyzer.isFalseOptional("type"), "The parameter type should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("constraint"), "The parameter constraint should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("with_underscore"), "The parameter with_underscore should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("Accept-Language"), "The parameter Accept-Language should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("index:set"), "The parameter index:set should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("something[one]"), "The parameter something[one] should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("something[two]"), "The parameter something[two] should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("b.b"), "The parameter b.b should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("p9"), "The parameter p9 should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("p10"), "The parameter p10 should NOT be false optional");
+
+        Map<String, String> validRandomRequest = analyzer.getRandomValidRequest();
+        assertTrue(analyzer.isValidRequest(validRandomRequest), "The request should be VALID");
+
+        assertTrue(analyzer.isValidIDL(), "The IDL should be VALID");
+
+        Map<String, String> invalidRandomRequest = analyzer.getRandomInvalidRequest();
+        assertFalse(analyzer.isValidRequest(invalidRandomRequest), "The request should be NOT valid");
+
+        Map<String, String> validPseudoRequest = analyzer.getPseudoRandomValidRequest();
+        assertTrue(analyzer.isValidRequest(validPseudoRequest), "The request should be VALID");
+
+        Map<String, String> invalidRequest = new HashMap<>();
+        invalidRequest.put("type", "false");
+        invalidRequest.put("constraint", "false");
+        invalidRequest.put("Accept-Language", "true");
+        invalidRequest.put("index:set", "true");
+        invalidRequest.put("something[one]", "one string");
+        invalidRequest.put("b.b", "something"); // (See next comment)
+        invalidRequest.put("p9", "fixed string");
+        invalidRequest.put("p10", "something different from b.b"); // Violates this dependency: AllOrNone(something[one]!=b.b, b.b==p10);
+        assertFalse(analyzer.isValidRequest(invalidRequest), "The request should be NOT valid");
+
+        Map<String, String> validRandomRequest2 = analyzer.getRandomValidRequest();
+        assertTrue(analyzer.isValidRequest(validRandomRequest2), "The request should be VALID");
+
+        Map<String, String> partiallyValidRequest = new HashMap<>();
+        partiallyValidRequest.put("type", "false");
+        partiallyValidRequest.put("constraint", "false");
+        partiallyValidRequest.put("Accept-Language", "true");
+        partiallyValidRequest.put("something[one]", "one string");
+        partiallyValidRequest.put("b.b", "something");
+        partiallyValidRequest.put("p9", "fixed string");
+        partiallyValidRequest.put("p10", "something");
+        assertTrue(analyzer.isValidPartialRequest(partiallyValidRequest), "The partial request should be VALID");
+
+        Map<String, String> partiallyInvalidRequest = new HashMap<>();
+        partiallyInvalidRequest.put("type", "false");
+        partiallyInvalidRequest.put("something[two]", "a string"); // Violates this dependency: IF type THEN (with_underscore==true OR (NOT with_underscore)) AND NOT [something[two]] AND p9=='fixed string';
+        assertFalse(analyzer.isValidPartialRequest(partiallyInvalidRequest), "The partial request should be NOT valid");
+
+        System.out.println("Test passed: multipleOperationsTest.");
+    }
+
+    @Test
+    public void conflictiveParameterNamesTest2() {
+        Analyzer analyzer = new Analyzer("oas","conflictiveParameterNames2.idl", "./src/test/resources/OAS_test_suite.yaml", "/conflictiveParameterNames2", "get");
+
+        assertFalse(analyzer.isDeadParameter("type"), "The parameter type should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("constraint"), "The parameter constraint should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("with_underscore"), "The parameter with_underscore should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("Accept-Language"), "The parameter Accept-Language should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("index:set"), "The parameter index:set should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("something[one]"), "The parameter something[one] should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("something[two]"), "The parameter something[two] should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("b.b"), "The parameter b.b should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("c.c"), "The parameter c.c should NOT be dead");
+        assertFalse(analyzer.isDeadParameter("p10"), "The parameter p10 should NOT be dead");
+
+        Map<String, String> validRequest = new HashMap<>();
+        validRequest.put("type", "false");
+        validRequest.put("constraint", "false");
+        validRequest.put("Accept-Language", "true");
+        validRequest.put("index:set", "true");
+        validRequest.put("something[one]", "one string");
+        validRequest.put("b.b", "something");
+        validRequest.put("c.c", "fixed string");
+        validRequest.put("p10", "something");
+        assertTrue(analyzer.isValidRequest(validRequest), "The request should be VALID");
+
+        assertFalse(analyzer.isFalseOptional("type"), "The parameter type should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("constraint"), "The parameter constraint should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("with_underscore"), "The parameter with_underscore should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("Accept-Language"), "The parameter Accept-Language should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("index:set"), "The parameter index:set should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("something[one]"), "The parameter something[one] should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("something[two]"), "The parameter something[two] should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("b.b"), "The parameter b.b should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("c.c"), "The parameter c.c should NOT be false optional");
+        assertFalse(analyzer.isFalseOptional("p10"), "The parameter p10 should NOT be false optional");
+
+        Map<String, String> validRandomRequest = analyzer.getRandomValidRequest();
+        assertTrue(analyzer.isValidRequest(validRandomRequest), "The request should be VALID");
+
+        assertTrue(analyzer.isValidIDL(), "The IDL should be VALID");
+
+        Map<String, String> invalidRandomRequest = analyzer.getRandomInvalidRequest();
+        assertFalse(analyzer.isValidRequest(invalidRandomRequest), "The request should be NOT valid");
+
+        Map<String, String> validPseudoRequest = analyzer.getPseudoRandomValidRequest();
+        assertTrue(analyzer.isValidRequest(validPseudoRequest), "The request should be VALID");
+
+        Map<String, String> invalidRequest = new HashMap<>();
+        invalidRequest.put("type", "false");
+        invalidRequest.put("constraint", "false");
+        invalidRequest.put("Accept-Language", "true");
+        invalidRequest.put("index:set", "true");
+        invalidRequest.put("something[one]", "one string");
+        invalidRequest.put("b.b", "something"); // (See next comment)
+        invalidRequest.put("c.c", "fixed string");
+        invalidRequest.put("p10", "something different from b.b"); // Violates this dependency: AllOrNone(something[one]!=b.b, b.b==p10);
+        assertFalse(analyzer.isValidRequest(invalidRequest), "The request should be NOT valid");
+
+        Map<String, String> validRandomRequest2 = analyzer.getRandomValidRequest();
+        assertTrue(analyzer.isValidRequest(validRandomRequest2), "The request should be VALID");
+
+        Map<String, String> partiallyValidRequest = new HashMap<>();
+        partiallyValidRequest.put("type", "false");
+        partiallyValidRequest.put("constraint", "false");
+        partiallyValidRequest.put("Accept-Language", "true");
+        partiallyValidRequest.put("something[one]", "one string");
+        partiallyValidRequest.put("b.b", "something");
+        partiallyValidRequest.put("c.c", "fixed string");
+        partiallyValidRequest.put("p10", "something");
+        assertTrue(analyzer.isValidPartialRequest(partiallyValidRequest), "The partial request should be VALID");
+
+        Map<String, String> partiallyInvalidRequest = new HashMap<>();
+        partiallyInvalidRequest.put("type", "false");
+        partiallyInvalidRequest.put("something[two]", "a string"); // Violates this dependency: IF type THEN (with_underscore==true OR (NOT with_underscore)) AND NOT [something[two]] AND p9=='fixed string';
+        assertFalse(analyzer.isValidPartialRequest(partiallyInvalidRequest), "The partial request should be NOT valid");
+
+        System.out.println("Test passed: multipleOperationsTest.");
     }
 }

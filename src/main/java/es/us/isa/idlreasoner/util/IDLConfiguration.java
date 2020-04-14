@@ -15,6 +15,7 @@ public class IDLConfiguration {
     public static String SOLVER;
     public static String IDL_FILES_FOLDER;
     public static String MAX_RESULTS;
+    public static Long TIMEOUT;
     public static String BASE_CONSTRAINTS_FILE;
     public static String DATA_FILE;
     public static String IDL_AUX_FILE;
@@ -23,6 +24,7 @@ public class IDLConfiguration {
         SOLVER = readProperty("solver");
         IDL_FILES_FOLDER = readProperty("idlFolder");
         MAX_RESULTS = readProperty("maxResults");
+        TIMEOUT = Long.parseLong(readProperty("timeout"));
         BASE_CONSTRAINTS_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("base_constraints_file");
         DATA_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("data_file");
         IDL_AUX_FILE = "./" + IDL_AUX_FOLDER + "/" + readProperty("idl_aux_file");
@@ -52,6 +54,7 @@ public class IDLConfiguration {
                 bw.append("solver=Gecode\n");
                 bw.append("idlFolder=src/test/resources\n");
                 bw.append("maxResults=100\n");
+                bw.append("timeout=1000\n");
                 bw.append("\n");
                 bw.append("# The following files are under ./idl_aux_files\n");
                 bw.append("base_constraints_file=base_constraints.mzn\n");
