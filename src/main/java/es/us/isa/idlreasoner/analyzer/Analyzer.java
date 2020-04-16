@@ -20,10 +20,12 @@ public class Analyzer {
 	private Resolutor resolutor;
 	private AbstractMapper mapper;
 	private boolean needReloadConstraintsFile; // When false, random requests are generated faster
+	private boolean lastRandomReqWasValid; // Used to reload constraints file when switching to validReq or v.v.
 
 	public Analyzer(String specificationType, String idlPath, String apiSpecificationPath, String operationPath, String operationType) {
 		initFilesAndConf();
 		needReloadConstraintsFile = true;
+		lastRandomReqWasValid = false;
 		resolutor = createResolutor();
 		mapper = createMapper(specificationType, idlPath, apiSpecificationPath, operationPath, operationType);
 	}
@@ -152,13 +154,14 @@ public class Analyzer {
 	}
 
 	private void setupRandomRequestOperation(boolean valid) {
-		if (needReloadConstraintsFile) {
+		if (needReloadConstraintsFile || lastRandomReqWasValid!=valid) {
 			setupAnalysisOperation();
 			if (!valid)
 				mapper.inverseConstraints();
 			mapper.finishConstraintsFileWithSearch();
 			resolutor.setRandomSearch(true);
 			needReloadConstraintsFile = false;
+			lastRandomReqWasValid = valid;
 		}
 	}
 

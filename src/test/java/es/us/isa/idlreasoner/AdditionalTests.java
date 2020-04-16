@@ -22,6 +22,22 @@ public class AdditionalTests {
     }
 
     @Test
+    public void validAfterInvalidRequest() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial5.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial5", "get");
+        analyzer.getRandomInvalidRequest();
+        Map<String, String> validRequest = analyzer.getRandomValidRequest();
+        assertTrue(analyzer.isValidRequest(validRequest), "The request should be VALID");
+    }
+
+    @Test
+    public void invalidAfterValidRequest() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial5.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial5", "get");
+        analyzer.getRandomValidRequest();
+        Map<String, String> invalidRequest = analyzer.getRandomInvalidRequest();
+        assertFalse(analyzer.isValidRequest(invalidRequest), "The request should be NOT valid");
+    }
+
+    @Test
     public void multipleOperationsTest() {
         Analyzer analyzer = new Analyzer("oas","combinatorial8.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial8", "get");
 
