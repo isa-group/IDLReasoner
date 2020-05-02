@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
@@ -24,8 +28,8 @@ public class MinizincFilesDownloader {
 	private static String downloadDirectory;
 	private static String minizincFileLocal;
 
-	private static String minizincWURL = "http://download1592.mediafire.com/6h1pwkfkkfcg/zz7f9yu9ewrsh80/minizinc.zip";
-	private static String minizincLURL = "https://download1582.mediafire.com/5228ipxk783g/rluflqq2dubvj7d/minizinc-linux.zip";
+	private static String minizincWURL = "http://www.mediafire.com/file/zz7f9yu9ewrsh80/minizinc.zip/file";
+	private static String minizincLURL = "http://www.mediafire.com/file/rluflqq2dubvj7d/minizinc-linux.zip/file";
 	private static String OS = System.getProperty("os.name").toLowerCase();
 	private static WebContentAuxiliar webContent = new WebContentAuxiliar();
 	private String url;
@@ -63,9 +67,9 @@ public class MinizincFilesDownloader {
 			//Download Zip file
             	try {
             		if(OS.contains("windows")) {
-            			HttpDownloadUtility.downloadFile(minizincWURL, downloadDirectory);
+            			HttpDownloadUtility.downloadFile(getDownloadLink(minizincWURL), downloadDirectory);
             		}else if (OS.equals("linux")) {
-                    	HttpDownloadUtility.downloadFile(minizincLURL,downloadDirectory);
+                    	HttpDownloadUtility.downloadFile(getDownloadLink(minizincLURL),downloadDirectory);
                 	}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -98,6 +102,21 @@ public class MinizincFilesDownloader {
 	        sb.append(s);
 	    }
 	    return sb.toString();
+	}
+	
+	public static String getDownloadLink(String url) {
+		String res;
+		
+		Document doc = null;
+		try {
+		   doc = Jsoup.connect(url).get();
+		} catch (IOException ioe) {
+		   ioe.printStackTrace();
+		}
+		Element downloadLink = doc.getElementById("download_link");
+		res = downloadLink.getElementsByClass("input").get(0).attr("href");
+		
+		return res;
 	}
 
 
