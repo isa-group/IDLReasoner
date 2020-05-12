@@ -15,7 +15,7 @@ public class WindowsResolutor extends Resolutor {
 
 	public WindowsResolutor() {
 		super();
-		minizincExe = "\"minizinc/minizinc.exe\"";
+		minizincExe = "\"minizinc/windows/minizinc.exe\"";
 		commandProcessArgs[0] = "cmd.exe";
 		commandProcessArgs[1] = "/c";
 	}
