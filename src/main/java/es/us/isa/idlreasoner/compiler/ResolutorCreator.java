@@ -17,6 +17,8 @@ public class ResolutorCreator {
 			resolutor = new WindowsResolutor();
 		else if (SystemUtils.IS_OS_MAC)
 			resolutor = new MacResolutor();
+		else if (SystemUtils.IS_OS_LINUX)
+			resolutor = new MacResolutor();
 		else
 			terminate("Operating system " + System.getProperty("os.name") + " not supported.");
 
