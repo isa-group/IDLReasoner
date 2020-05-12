@@ -11,7 +11,9 @@ public class ResolutorCreator {
 	public static Resolutor createResolutor() {
 		Resolutor resolutor = null;
 
-		if (System.getProperty("os.name").contains("Windows"))
+		if (System.getProperty("os.name").toLowerCase().contains("windows"))
+			resolutor = new WindowsResolutor();
+		else if (System.getProperty("os.name").toLowerCase().contains("mac"))
 			resolutor = new WindowsResolutor();
 		else
 			terminate("Operating system " + System.getProperty("os.name") + " not supported.");
