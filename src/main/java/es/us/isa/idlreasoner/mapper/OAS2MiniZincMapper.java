@@ -1,5 +1,6 @@
 package es.us.isa.idlreasoner.mapper;
 
+import es.us.isa.idlreasoner.util.CommonResources;
 import io.swagger.models.Swagger;
 import io.swagger.models.Operation;
 import io.swagger.models.parameters.AbstractSerializableParameter;
@@ -16,8 +17,8 @@ public class OAS2MiniZincMapper extends AbstractMapper {
 
     private List<Parameter> parameters;
 
-    public OAS2MiniZincMapper(String apiSpecificationPath, String operationPath, String operationType) {
-        super();
+    public OAS2MiniZincMapper(CommonResources cr, String apiSpecificationPath, String operationPath, String operationType) {
+        super(cr);
         this.specificationPath = apiSpecificationPath;
 
         Swagger openAPISpec = new SwaggerParser().read(apiSpecificationPath);
@@ -109,8 +110,8 @@ public class OAS2MiniZincMapper extends AbstractMapper {
         variablesData = currentVariablesData.toString();
 
         // Create MinZinc base file and data file
-        writeContentToFile(BASE_CONSTRAINTS_FILE, baseProblem);
-        writeContentToFile(DATA_FILE, variablesData);
+        writeContentToFile(cr.BASE_CONSTRAINTS_FILE, baseProblem);
+        writeContentToFile(cr.DATA_FILE, variablesData);
 
         exportStringIntMappingToFile();
         fixStringToIntCounter();
@@ -135,7 +136,7 @@ public class OAS2MiniZincMapper extends AbstractMapper {
         return null; // This should never happen
     }
 
-    static void generateIDLfromIDL4OAS(String apiSpecificationPath, String operationPath, String operationType) {
+    public void generateIDLfromIDL4OAS(String apiSpecificationPath, String operationPath, String operationType) {
         Swagger oasSpec = new SwaggerParser().read(apiSpecificationPath);
         Operation oasOp = getOasOperation(oasSpec, operationPath, operationType);
 
@@ -146,7 +147,7 @@ public class OAS2MiniZincMapper extends AbstractMapper {
 
         if (IDLdeps != null && IDLdeps.size() != 0) {
             String allDeps = String.join("\n", IDLdeps);
-            appendContentToFile(IDL_AUX_FILE, allDeps);
+            appendContentToFile(cr.IDL_AUX_FILE, allDeps);
         }
     }
 

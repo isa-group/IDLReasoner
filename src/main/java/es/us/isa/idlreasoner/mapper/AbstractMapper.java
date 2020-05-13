@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import es.us.isa.idlreasoner.util.CommonResources;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import static es.us.isa.idlreasoner.util.FileManager.*;
@@ -18,6 +19,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public abstract class AbstractMapper {
+
+    CommonResources cr;
 
     String specificationPath;
 //    private int MIN_STRING_INT_MAPPING = 10;
@@ -42,7 +45,8 @@ public abstract class AbstractMapper {
     final String RANDOM_SEARCH = "include \"gecode.mzn\";\n" +
             "solve ::int_default_search(random, indomain_random) satisfy;\n";
 
-    public AbstractMapper() {
+    public AbstractMapper(CommonResources cr) {
+        this.cr = cr;
         operationParameters = new HashMap<>();
         parameterNamesMapping = HashBiMap.create();
         stringIntMapping = HashBiMap.create();
@@ -156,12 +160,12 @@ public abstract class AbstractMapper {
 
     public void finishConstraintsFile() {
         currentProblem += "solve satisfy;\n";
-        writeContentToFile(BASE_CONSTRAINTS_FILE, currentProblem);
+        writeContentToFile(cr.BASE_CONSTRAINTS_FILE, currentProblem);
     }
 
     public void finishConstraintsFileWithSearch() {
         currentProblem += RANDOM_SEARCH;
-        writeContentToFile(BASE_CONSTRAINTS_FILE, currentProblem);
+        writeContentToFile(cr.BASE_CONSTRAINTS_FILE, currentProblem);
     }
 
     public void resetStringIntMapping() {
@@ -191,7 +195,7 @@ public abstract class AbstractMapper {
     public void initializeStringIntMapping() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String, Integer>> typeRef = new TypeReference<HashMap<String, Integer>>() {};
-        stringIntMapping = HashBiMap.create(mapper.readValue(new File(STRING_INT_MAPPING_FILE), typeRef));
+        stringIntMapping = HashBiMap.create(mapper.readValue(new File(cr.STRING_INT_MAPPING_FILE), typeRef));
         Map.Entry<String, Integer> entryWithHighestInt = stringIntMapping.entrySet().stream()
                 .max(Comparator.comparing(Map.Entry::getValue))
                 .orElse(null);
@@ -204,10 +208,10 @@ public abstract class AbstractMapper {
     }
 
     void exportStringIntMappingToFile() throws IOException {
-        recreateFile(STRING_INT_MAPPING_FILE);
+        recreateFile(cr.STRING_INT_MAPPING_FILE);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(stringIntMapping);
-        appendContentToFile(STRING_INT_MAPPING_FILE, json);
+        appendContentToFile(cr.STRING_INT_MAPPING_FILE, json);
     }
 
     public Map<String,String> setUpRequest(Map<String,String> mznSolution) {
@@ -246,7 +250,7 @@ public abstract class AbstractMapper {
         }
 
         variablesData = newVariablesData.toString();
-        appendContentToFile(DATA_FILE, variablesData);
+        appendContentToFile(cr.DATA_FILE, variablesData);
     }
 
 

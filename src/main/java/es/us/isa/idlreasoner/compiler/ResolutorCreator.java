@@ -1,5 +1,6 @@
 package es.us.isa.idlreasoner.compiler;
 
+import es.us.isa.idlreasoner.util.CommonResources;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.util.List;
@@ -10,15 +11,15 @@ import static es.us.isa.idlreasoner.util.Utils.terminate;
 
 public class ResolutorCreator {
 
-	public static Resolutor createResolutor() {
+	public static Resolutor createResolutor(CommonResources cr) {
 		Resolutor resolutor = null;
 
 		if (SystemUtils.IS_OS_WINDOWS)
-			resolutor = new WindowsResolutor();
+			resolutor = new WindowsResolutor(cr);
 		else if (SystemUtils.IS_OS_MAC)
-			resolutor = new MacResolutor();
+			resolutor = new MacResolutor(cr);
 		else if (SystemUtils.IS_OS_LINUX)
-			resolutor = new MacResolutor();
+			resolutor = new LinuxResolutor(cr);
 		else
 			terminate("Operating system " + System.getProperty("os.name") + " not supported.");
 

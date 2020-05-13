@@ -1,5 +1,6 @@
 package es.us.isa.idlreasoner.compiler;
 
+import es.us.isa.idlreasoner.util.CommonResources;
 import es.us.isa.idlreasoner.util.StreamGobbler;
 
 import java.io.BufferedReader;
@@ -11,15 +12,17 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.DATA_FILE;
 
 public abstract class Resolutor {
 
+	protected CommonResources cr;
 	protected boolean randomSearch;
 	protected String minizincExe;
 	protected String[] commandProcessArgs = new String[2];
 
-	public Resolutor() {}
+	public Resolutor(CommonResources cr) {
+		this.cr = cr;
+	}
 
 	public boolean isRandomSearch() {
 		return randomSearch;
@@ -110,16 +113,16 @@ public abstract class Resolutor {
 
 	private String getSolveCommand() {
 		if (randomSearch)
-			return minizincExe + " -r " + getSeed() + " --solver Gecode " + BASE_CONSTRAINTS_FILE + " " + DATA_FILE;
+			return minizincExe + " -r " + getSeed() + " --solver Gecode " + cr.BASE_CONSTRAINTS_FILE + " " + cr.DATA_FILE;
 		else
-			return minizincExe + " --solver " + SOLVER + " " + BASE_CONSTRAINTS_FILE + " " + DATA_FILE;
+			return minizincExe + " --solver " + SOLVER + " " + cr.BASE_CONSTRAINTS_FILE + " " + cr.DATA_FILE;
 	}
 
 	private String getSolveAllCommand() {
 		if(!MAX_RESULTS.trim().equals(""))
-			return minizincExe + " -n "+ MAX_RESULTS + " --solver " + SOLVER + " " + BASE_CONSTRAINTS_FILE + " " + DATA_FILE;
+			return minizincExe + " -n "+ MAX_RESULTS + " --solver " + SOLVER + " " + cr.BASE_CONSTRAINTS_FILE + " " + cr.DATA_FILE;
 		else
-			return minizincExe + " -a --solver " + SOLVER + " " + BASE_CONSTRAINTS_FILE + " " + DATA_FILE;
+			return minizincExe + " -a --solver " + SOLVER + " " + cr.BASE_CONSTRAINTS_FILE + " " + cr.DATA_FILE;
 	}
 
 

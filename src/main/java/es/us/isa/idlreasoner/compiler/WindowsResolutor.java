@@ -1,5 +1,6 @@
 package es.us.isa.idlreasoner.compiler;
 
+import es.us.isa.idlreasoner.util.CommonResources;
 import es.us.isa.idlreasoner.util.StreamGobbler;
 
 import java.io.BufferedReader;
@@ -13,8 +14,8 @@ import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
 public class WindowsResolutor extends Resolutor {
 
-	public WindowsResolutor() {
-		super();
+	public WindowsResolutor(CommonResources cr) {
+		super(cr);
 		minizincExe = "\"minizinc/windows/minizinc.exe\"";
 		commandProcessArgs[0] = "cmd.exe";
 		commandProcessArgs[1] = "/c";

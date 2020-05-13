@@ -2,6 +2,7 @@ package es.us.isa.idlreasoner.analyzer;
 
 import es.us.isa.idlreasoner.compiler.Resolutor;
 import es.us.isa.idlreasoner.mapper.AbstractMapper;
+import es.us.isa.idlreasoner.util.CommonResources;
 
 import java.io.IOException;
 import java.util.*;
@@ -19,15 +20,17 @@ public class Analyzer {
 
 	private Resolutor resolutor;
 	private AbstractMapper mapper;
+	private CommonResources cr;
 	private boolean needReloadConstraintsFile; // When false, random requests are generated faster
 	private boolean lastRandomReqWasValid; // Used to reload constraints file when switching to validReq or v.v.
 
 	public Analyzer(String specificationType, String idlPath, String apiSpecificationPath, String operationPath, String operationType) {
-		initFilesAndConf();
+		cr = new CommonResources();
+		initFilesAndConf(cr);
 		needReloadConstraintsFile = true;
 		lastRandomReqWasValid = false;
-		resolutor = createResolutor();
-		mapper = createMapper(specificationType, idlPath, apiSpecificationPath, operationPath, operationType);
+		resolutor = createResolutor(cr);
+		mapper = createMapper(cr, specificationType, idlPath, apiSpecificationPath, operationPath, operationType);
 	}
 
 	public Analyzer(String specificationType, String apiSpecificationPath, String operationPath, String operationType) {
@@ -166,7 +169,7 @@ public class Analyzer {
 	}
 
 	public void updateData(Map<String, List<String>> data) {
-		recreateFile(DATA_FILE);
+		recreateFile(cr.DATA_FILE);
 		try {
 			mapper.initializeStringIntMapping();
 			mapper.updateDataFile(data);

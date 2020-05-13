@@ -1,6 +1,7 @@
 package es.us.isa.idlreasoner.mapper;
 
 import com.google.inject.Injector;
+import es.us.isa.idlreasoner.util.CommonResources;
 import es.us.isa.interparamdep.InterparameterDependenciesLanguageStandaloneSetupGenerated;
 import es.us.isa.interparamdep.generator.InterparameterDependenciesLanguageGenerator;
 import org.eclipse.emf.common.util.URI;
@@ -12,14 +13,17 @@ import static es.us.isa.idlreasoner.util.Utils.terminate;
 public class DependenciesMapper {
 
     private String idlSpecificationPath;
+    private CommonResources cr;
 
-    public DependenciesMapper(String idlSpecificationPath) {
+    public DependenciesMapper(CommonResources cr, String idlSpecificationPath) {
+        this.cr = cr;
         this.idlSpecificationPath = idlSpecificationPath;
         mapConstraints();
     }
 
     public void mapConstraints() {
         InterparameterDependenciesLanguageGenerator idlGenerator = new InterparameterDependenciesLanguageGenerator();
+        idlGenerator.setFolderPath(cr.BASE_CONSTRAINTS_FILE.substring(0, cr.BASE_CONSTRAINTS_FILE.lastIndexOf("/")));
         Injector injector = new InterparameterDependenciesLanguageStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
         XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
         Resource resource = resourceSet.getResource(URI.createFileURI(idlSpecificationPath), true);
