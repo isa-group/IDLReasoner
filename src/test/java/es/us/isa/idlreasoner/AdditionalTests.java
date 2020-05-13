@@ -2,7 +2,6 @@ package es.us.isa.idlreasoner;
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
 import es.us.isa.idlreasoner.compiler.Resolutor;
-import es.us.isa.idlreasoner.compiler.WindowsResolutor;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
