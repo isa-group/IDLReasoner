@@ -82,34 +82,34 @@ public class Resolutor {
 	}
 
 	private String callSolver(String command, boolean async) {
-		String res = "";
+		String line = "";
+		StringBuilder res = new StringBuilder();
 		ProcessBuilder processBuilder = new ProcessBuilder();
+		Process process = null;
 		String[] commandProcessArgs = getCommandProcessArgs();
 		processBuilder.command(commandProcessArgs[0], commandProcessArgs[1], command);
 
 		try {
-			Process process = processBuilder.start();
-			BufferedReader reader;
-			if (async) {
-				StreamGobbler streamGobbler = new StreamGobbler(process.getInputStream());
-				Executors.newSingleThreadExecutor().submit(streamGobbler);
-				if (process.waitFor(TIMEOUT, TimeUnit.MILLISECONDS))
-					reader = streamGobbler.getReader();
-				else
-					return null;
-			} else
-				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			process = processBuilder.start();
+			if (async && !process.waitFor(TIMEOUT, TimeUnit.MILLISECONDS))
+				return null;
 
-			String line;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			while ((line = reader.readLine()) != null)
-				res+=line+"\n";
+				res.append(line).append("\n");
 			reader.close();
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			if (process != null) {
+				process.destroy();
+				if (process.isAlive())
+					process.destroyForcibly();
+			}
 		}
 
-		return res;
+		return res.toString();
 	}
 
 	private String getSolveCommand() {
