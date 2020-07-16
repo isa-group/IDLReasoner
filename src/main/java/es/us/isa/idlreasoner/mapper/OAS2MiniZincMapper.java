@@ -1,11 +1,13 @@
 package es.us.isa.idlreasoner.mapper;
 
 import es.us.isa.idlreasoner.util.CommonResources;
-import io.swagger.models.Swagger;
-import io.swagger.models.Operation;
-import io.swagger.models.parameters.AbstractSerializableParameter;
-import io.swagger.models.parameters.Parameter;
-import io.swagger.parser.SwaggerParser;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.parser.OpenAPIV3Parser;
+import io.swagger.v3.parser.core.models.ParseOptions;
 
 import java.io.*;
 import java.util.*;
@@ -21,8 +23,16 @@ public class OAS2MiniZincMapper extends AbstractMapper {
         super(cr);
         this.specificationPath = apiSpecificationPath;
 
-        Swagger openAPISpec = new SwaggerParser().read(apiSpecificationPath);
-        parameters = getOasOperation(openAPISpec, operationPath, operationType).getParameters(); // NullPointerException would be thrown on purpose, to stop program
+        ParseOptions options = new ParseOptions();
+        options.setResolveFully(true);
+        OpenAPI openAPISpec = new OpenAPIV3Parser().read(apiSpecificationPath);
+        Operation operation = getOasOperation(openAPISpec, operationPath, operationType);
+        parameters = operation.getParameters(); // NullPointerException would be thrown on purpose, to stop program
+        if (operation.getRequestBody() != null) {
+            if (parameters == null)
+                parameters = new ArrayList<>();
+            parameters.addAll(getFormDataParameters(operation));
+        }
     }
 
     public void mapVariables() throws IOException {
@@ -42,8 +52,8 @@ public class OAS2MiniZincMapper extends AbstractMapper {
         redundantSolutionsConstraints += "%%% The following constraints are to avoid redundant solutions returned by MiniZinc %%%\n";
 
         for (Parameter parameter: parameters) {
-            String paramType = ((AbstractSerializableParameter)parameter).getType();
-            List<?> paramEnum = ((AbstractSerializableParameter) parameter).getEnum();
+            String paramType = parameter.getSchema().getType();
+            List<?> paramEnum = parameter.getSchema().getEnum();
             String changedParamName = origToChangedParamName(parameter.getName());
             String var = "set of int: data_" + changedParamName + ";\n"
                        + "var data_" + changedParamName + ": " + changedParamName + ";\n";
@@ -95,12 +105,12 @@ public class OAS2MiniZincMapper extends AbstractMapper {
             // Save contents
             currentVariables.append(var);
             currentVariables.append(varSet);
-            if (parameter.getRequired())
+            if (Boolean.TRUE.equals(parameter.getRequired()))
                 mapRequiredVar(changedParamName);
             currentVariablesData.append(varData.toString());
             currentVariablesData.append(varSetData);
 
-            operationParameters.put(parameter.getName(), new AbstractMap.SimpleEntry<>(paramType, parameter.getRequired()));
+            operationParameters.put(parameter.getName(), new AbstractMap.SimpleEntry<>(paramType, Boolean.TRUE.equals(parameter.getRequired())));
         }
 
         // Update MiniZinc fragments
@@ -117,7 +127,7 @@ public class OAS2MiniZincMapper extends AbstractMapper {
         fixStringToIntCounter();
     }
 
-    private static Operation getOasOperation(Swagger openAPISpec, String operationPath, String operationType) {
+    private static Operation getOasOperation(OpenAPI openAPISpec, String operationPath, String operationType) {
         if(operationType.toLowerCase().equals("get"))
             return openAPISpec.getPaths().get(operationPath).getGet();
         if(operationType.toLowerCase().equals("delete"))
@@ -136,13 +146,37 @@ public class OAS2MiniZincMapper extends AbstractMapper {
         return null; // This should never happen
     }
 
+    private Collection<Parameter> getFormDataParameters(Operation operation) {
+        List<Parameter> formDataParameters = new ArrayList<>();
+        Schema formDataBody;
+        Map<String, Schema> formDataBodyProperties;
+
+        try {
+            formDataBody = operation.getRequestBody().getContent().get("application/x-www-form-urlencoded").getSchema();
+            formDataBodyProperties = formDataBody.getProperties();
+        } catch (NullPointerException e) {
+            return formDataParameters;
+        }
+
+        for (Map.Entry<String, Schema> property: formDataBodyProperties.entrySet()) {
+            Parameter parameter = new Parameter().name(property.getKey()).in("formData").required(formDataBody.getRequired().contains(property.getKey()));
+            parameter.setSchema(new Schema().type(property.getValue().getType()));
+            parameter.getSchema().setEnum(property.getValue().getEnum());
+            formDataParameters.add(parameter);
+        }
+
+        return formDataParameters;
+    }
+    
     public void generateIDLfromIDL4OAS(String apiSpecificationPath, String operationPath, String operationType) {
-        Swagger oasSpec = new SwaggerParser().read(apiSpecificationPath);
+        ParseOptions options = new ParseOptions();
+        options.setResolveFully(true);
+        OpenAPI oasSpec = new OpenAPIV3Parser().read(apiSpecificationPath);
         Operation oasOp = getOasOperation(oasSpec, operationPath, operationType);
 
         List<String> IDLdeps = null;
         try {
-            IDLdeps = (List<String>)oasOp.getVendorExtensions().get("x-dependencies");
+            IDLdeps = (List<String>)oasOp.getExtensions().get("x-dependencies");
         } catch (Exception e) {} // If the "x-dependencies" extension is not correctly used
 
         if (IDLdeps != null && IDLdeps.size() != 0) {

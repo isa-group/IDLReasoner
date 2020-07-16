@@ -1,0 +1,925 @@
+openapi: 3.0.1
+info:
+  title: Swagger Example
+  description: This is a sample server
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /noParams:
+    get:
+      responses:
+        default:
+          description: Default
+          content: {}
+  /oneParamBoolean:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: boolean
+      responses:
+        default:
+          description: Default
+          content: {}
+  /oneParamString:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default
+          content: {}
+  /oneParamInt:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: integer
+      responses:
+        default:
+          description: Default
+          content: {}
+  /oneParamEnumString:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /oneParamEnumInt:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /oneDependency:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: boolean
+        - name: p2
+          in: query
+          schema:
+            type: string
+        - name: p3
+          in: query
+          schema:
+            type: integer
+        - name: p4
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p5
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /oneDependencyEnumParams:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: boolean
+        - name: p2
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+        - name: p3
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+      responses:
+        default:
+          description: Default
+          content: {}
+  /oneDependencyArithRelEnumParams:
+    get:
+      parameters:
+        - name: p3
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+        - name: p5
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+      responses:
+        default:
+          description: Default
+          content: {}
+  /oneDependencyComplexEnumParams:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: boolean
+        - name: p2
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+        - name: p3
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial1:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p2
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p3
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p4
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p5
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial2:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: boolean
+        - name: p2
+          in: query
+          schema:
+            type: integer
+        - name: p3
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+        - name: p4
+          in: query
+          schema:
+            type: integer
+        - name: p5
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+        - name: p6
+          in: query
+          schema:
+            type: boolean
+        - name: p7
+          in: query
+          schema:
+            type: integer
+        - name: p8
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+        - name: p9
+          in: query
+          schema:
+            type: integer
+        - name: p10
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial3:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: boolean
+        - name: p2
+          in: query
+          schema:
+            type: string
+        - name: p3
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p4
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+        - name: p5
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial4:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: integer
+        - name: p2
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 100
+              - 1000
+              - 10000
+              - 100000
+              - 1000000
+        - name: p3
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 100
+              - 1000
+              - 10000
+              - 100000
+              - 1000000
+        - name: p4
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 100
+              - 1000
+              - 10000
+              - 100000
+              - 1000000
+        - name: p5
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 100
+              - 1000
+              - 10000
+              - 100000
+              - 1000000
+        - name: p6
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p7
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p8
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p9
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p10
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial5:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: p2
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p3
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: p4
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p5
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: p6
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: p7
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p8
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: p9
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p10
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial6:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p2
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p3
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+        - name: p4
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+        - name: p5
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial7:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p2
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p3
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+        - name: p4
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+        - name: p5
+          in: query
+          schema:
+            type: integer
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial8:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: boolean
+        - name: p2
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: p3
+          in: query
+          schema:
+            type: boolean
+        - name: p4
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: p5
+          in: query
+          schema:
+            type: boolean
+        - name: p6
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p7
+          in: query
+          schema:
+            type: string
+        - name: p8
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p9
+          in: query
+          schema:
+            type: string
+        - name: p10
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial9:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          schema:
+            type: integer
+        - name: p2
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: p3
+          in: query
+          schema:
+            type: integer
+        - name: p4
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p5
+          in: query
+          schema:
+            type: string
+        - name: p6
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p7
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p8
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p9
+          in: query
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p10
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /combinatorial10:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: p2
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p3
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - value1
+              - value2
+              - value3
+              - value4
+              - value5
+        - name: p4
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+        - name: p5
+          in: query
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+      responses:
+        default:
+          description: Default
+          content: {}
+  /conflictiveParameterNames:
+    get:
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: boolean
+        - name: constraint
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: with_underscore
+          in: query
+          schema:
+            type: boolean
+        - name: Accept-Language
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: index:set
+          in: query
+          schema:
+            type: boolean
+        - name: something[one]
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: something[two]
+          in: query
+          schema:
+            type: string
+        - name: b.b
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: p9
+          in: query
+          schema:
+            type: string
+        - name: p10
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default
+          content: {}
+  /conflictiveParameterNames2:
+    get:
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: boolean
+        - name: constraint
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: with_underscore
+          in: query
+          schema:
+            type: boolean
+        - name: Accept-Language
+          in: query
+          required: true
+          schema:
+            type: boolean
+        - name: index:set
+          in: query
+          schema:
+            type: boolean
+        - name: something[one]
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: something[two]
+          in: query
+          schema:
+            type: string
+        - name: b.b
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: c.c
+          in: query
+          schema:
+            type: string
+        - name: p10
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default
+          content: {}
+components: {}

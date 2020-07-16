@@ -21,6 +21,19 @@ public class AdditionalTests {
     }
 
     @Test
+    public void formDataParametersTest() {
+        Analyzer analyzer = new Analyzer("oas", "./src/test/resources/stripe.yaml", "/v1/products", "post");
+        assertTrue(analyzer.isValidIDL(), "The IDL should be VALID");
+        System.out.println("Test passed: formDataParametersTest.");
+    }
+
+    @Test
+    public void formDataParametersV3Test() {
+        Analyzer analyzer = new Analyzer("oas", "./src/test/resources/stripe_v3.yaml", "/v1/products", "post");
+        assertTrue(analyzer.isValidIDL(), "The IDL should be VALID");
+    }
+
+    @Test
     public void validAfterInvalidRequest() {
         Analyzer analyzer = new Analyzer("oas","combinatorial5.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial5", "get");
         analyzer.getRandomInvalidRequest();
