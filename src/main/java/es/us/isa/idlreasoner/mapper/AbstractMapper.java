@@ -24,7 +24,7 @@ public abstract class AbstractMapper {
 
     String specificationPath;
 //    private int MIN_STRING_INT_MAPPING = 10;
-    final int MAX_STRING_INT_MAPPING = 1000;
+    final int MAX_STRING_INT_MAPPING = 100000;
 
     Map<String, Map.Entry<String, Boolean>> operationParameters; // <name, <type, required>>
     BiMap<String, String> parameterNamesMapping;

@@ -122,6 +122,7 @@ public class OAS2MiniZincMapper extends AbstractMapper {
         // Create MinZinc base file and data file
         writeContentToFile(cr.BASE_CONSTRAINTS_FILE, baseProblem);
         writeContentToFile(cr.DATA_FILE, variablesData);
+        writeContentToFile(cr.BASE_DATA_FILE, variablesData);
 
         exportStringIntMappingToFile();
         fixStringToIntCounter();

@@ -170,6 +170,55 @@ public class AdditionalTests {
     }
 
     @Test
+    public void defaultAndNonDefaultDataIsValidRequestTest() {
+        Analyzer analyzer = new Analyzer("oas","combinatorial8.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial8", "get");
+
+        Map<String, String> validRandomRequestBeforeUpdateData = analyzer.getRandomValidRequest();
+        assertTrue(analyzer.isValidRequest(validRandomRequestBeforeUpdateData), "The request should be VALID");
+
+        // Update data
+        List<String> p1Data = Arrays.asList("true", "false");
+        List<String> p2Data = Arrays.asList("true", "false");
+        List<String> p3Data = Arrays.asList("true", "false");
+        List<String> p4Data = Arrays.asList("true", "false");
+        List<String> p5Data = Arrays.asList("true", "false");
+        List<String> p6Data = Arrays.asList("a", "b", "c", "d", "e");
+        List<String> p7Data = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
+        List<String> p8Data = Arrays.asList("z", "f", "g", "h");
+        List<String> p9Data = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
+        List<String> p10Data = Arrays.asList("z", "f", "g", "h");
+        Map <String, List<String>> inputData = new HashMap<>();
+        inputData.put("p1", p1Data);
+        inputData.put("p2", p2Data);
+        inputData.put("p3", p3Data);
+        inputData.put("p4", p4Data);
+        inputData.put("p5", p5Data);
+        inputData.put("p6", p6Data);
+        inputData.put("p7", p7Data);
+        inputData.put("p8", p8Data);
+        inputData.put("p9", p9Data);
+        inputData.put("p10", p10Data);
+        analyzer.updateData(inputData);
+
+        assertFalse(analyzer.isValidRequest(validRandomRequestBeforeUpdateData), "The data was updated and, according to it, the request should be invalid");
+        assertTrue(analyzer.isValidRequest(validRandomRequestBeforeUpdateData, true), "With the default data, the request should be valid");
+
+        Map<String, String> validRandomRequestAfterUpdateData = analyzer.getPseudoRandomValidRequest();
+        assertTrue(analyzer.isValidRequest(validRandomRequestAfterUpdateData), "The request should be VALID");
+        assertTrue(analyzer.isValidRequest(validRandomRequestAfterUpdateData, true), "The request should be VALID");
+        if (validRandomRequestAfterUpdateData.get("p6") != null)
+            assertTrue(p6Data.contains(validRandomRequestAfterUpdateData.get("p6")));
+        if (validRandomRequestAfterUpdateData.get("p7") != null)
+            assertTrue(p7Data.contains(validRandomRequestAfterUpdateData.get("p7")));
+        if (validRandomRequestAfterUpdateData.get("p8") != null)
+            assertTrue(p8Data.contains(validRandomRequestAfterUpdateData.get("p8")));
+        if (validRandomRequestAfterUpdateData.get("p9") != null)
+            assertTrue(p9Data.contains(validRandomRequestAfterUpdateData.get("p9")));
+        if (validRandomRequestAfterUpdateData.get("p10") != null)
+            assertTrue(p10Data.contains(validRandomRequestAfterUpdateData.get("p10")));
+    }
+
+    @Test
     public void randomInvalidRequestCustomDataTest() {
         Analyzer analyzer = new Analyzer("oas","combinatorial8.idl", "./src/test/resources/OAS_test_suite.yaml", "/combinatorial8", "get");
 

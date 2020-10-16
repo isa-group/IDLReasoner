@@ -1,7 +1,6 @@
 package es.us.isa.idlreasoner.compiler;
 
 import es.us.isa.idlreasoner.util.CommonResources;
-import es.us.isa.idlreasoner.util.StreamGobbler;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.BufferedReader;

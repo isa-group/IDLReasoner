@@ -32,6 +32,7 @@ public class IDLConfiguration {
         }
         recreateFile(cr.IDL_AUX_FILE);
         recreateFile(cr.BASE_CONSTRAINTS_FILE);
+        recreateFile(cr.BASE_DATA_FILE);
         recreateFile(cr.DATA_FILE);
     }
 

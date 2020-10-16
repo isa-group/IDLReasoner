@@ -114,6 +114,13 @@ public class Analyzer {
 	}
 
 	public Boolean isValidRequest(Map<String, String> parametersSet) {
+		return isValidRequest(parametersSet, false);
+	}
+
+	public Boolean isValidRequest(Map<String, String> parametersSet, boolean useDefaultData) {
+		String dataFile = cr.DATA_FILE;
+		if (useDefaultData)
+			cr.DATA_FILE = cr.BASE_DATA_FILE;
 		setupAnalysisOperation();
 		Set<String> parametersSetNames = parametersSet.keySet();
 		Set<String> operationParameters = mapper.getOperationParameters();
@@ -126,7 +133,10 @@ public class Analyzer {
 			}
 		}
 		mapper.finishConstraintsFile();
-		return resolutor.solve() != null;
+		Boolean result = resolutor.solve() != null;
+		if (useDefaultData)
+			cr.DATA_FILE = dataFile;
+		return result;
 	}
 
 	public Boolean isValidPartialRequest(Map<String, String> parametersSet) {
