@@ -106,11 +106,9 @@
 
         <!-- IDL2MiniZincMapper local dependency -->
         <dependency>
-            <groupId>IDL2MiniZincMapper</groupId>
-            <artifactId>IDL2MiniZincMapper</artifactId>
+            <groupId>es.us.isa</groupId>
+            <artifactId>idl-2-minizinc-mapper</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/IDL2MiniZincMapper.jar</systemPath>
         </dependency>
 
 
