@@ -10,11 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FalseOptionalTest {
 
-    @AfterAll
-    public static void killChildProcesses() {
-        Analyzer.killChildProcesses();
-    }
-
 //    // If there are no parameters in the specification, isFalseOptional cannot be tested
 //    @Test
 //    public void no_params() {

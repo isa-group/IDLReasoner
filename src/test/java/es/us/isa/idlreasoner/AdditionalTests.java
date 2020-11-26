@@ -14,11 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AdditionalTests {
 
-    @AfterAll
-    public static void killChildProcesses() {
-        Analyzer.killChildProcesses();
-    }
-
     @Test
     public void idl4oasTest() {
         Analyzer analyzer = new Analyzer("oas", "./src/test/resources/OAS_example.yaml", "/optionalParams", "get");

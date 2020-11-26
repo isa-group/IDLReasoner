@@ -10,11 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DeadParameterTest {
 
-    @AfterAll
-    public static void killChildProcesses() {
-        Analyzer.killChildProcesses();
-    }
-
 //    // If there are no parameters in the specification, isDeadParameter cannot be tested
 //    @Test
 //    public void no_params() {

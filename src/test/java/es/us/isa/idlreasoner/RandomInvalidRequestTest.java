@@ -11,11 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class RandomInvalidRequestTest {
 
-    @AfterAll
-    public static void killChildProcesses() {
-        Analyzer.killChildProcesses();
-    }
-
     @Test
     public void no_params() {
         Analyzer analyzer = new Analyzer("oas","no_deps.idl", "./src/test/resources/OAS_test_suite.yaml", "/noParams", "get");

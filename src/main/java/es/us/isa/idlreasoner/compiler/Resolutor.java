@@ -7,12 +7,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-import static es.us.isa.idlreasoner.util.Utils.getCommandProcessArgs;
 import static es.us.isa.idlreasoner.util.Utils.terminate;
 
 public class Resolutor {
@@ -104,8 +102,11 @@ public class Resolutor {
 		} finally {
 			if (process != null && process.isAlive()) {
 				process.destroy();
-				if (process.isAlive())
+				if (process.isAlive()) {
 					process.destroyForcibly();
+					if (process.isAlive()) // This is a bug in the library. Sometimes, processes don't get killed
+						killChildProcesses();
+				}
 			}
 		}
 
@@ -137,6 +138,61 @@ public class Resolutor {
 			terminate("Operating system " + System.getProperty("os.name") + " not supported.");
 
 		return null;
+	}
+
+	private static void killChildProcesses() {
+		ProcessBuilder processBuilder = new ProcessBuilder();
+		Process process = null;
+		String[] commandProcessArgs = getCommandProcessArgs();
+		String[] killCommands = getKillCommands();
+		for (String killCommand: killCommands) {
+			processBuilder.command(commandProcessArgs[0], commandProcessArgs[1], killCommand);
+			try {
+				process = processBuilder.start();
+				if (process.waitFor() < 0)
+					System.err.println("WARNING! Some processes called 'minizinc' or 'fzn-gecode' could not be destroyed. Make sure to destroy them manually.");
+			} catch (IOException | InterruptedException e) {
+				e.printStackTrace();
+			} finally {
+				if (process != null && process.isAlive()) {
+					process.destroy();
+					if (process.isAlive())
+						process.destroyForcibly();
+				}
+			}
+		}
+	}
+
+	private static String[] getKillCommands() {
+		String[] killCommands = new String[2];
+		if (SystemUtils.IS_OS_WINDOWS) {
+			killCommands[0] = "taskkill /IM \"fzn-gecode.exe\" /F";
+			killCommands[1] = "taskkill /IM \"minizinc.exe\" /F";
+		}
+		else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
+			killCommands[0] = "killall -9 fzn-gecode";
+			killCommands[1] = "killall -9 minizinc";
+		}
+		else
+			terminate("Operating system " + System.getProperty("os.name") + " not supported.");
+
+		return killCommands;
+	}
+
+	private static String[] getCommandProcessArgs() {
+		String[] commandProcessArgs = new String[2];
+		if (SystemUtils.IS_OS_WINDOWS) {
+			commandProcessArgs[0] = "cmd.exe";
+			commandProcessArgs[1] = "/c";
+		}
+		else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
+			commandProcessArgs[0] = "/bin/bash";
+			commandProcessArgs[1] = "-c";
+		}
+		else
+			terminate("Operating system " + System.getProperty("os.name") + " not supported.");
+
+		return commandProcessArgs;
 	}
 
 //	private String fixIfErrors(String solutions, String command) {
