@@ -101,12 +101,13 @@ public class Resolutor {
 			return null;
 		} finally {
 			if (process != null && process.isAlive()) {
-				process.destroy();
-				if (process.isAlive()) {
-					process.destroyForcibly();
-					if (process.isAlive()) // This is a bug in the library. Sometimes, processes don't get killed
-						killChildProcesses();
-				}
+				/*
+					The Java API for killing processes is SO-dependent. Also, after calling destroy() or
+					destroyForcibly(), the process may still be alive. But ALSO, isAlive() may return false
+					(at least in Windows) when the process hasn't been destroyed. Therefore, ignore Java
+					and directly kill the child processes by name.
+				 */
+				killChildProcesses();
 			}
 		}
 
