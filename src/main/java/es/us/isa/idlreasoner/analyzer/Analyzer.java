@@ -3,6 +3,7 @@ package es.us.isa.idlreasoner.analyzer;
 import es.us.isa.idlreasoner.compiler.Resolutor;
 import es.us.isa.idlreasoner.mapper.AbstractMapper;
 import es.us.isa.idlreasoner.util.CommonResources;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -12,8 +13,7 @@ import static es.us.isa.idlreasoner.compiler.ResolutorCreator.createResolutor;
 import static es.us.isa.idlreasoner.mapper.MapperCreator.createMapper;
 import static es.us.isa.idlreasoner.util.FileManager.recreateFile;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
-import static es.us.isa.idlreasoner.util.Utils.parseSpecParamName;
-import static es.us.isa.idlreasoner.util.Utils.terminate;
+import static es.us.isa.idlreasoner.util.Utils.*;
 
 
 public class Analyzer {
@@ -189,7 +189,44 @@ public class Analyzer {
 		mapper.fixStringToIntCounter();
 	}
 
+	public static void killChildProcesses() {
+		ProcessBuilder processBuilder = new ProcessBuilder();
+		Process process = null;
+		String[] commandProcessArgs = getCommandProcessArgs();
+		String[] killCommands = getKillCommands();
+		for (String killCommand: killCommands) {
+			processBuilder.command(commandProcessArgs[0], commandProcessArgs[1], killCommand);
+			try {
+				process = processBuilder.start();
+				if (process.waitFor() < 0)
+					System.err.println("WARNING! Some processes called 'minizinc' or 'fzn-gecode' could not be destroyed. Make sure to destroy them manually.");
+			} catch (IOException | InterruptedException e) {
+				e.printStackTrace();
+			} finally {
+				if (process != null && process.isAlive()) {
+					process.destroy();
+					if (process.isAlive())
+						process.destroyForcibly();
+				}
+			}
+		}
+	}
 
+	private static String[] getKillCommands() {
+		String[] killCommands = new String[2];
+		if (SystemUtils.IS_OS_WINDOWS) {
+			killCommands[0] = "taskkill /IM \"fzn-gecode.exe\" /F";
+			killCommands[1] = "taskkill /IM \"minizinc.exe\" /F";
+		}
+		else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
+			killCommands[0] = "killall -9 fzn-gecode";
+			killCommands[1] = "killall -9 minizinc";
+		}
+		else
+			terminate("Operating system " + System.getProperty("os.name") + " not supported.");
+
+		return killCommands;
+	}
 
 
 

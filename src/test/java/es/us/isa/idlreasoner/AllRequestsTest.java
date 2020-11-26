@@ -1,6 +1,7 @@
 package es.us.isa.idlreasoner;
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -9,6 +10,11 @@ import com.google.common.collect.ImmutableMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AllRequestsTest {
+
+    @AfterAll
+    public static void killChildProcesses() {
+        Analyzer.killChildProcesses();
+    }
 
     @Test
     public void no_params() {

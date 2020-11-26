@@ -2,6 +2,7 @@ package es.us.isa.idlreasoner;
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
 import es.us.isa.idlreasoner.compiler.Resolutor;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -12,6 +13,11 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AdditionalTests {
+
+    @AfterAll
+    public static void killChildProcesses() {
+        Analyzer.killChildProcesses();
+    }
 
     @Test
     public void idl4oasTest() {

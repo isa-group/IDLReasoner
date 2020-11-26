@@ -12,6 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
+import static es.us.isa.idlreasoner.util.Utils.getCommandProcessArgs;
 import static es.us.isa.idlreasoner.util.Utils.terminate;
 
 public class Resolutor {
@@ -101,7 +102,7 @@ public class Resolutor {
 			e.printStackTrace();
 			return null;
 		} finally {
-			if (process != null) {
+			if (process != null && process.isAlive()) {
 				process.destroy();
 				if (process.isAlive())
 					process.destroyForcibly();
@@ -136,22 +137,6 @@ public class Resolutor {
 			terminate("Operating system " + System.getProperty("os.name") + " not supported.");
 
 		return null;
-	}
-
-	private String[] getCommandProcessArgs() {
-		String[] commandProcessArgs = new String[2];
-		if (SystemUtils.IS_OS_WINDOWS) {
-			commandProcessArgs[0] = "cmd.exe";
-			commandProcessArgs[1] = "/c";
-		}
-		else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
-			commandProcessArgs[0] = "/bin/bash";
-			commandProcessArgs[1] = "-c";
-		}
-		else
-			terminate("Operating system " + System.getProperty("os.name") + " not supported.");
-
-		return commandProcessArgs;
 	}
 
 //	private String fixIfErrors(String solutions, String command) {

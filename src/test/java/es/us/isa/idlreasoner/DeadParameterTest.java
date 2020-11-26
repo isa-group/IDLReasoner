@@ -1,6 +1,7 @@
 package es.us.isa.idlreasoner;
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,6 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class DeadParameterTest {
+
+    @AfterAll
+    public static void killChildProcesses() {
+        Analyzer.killChildProcesses();
+    }
 
 //    // If there are no parameters in the specification, isDeadParameter cannot be tested
 //    @Test
