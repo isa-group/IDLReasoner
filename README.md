@@ -1,11 +1,5 @@
 # IDLReasoner
 
-## Setup
-In order to use IDLReasoner, you need to install the IDL dependency first, as follows:
-```
-mvn install:install-file -Dfile=lib/IDL.jar -DgroupId=es.us.isa -DartifactId=idl -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar
-```
-
 ## Analysis operations
 
 IDLReasoner is a Java library that allows to automatically analyze IDL specifications and perform a number of operations on them, namely:
