@@ -29,7 +29,9 @@ public abstract class AbstractMapper {
     Map<String, Map.Entry<String, Boolean>> operationParameters; // <name, <type, required>>
     BiMap<String, String> parameterNamesMapping;
     BiMap<String, Integer> stringIntMapping;
+    BiMap<String, Integer> stringIntMappingIDLValues; // This map contains ONLY the values found in the IDL. Doesn't ever change
     Integer stringToIntCounter;
+    Integer stringToIntCounterIDLValues; // Equal to the number of values found in the IDL. Doesn't ever change
     Integer STRING_TO_INT_FIXED_COUNTER; // Counter up to which string-int entries should be preserved when resetting the bimap
 
     DependenciesMapper dm;
@@ -192,10 +194,11 @@ public abstract class AbstractMapper {
         }
     }
 
-    public void initializeStringIntMapping() throws IOException {
+    public void initializeStringIntMappingWithIDLValues() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String, Integer>> typeRef = new TypeReference<HashMap<String, Integer>>() {};
         stringIntMapping = HashBiMap.create(mapper.readValue(new File(cr.STRING_INT_MAPPING_FILE), typeRef));
+        stringIntMappingIDLValues = HashBiMap.create(stringIntMapping);
         Map.Entry<String, Integer> entryWithHighestInt = stringIntMapping.entrySet().stream()
                 .max(Comparator.comparing(Map.Entry::getValue))
                 .orElse(null);
@@ -204,6 +207,13 @@ public abstract class AbstractMapper {
         } else {
             stringToIntCounter = 0;
         }
+        stringToIntCounterIDLValues = stringToIntCounter;
+        fixStringToIntCounter();
+    }
+
+    public void resetStringIntMappingWithIDLValues() {
+        stringIntMapping = HashBiMap.create(stringIntMappingIDLValues);
+        stringToIntCounter = stringToIntCounterIDLValues;
         fixStringToIntCounter();
     }
 

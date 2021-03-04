@@ -13,7 +13,6 @@ import java.io.*;
 import java.util.*;
 
 import static es.us.isa.idlreasoner.util.FileManager.*;
-import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 
 public class OAS2MiniZincMapper extends AbstractMapper {
 
@@ -40,7 +39,7 @@ public class OAS2MiniZincMapper extends AbstractMapper {
             return;
         operationParameters.clear();
 
-        initializeStringIntMapping();
+        initializeStringIntMappingWithIDLValues();
 
         StringBuilder currentVariables = new StringBuilder();
         variables = "";
