@@ -4,7 +4,7 @@
 
     <groupId>es.us.isa</groupId>
     <artifactId>idl-reasoner</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
 
     <name>IDLReasoner</name>
     <description>A MiniZinc-based Java library for analyzing IDL specifications</description>
@@ -36,7 +36,7 @@
         <developerConnection>scm:git:https://github.com/isa-group/IDLReasoner.git</developerConnection>
         <url>https://github.com/isa-group/IDLReasoner/tree/master</url>
 <!--        <tag>HEAD</tag>-->
-      <tag>idl-reasoner-0.0.2</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
