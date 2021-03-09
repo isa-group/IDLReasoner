@@ -9,7 +9,10 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import static es.us.isa.idlreasoner.util.FileManager.*;
 import static es.us.isa.idlreasoner.util.IDLConfiguration.*;
 import static es.us.isa.idlreasoner.util.Utils.terminate;
 
@@ -59,6 +62,13 @@ public class Resolutor {
 //		solutions = fixIfErrors(solutions, command);
 		return this.mapSolutions(solutions);
 	}
+	
+	//TODO
+	public List<String> getExplination() {
+		List<String> res = new ArrayList<>();
+		res = this.mapExplinationSolution(callSolver(this.getExplinationCommand(), true));
+		return res;
+	}
 
 	private Map<String,String> mapSolutions(String solutions){
 		Map<String, String> res = new HashMap<String, String>();
@@ -76,6 +86,46 @@ public class Resolutor {
 				res.put(aux[0].trim(), aux[1].trim());
 			}
 		}
+		return res;
+	}
+	
+	//TODO
+	private List<String> mapExplinationSolution(String solutions){
+		List<String> res = new ArrayList<>();
+		
+		String splitter = solutions.split("Traces:")[1];
+		splitter = splitter.split("%%%mzn-progress")[0];
+
+		List<String> constraints = Arrays.asList(splitter.split("\n"));
+		List<String> reasons = new ArrayList<>();
+		for (String constraint : constraints) {
+			if(!constraint.isEmpty()) {
+				List<String> c = Arrays.asList(constraint.split(";"));
+				reasons.add(c.get(c.size()-1));
+			}
+		}
+		
+		for (String reason : reasons) {
+			
+			String[] data = Arrays.asList(reason.split(cr.BASE_CONSTRAINTS_FILE)).get(1).split("\\|");
+			
+			Integer line = new Integer(data[1])-1;
+			Integer startCharacter = new Integer(data[2])-1;
+			Integer lastCharacter = new Integer(data[4]);
+			
+			try {
+				BufferedReader br = openReader(cr.BASE_CONSTRAINTS_FILE);
+				
+				List<String> lines = br.lines().collect(Collectors.toList());
+				String constraint = lines.get(line).substring(startCharacter, lastCharacter);
+				res.add(constraint);
+				
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		return res;
 	}
 
@@ -112,6 +162,11 @@ public class Resolutor {
 		}
 
 		return res.toString();
+	}
+	
+	//TODO
+	private String getExplinationCommand(){
+		return getMinizincExe() + " --solver findMUS " + cr.BASE_CONSTRAINTS_FILE + " " + cr.DATA_FILE;
 	}
 
 	private String getSolveCommand() {

@@ -156,6 +156,56 @@ public class Analyzer {
 	public Integer numberOfRequest() {
 		return this.getAllUnSetUpRequests().size();
 	}
+	
+	public List<String> whyIsDeadParameter(String parameter) {
+		List<String> res = new ArrayList<String>();
+		
+		if(this.isDeadParameter(parameter)) {
+			res = resolutor.getExplination();
+			return res;
+			
+		}else {
+			
+			return res;
+		}
+	}
+	
+	public List<String> whyIsFalseOptional(String paramter) {
+		List<String> res = new ArrayList<String>();
+		if(this.isFalseOptional(paramter)) {
+			res = resolutor.getExplination();
+		}
+		return res;
+	}
+	
+	public List<String> whyIsNotValidIDL() {
+		List<String> res = new ArrayList<String>();
+		if(!this.isValidIDL()) {
+			res = resolutor.getExplination();
+		}
+		return res;
+	}
+	
+
+	
+	public List<String> whyIsNotValidRequest(Map<String, String> parametersSet, boolean useDefaultData) {
+		List<String> res = new ArrayList<String>();
+		if(this.isValidRequest(parametersSet, useDefaultData)) {
+			res = resolutor.getExplination();
+		}
+		return res;
+	}
+	
+	public List<String> whyIsNotValidPartialRequest(Map<String, String> parametersSet) {
+		List<String> res = new ArrayList<String>();
+		if(this.isValidPartialRequest(parametersSet)) {
+			res = resolutor.getExplination();
+		}
+		return res;
+	}
+	
+	
+	
 
 	private void setupAnalysisOperation() {
 		if (!needReloadConstraintsFile)
