@@ -137,6 +137,27 @@ paths:
       responses:
         default:
           description: "Default"
+  /oneDependencyEnumAndIntParams:
+    get:
+      parameters:
+        - name: "p1"
+          in: "query"
+          required: false
+          type: "boolean"
+        - name: "p2"
+          in: "query"
+          required: false
+          type: "string"
+          enum:
+            - "value1"
+            - "value2"
+        - name: "p3"
+          in: "query"
+          required: true
+          type: "integer"
+      responses:
+        default:
+          description: "Default"
   /oneDependencyArithRelEnumParams:
     get:
       parameters:

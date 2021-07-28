@@ -248,7 +248,7 @@ public abstract class AbstractMapper {
             List<String> paramValues = data.get(operationParameter.getKey());
             String changedParamName = origToChangedParamName(operationParameter.getKey());
             StringBuilder varData = new StringBuilder("data_" + changedParamName + " = {");
-            if (paramValues != null) {
+            if (paramValues != null && !paramValues.isEmpty()) {
                 for (String paramValue: paramValues)
                     varData.append(origToChangedParamValue(operationParameter.getKey(), paramValue)).append(", ");
                 varData = new StringBuilder(varData.substring(0, varData.length() - 2)); // trim last comma and space

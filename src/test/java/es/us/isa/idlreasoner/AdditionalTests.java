@@ -5,10 +5,7 @@ import es.us.isa.idlreasoner.compiler.Resolutor;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -545,5 +542,34 @@ public class AdditionalTests {
         assertFalse(analyzer.isValidPartialRequest(partiallyInvalidRequest), "The partial request should be NOT valid");
 
         System.out.println("Test passed: multipleOperationsTest.");
+    }
+
+    @Test
+    public void updateDataTest() {
+        Analyzer analyzer = new Analyzer("oas", "one_dep_onlyone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependencyEnumAndIntParams", "get");
+
+        List<String> p1Data = Collections.singletonList("true");
+        List<String> p2Data = new ArrayList<>();
+        List<String> p3Data = Collections.singletonList("1");
+        Map <String, List<String>> inputData = new HashMap<>();
+        inputData.put("p1", p1Data);
+        inputData.put("p2", p2Data);
+        inputData.put("p3", p3Data);
+        analyzer.updateData(inputData);
+
+        Map<String, String> validRequest = analyzer.getRandomValidRequest();
+
+        assertNull(validRequest.get("p2"), "Parameter p2 must be null");
+        assertEquals("true", validRequest.get("p1"), "Parameter p1 can only be 'true'");
+        assertEquals("1", validRequest.get("p3"), "Parameter p3 can only be '1'");
+
+        inputData.remove("p2");
+        analyzer.updateData(inputData);
+
+        validRequest = analyzer.getRandomValidRequest();
+
+        assertNull(validRequest.get("p2"), "Parameter p2 must be null");
+        assertEquals("true", validRequest.get("p1"), "Parameter p1 can only be 'true'");
+        assertEquals("1", validRequest.get("p3"), "Parameter p3 can only be '1'");
     }
 }
