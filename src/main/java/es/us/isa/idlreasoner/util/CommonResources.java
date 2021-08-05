@@ -11,6 +11,7 @@ public class CommonResources {
     public String BASE_DATA_FILE;
     public String IDL_AUX_FILE;
     public String STRING_INT_MAPPING_FILE;
+    public String IDL_JSON_FILE;
 
     public CommonResources() {
         String folderName = Long.toString(new Date().getTime());
@@ -19,5 +20,6 @@ public class CommonResources {
         DATA_FILE = "./" + IDL_AUX_FOLDER + "/" + folderName + "/data.dzn";
         IDL_AUX_FILE = "./" + IDL_AUX_FOLDER + "/" + folderName + "/constraints.idl";
         STRING_INT_MAPPING_FILE = "./" + IDL_AUX_FOLDER + "/" + folderName + "/string_int_mapping.json";
+        IDL_JSON_FILE = "./" + IDL_AUX_FOLDER + "/" + folderName + "/idl.json";
     }
 }

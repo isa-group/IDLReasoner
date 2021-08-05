@@ -22,6 +22,16 @@ public class IDLConfiguration {
         MAX_RESULTS = readProperty("maxResults");
         TIMEOUT = Long.parseLong(readProperty("timeout"));
     }
+    
+    public static void initJosnFile(CommonResources cr) {
+    	 initConfigurationFile();
+         updateConf();
+         if (!(new File(cr.STRING_INT_MAPPING_FILE)).exists()) {
+             createFileIfNotExists(cr.STRING_INT_MAPPING_FILE);
+             appendContentToFile(cr.STRING_INT_MAPPING_FILE, "{ }");
+         }
+        recreateFile(cr.IDL_JSON_FILE);
+    }
 
     public static void initFilesAndConf(CommonResources cr) {
         initConfigurationFile();
@@ -34,6 +44,8 @@ public class IDLConfiguration {
         recreateFile(cr.BASE_CONSTRAINTS_FILE);
         recreateFile(cr.BASE_DATA_FILE);
         recreateFile(cr.DATA_FILE);
+        recreateFile(cr.DATA_FILE);
+        recreateFile(cr.IDL_JSON_FILE);
     }
 
     private static void initConfigurationFile() {

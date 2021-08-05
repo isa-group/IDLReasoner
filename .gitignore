@@ -10,3 +10,4 @@ IDLreasoner.iml
 .settings/
 /bin/
 /classes/
+/.apt_generated_tests/

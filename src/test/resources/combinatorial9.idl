@@ -1,5 +1,1 @@
-IF p1 THEN p3==10 OR p5;
-p3 > p1;
-p2 <= p1;
-OnlyOne(p5, p7 OR p9);
-IF p2 THEN p7;
+OnlyOne(p1, p5, p7 OR p9);
