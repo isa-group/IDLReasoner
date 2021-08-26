@@ -1,5 +1,7 @@
 package es.us.isa.idlreasoner.compiler;
 
+import static es.us.isa.idlreasoner.util.Utils.terminate;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,9 +40,17 @@ public class CALETAResolutor {
 		this.dependencies = dependencies;
 		this.originalDependencies = dependencies;
 		
-	}	
+	}
 	
-	public void addZ3Listener() {
+	public void addListener() {
+		if(IDLConfiguration.SOLVER.toLowerCase().equals("z3")) {
+			addZ3Listener();
+		}else {
+			terminate("Solver " + IDLConfiguration.SOLVER.toLowerCase() + " not supported for CALETA Analyzer");
+		}
+	}
+	
+	private void addZ3Listener() {
 		instanceModels();
 		controller = new CSPModelToZ3ModelController(new Integer(IDLConfiguration.MAX_RESULTS));
 		IDL4OASModelToCSPController idl2CSPcontroller = new IDL4OASModelToCSPController(CSPmodel);
@@ -56,7 +66,6 @@ public class CALETAResolutor {
 		IDLModel.addPathItem(path);
 	}
 	
-	//TODO DELETEME
 	public void resetDependencies() {		
 		List<NAryFunction<Boolean>> aux = new ArrayList<>(originalDependencies);
 		addZ3Listener();

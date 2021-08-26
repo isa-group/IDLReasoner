@@ -66,6 +66,7 @@ import io.swagger.v3.parser.OpenAPIV3Parser;
 public class CALETAMapper extends AbstractMapper {
 	
 	private CommonResources cr;
+	private String specificationType;
 	private String apiSpecificationPath;
 	private String operationPath;
 	private String operationType;
@@ -82,9 +83,10 @@ public class CALETAMapper extends AbstractMapper {
 	private List<es.us.isa.idlreasoner.model.Operation> processedOperators2;
 	
 	
-	public CALETAMapper(CommonResources cr, String idlFile, String apiSpecificationPath, String operationPath, String operationType) {
+	public CALETAMapper(CommonResources cr, String specificationType, String idlFile, String apiSpecificationPath, String operationPath, String operationType) {
         super(cr);
 		this.cr = cr;
+		this.specificationType = specificationType;
 		this.apiSpecificationPath = apiSpecificationPath;
 		this.operationPath = operationPath;
 		this.operationType = operationType;
@@ -97,6 +99,16 @@ public class CALETAMapper extends AbstractMapper {
 		mapModel2CALETA();
 		this.originalDependencies = new ArrayList<>(dependencies);
 		completePresenceParameter();
+	}
+	
+	// ---- Map variables from OAS ----
+	
+	public void mapVariables() {
+		CALETAVariableMapper mapper = CALETAVariableMapperCreator.createMapper(specificationType, apiSpecificationPath, operationPath, operationType);
+		this.dependencies =  mapper.getDependencies();
+		this.parameters =  mapper.getParameters();
+		this.mapParameter = mapper.getMapParameter();
+		this.mapRequiredParameter = mapper.getMapRequiredParameter();
 	}
 	
 	
@@ -282,6 +294,7 @@ public class CALETAMapper extends AbstractMapper {
 	// ----- Process ArithmeticDependency -----
 	
 	
+	@SuppressWarnings("unchecked")
 	private NAryFunction<Boolean> processArithmeticDependency(ArithmeticDependency arithmeticDependency,
 			Boolean complex) {
 		BinaryRelationalPredicate res = null;
@@ -622,65 +635,6 @@ public class CALETAMapper extends AbstractMapper {
 			default:
 				return null;
 		}
-	}
-	
-	// ---- Map variables from OAS ----
-	
-	@SuppressWarnings("unchecked")
-	public void mapVariables() {
-		OpenAPI openAPISpec = new OpenAPIV3Parser().read(apiSpecificationPath);
-        Operation operation = getOasOperation(openAPISpec, operationPath, operationType);
-        parameters = operation.getParameters(); // NullPointerException would be thrown on purpose, to stop program
-        if (operation.getRequestBody() != null) {
-            if (parameters == null)
-                parameters = new ArrayList<>();
-            parameters.addAll(getFormDataParameters(operation));
-        }
-        if(parameters!=null) {
-            for (Parameter parameter : parameters) {
-            	List<?> enumList = parameter.getSchema().getEnum();
-            	
-            	Boolean isEnumerate = enumList!=null;
-            	Boolean required = false;
-            	Domain domain = null;
-            	String parameterType = parameter.getSchema().getType();
-            	
-            	if(parameter.getRequired()!=null) {
-            		required = parameter.getRequired();
-            	}
-            	
-            	if("boolean".equals(parameterType)) {
-        			domain = new BooleanDomain();
-            	}else if("string".equals(parameterType)) {
-            		if(isEnumerate) {
-        				SortedSet<String> stringDomain = transformList2SortedSet((List<String>)enumList);
-        				domain = new StringDomain(stringDomain);
-        			}else {
-        				domain = new StringDomain();
-        			}
-            	}else if("integer".equals(parameterType)) {
-            		if(isEnumerate) {
-         				SortedSet<Integer> integerDomain = transformList2SortedSet((List<Integer>)enumList);
-        				domain = new IntegerDomain(integerDomain);
-        			}else {
-        				domain = new IntegerDomain();
-        			}
-            	}else if("number".equals(parameterType)) {
-            		domain = new RealDomain();
-            	}
-
-            	es.us.isa.IDL4OAS.Parameter<?> p = new es.us.isa.IDL4OAS.Parameter<>(parameter.getName(), required, domain);
-            	if(p.isRequired()) {
-            		PresenceParameter pSet = new PresenceParameter(p.getName(), p, true);
-            		Constant<Boolean> c = new Constant<Boolean>(true);
-            		RelationalObjectDependency<Boolean> pSetRestriction = new RelationalObjectDependency<Boolean>(pSet, c, Boolean.class);
-            		dependencies.add(pSetRestriction);
-            	}
-            	mapRequiredParameter.put(parameter.getName(), required);
-            	mapParameter.put(parameter.getName(), p);
-    		}
-        }
-		
 	}
 	
 	// ---- Map JSON to IDL model ----

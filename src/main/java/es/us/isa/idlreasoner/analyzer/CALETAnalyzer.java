@@ -25,7 +25,7 @@ public class CALETAnalyzer implements AbstractAnalyzer {
 		CommonResources cr = new CommonResources();
 		initFilesAndConf(cr);
 		
-		mapper = new CALETAMapper(cr, idlPath, apiSpecificationPath, operationPath, operationType);
+		mapper = new CALETAMapper(cr, specificationType,  idlPath, apiSpecificationPath, operationPath, operationType);
 		parameters = mapper.getOperationParameters();
 		
 		resolutor = new CALETAResolutor(apiSpecificationPath, operationPath, operationType, mapper.getMapParameter().values(), mapper.getDependencies());
@@ -220,7 +220,7 @@ public class CALETAnalyzer implements AbstractAnalyzer {
 	}
 
 	private void setUpListener() {
-		resolutor.addZ3Listener(); 
+		resolutor.addListener(); 
 	}
 	
 	private void finishModel() {
