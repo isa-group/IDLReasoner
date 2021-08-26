@@ -1,6 +1,8 @@
 
 package es.us.isa.idlreasoner.model;
 
+import java.util.List;
+
 import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,8 +22,8 @@ public class Term {
     @JsonProperty("negated")
     private Boolean negated;
 
-    @JsonProperty("IfTheDepedency")
-    private IfThenDepedency ifTheDepedency;
+    @JsonProperty("IfThenDepedency")
+    private IfThenDepedency ifThenDepedency;
     @JsonProperty("OrDepdencny")
     private OrDepdencny orDepdencny;
     @JsonProperty("AllOrNone")
@@ -30,7 +32,8 @@ public class Term {
     private ZeroOrOne zeroOrOne;
     @JsonProperty("OnlyOne")
     private OnlyOne onlyOne;
-    
+    @JsonProperty("arithmeticDependency")
+    private ArithmeticDependency arithmeticDependency;
     @JsonProperty("relationalDependency")
     private RelationalDependency relationalDependency;
     @JsonProperty("parameter")
@@ -45,6 +48,8 @@ public class Term {
     private String relation;
     @JsonProperty("value")
     private String value;
+    @JsonProperty("values")
+    private List<String> values;
     
     @JsonProperty("OnlyOne")
     public OnlyOne getOnlyOne() {
@@ -125,13 +130,13 @@ public class Term {
 
 
     @JsonProperty("IfTheDepedency")
-    public IfThenDepedency getIfTheDepedency() {
-        return ifTheDepedency;
+    public IfThenDepedency getIfThenDepedency() {
+        return ifThenDepedency;
     }
 
     @JsonProperty("IfTheDepedency")
-    public void setIfTheDepedency(IfThenDepedency ifTheDepedency) {
-        this.ifTheDepedency = ifTheDepedency;
+    public void setIfThenDepedency(IfThenDepedency ifThenDepedency) {
+        this.ifThenDepedency = ifThenDepedency;
     }
 
     @JsonProperty("OrDepdencny")
@@ -174,9 +179,28 @@ public class Term {
         this.zeroOrOne = zeroOnOne;
     }
     
+    @JsonProperty("arithmeticDependency")
+    public ArithmeticDependency getArithmeticDependency() {
+        return arithmeticDependency;
+    }
+
+    @JsonProperty("arithmeticDependency")
+    public void setArithmeticDependency(ArithmeticDependency arithmeticDependency) {
+        this.arithmeticDependency = arithmeticDependency;
+    }
+    
+    @JsonProperty("values")      
+	public List<String> getValues() {
+		return values;
+	}
+    
+    @JsonProperty("values")
+	public void setValues(List<String> values) {
+		this.values = values;
+	}
 	@Override
 	public String toString() {
-		return "Term [negated=" + negated + ", ifTheDepedency=" + ifTheDepedency + ", orDepdencny=" + orDepdencny
+		return "Term [negated=" + negated + ", ifTheDepedency=" + ifThenDepedency + ", orDepdencny=" + orDepdencny
 				+ ", allOrNone=" + allOrNone + ", zeroOrOne=" + zeroOrOne + ", onlyOne=" + onlyOne
 				+ ", relationalDependency=" + relationalDependency + ", parameter=" + parameter + ", presence="
 				+ presence + ", and=" + and + ", or=" + or + ", relation=" + relation + ", value=" + value + "]";

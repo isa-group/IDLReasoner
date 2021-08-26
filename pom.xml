@@ -223,6 +223,8 @@
             <groupId>es.us.isa</groupId>
             <artifactId>idl</artifactId>
             <version>0.0.3-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/idl.jar</systemPath>
         </dependency>
 
 		<!-- CALETA -->
@@ -230,9 +232,42 @@
 		  <groupId>es.us.isa</groupId>
 		  <artifactId>IDL4OASModel</artifactId>
 		  <version>0.0.1</version>
+          <scope>system</scope>
+          <systemPath>${basedir}/lib/IDL4OASModel.jar</systemPath>
 		</dependency>
+		
+	  	<dependency>
+			<groupId>es.us.isa</groupId>
+			<artifactId>ModelAnalyserFW</artifactId>
+			<version>0.0.1</version>
+          	<scope>system</scope>
+          	<systemPath>${basedir}/lib/ModelAnalyserFW.jar</systemPath>
+		</dependency>
+		
+	  	
+		<dependency>
+	  	  	<groupId>es.us.isa</groupId>
+	  		<artifactId>CSPModel</artifactId>
+	 	 	<version>alpha dev</version>
+          	<scope>system</scope>
+          	<systemPath>${basedir}/lib/CSPModel.jar</systemPath>
+	  	</dependency>
 
-    </dependencies>
+		<dependency>
+		  <groupId>es.us.isa</groupId>
+		  <artifactId>z3Model</artifactId>
+		  <version>0.0.1-SNAPSHOT</version>
+      		<scope>system</scope>
+          <systemPath>${basedir}/lib/z3Model.jar</systemPath>
+		</dependency>
+		
+		
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.7</version>
+		</dependency>
+	</dependencies>
 
 
 </project>

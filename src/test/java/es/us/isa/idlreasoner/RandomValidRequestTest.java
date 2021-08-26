@@ -86,7 +86,7 @@ public class RandomValidRequestTest {
     public void one_dep_onlyone() {
         Analyzer analyzer = new Analyzer("oas","one_dep_onlyone.idl", "./src/test/resources/OAS_test_suite.yaml", "/oneDependency", "get");
         Map<String, String> validRequest = analyzer.getRandomValidRequest();
-        // System.out.println(validRequest);
+        //System.out.println(validRequest);
         assertTrue(analyzer.isValidRequest(validRequest), "The request should be VALID");
         System.out.println("Test passed: one_dep_onlyone.");
     }

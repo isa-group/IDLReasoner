@@ -18,19 +18,18 @@ import static es.us.isa.idlreasoner.util.Utils.*;
 
 public class Analyzer {
 
-	private Resolutor resolutor;
-	private AbstractMapper mapper;
-	private CommonResources cr;
-	private boolean needReloadConstraintsFile; // When false, random requests are generated faster
-	private boolean lastRandomReqWasValid; // Used to reload constraints file when switching to validReq or v.v.
+	private AbstractAnalyzer analyzer;
 
 	public Analyzer(String specificationType, String idlPath, String apiSpecificationPath, String operationPath, String operationType) {
-		cr = new CommonResources();
+		CommonResources cr = new CommonResources();
 		initFilesAndConf(cr);
-		needReloadConstraintsFile = true;
-		lastRandomReqWasValid = false;
-		resolutor = createResolutor(cr);
-		mapper = createMapper(cr, specificationType, idlPath, apiSpecificationPath, operationPath, operationType);
+		if(ANALYZER.toLowerCase().equals("caleta")) {
+			analyzer = new CALETAnalyzer(specificationType, idlPath, apiSpecificationPath, operationPath, operationType);
+		}else if(ANALYZER.toLowerCase().equals("minizinc")){
+			analyzer = new MinizincAnalyzer(specificationType, idlPath, apiSpecificationPath, operationPath, operationType, cr);
+		}else {
+			throw new UnsupportedOperationException("Unknown Analyzer!");
+		}
 	}
 
 	public Analyzer(String specificationType, String apiSpecificationPath, String operationPath, String operationType) {
@@ -38,205 +37,72 @@ public class Analyzer {
 	}
 
 	public List<Map<String,String>> getAllRequests() {
-		List<Map<String,String>> setUpRequests = new ArrayList<>();
-		getAllUnSetUpRequests().forEach(r -> setUpRequests.add(mapper.setUpRequest(r)));
-		return setUpRequests;
-	}
-
-	private List<Map<String,String>> getAllUnSetUpRequests() {
-		setupAnalysisOperation();
-		mapper.appendConstraintsRedundantSolutions();
-		mapper.finishConstraintsFile();
-		return resolutor.solveGetAllSolutions();
+		return analyzer.getAllRequests();
 	}
 	
 	public Map<String,String> getPseudoRandomValidRequest() {
-		Map<String, String> res = new HashMap<>();
-		List<Map<String,String>> allRequests = getAllUnSetUpRequests();
-		
-		if(allRequests.size()!=0) {
-			res = allRequests.get(ThreadLocalRandom.current().nextInt(0, allRequests.size()));
-		}
-
-		return mapper.setUpRequest(res);
+		return analyzer.getPseudoRandomValidRequest();
 	}
 
 	public Map<String,String> getRandomValidRequest() {
-		setupRandomRequestOperation(true);
-		return mapper.setUpRequest(resolutor.solve());
+		return analyzer.getRandomValidRequest();
 	}
 
 	public Map<String,String> getRandomInvalidRequest() {
-		setupRandomRequestOperation(false);
-		if (!mapper.hasDeps())
-			return null;
-		return mapper.setUpRequest(resolutor.solve());
+		return analyzer.getRandomInvalidRequest();
 	}
 
 	public Boolean isDeadParameter(String parameter) {
-		setupAnalysisOperation();
-
-		mapper.setParamToValue(parseSpecParamName(parameter)+"Set", "1");
-		mapper.finishConstraintsFile();
-
-		return resolutor.solve() == null;
+		return analyzer.isDeadParameter(parameter);
 	}
 
 	public Boolean isFalseOptional(String parameter) {
-		setupAnalysisOperation();
-
-		if (mapper.isOptionalParameter(parameter)) {
-			mapper.setParamToValue(parseSpecParamName(parameter)+"Set", "0");
-			mapper.finishConstraintsFile();
-			return resolutor.solve() == null;
-		} else {
-			return false;
-		}
+		return analyzer.isFalseOptional(parameter);
 	}
 
 	public Boolean isValidIDL() {
-		Set<String> parameters = mapper.getOperationParameters();
-		boolean res = true;
-		for(String parameter : parameters) {
-			res = !this.isDeadParameter(parameter) && !this.isFalseOptional(parameter);
-			if(!res)
-				break;
-		}
-		if (res)
-			res = isSolvableIDL();
-		return res;
-	}
-
-	private Boolean isSolvableIDL() {
-		setupAnalysisOperation();
-		mapper.finishConstraintsFile();
-		return resolutor.solve() != null;
+		return analyzer.isValidIDL();
 	}
 
 	public Boolean isValidRequest(Map<String, String> parametersSet) {
-		return isValidRequest(parametersSet, false);
+		return analyzer.isValidRequest(parametersSet);
 	}
 
 	public Boolean isValidRequest(Map<String, String> parametersSet, boolean useDefaultData) {
-		String dataFile = cr.DATA_FILE;
-		if (useDefaultData)
-			cr.DATA_FILE = cr.BASE_DATA_FILE;
-		setupAnalysisOperation();
-		Set<String> parametersSetNames = parametersSet.keySet();
-		Set<String> operationParameters = mapper.getOperationParameters();
-		for(String operationParameter : operationParameters) {
-			if (parametersSetNames.contains(operationParameter)) {
-				mapper.setParamToValue(parseSpecParamName(operationParameter), operationParameter, parametersSet.get(operationParameter));
-				mapper.setParamToValue(parseSpecParamName(operationParameter)+"Set", "1");
-			} else {
-				mapper.setParamToValue(parseSpecParamName(operationParameter)+"Set", "0");
-			}
-		}
-		mapper.finishConstraintsFile();
-		Boolean result = resolutor.solve() != null;
-		if (useDefaultData)
-			cr.DATA_FILE = dataFile;
-		return result;
+		return analyzer.isValidRequest(parametersSet, useDefaultData);
 	}
 
 	public Boolean isValidPartialRequest(Map<String, String> parametersSet) {
-		setupAnalysisOperation();
-		Set<String> parametersSetNames = parametersSet.keySet();
-		Set<String> operationParameters = mapper.getOperationParameters();
-		for(String operationParameter : operationParameters) {
-			if (parametersSetNames.contains(operationParameter)) {
-				mapper.setParamToValue(parseSpecParamName(operationParameter), operationParameter, parametersSet.get(operationParameter));
-				mapper.setParamToValue(parseSpecParamName(operationParameter)+"Set", "1");
-			}
-		}
-		mapper.finishConstraintsFile();
-		return resolutor.solve() != null;
+		return analyzer.isValidPartialRequest(parametersSet);
 	}
 
 	public Integer numberOfRequest() {
-		return this.getAllUnSetUpRequests().size();
+		return analyzer.numberOfRequest();
 	}
 	
 	public List<String> whyIsDeadParameter(String parameter) {
-		List<String> res = new ArrayList<String>();
-		
-		if(this.isDeadParameter(parameter)) {
-			res = resolutor.getExplination();
-			return res;
-			
-		}else {
-			
-			return res;
-		}
+		return analyzer.whyIsDeadParameter(parameter);
 	}
 	
 	public List<String> whyIsFalseOptional(String paramter) {
-		List<String> res = new ArrayList<String>();
-		if(this.isFalseOptional(paramter)) {
-			res = resolutor.getExplination();
-		}
-		return res;
+		return analyzer.whyIsFalseOptional(paramter);
 	}
 	
 	public List<String> whyIsNotValidIDL() {
-		List<String> res = new ArrayList<String>();
-		if(!this.isValidIDL()) {
-			res = resolutor.getExplination();
-		}
-		return res;
+		return analyzer.whyIsNotValidIDL();
 	}
 	
-
-	
 	public List<String> whyIsNotValidRequest(Map<String, String> parametersSet, boolean useDefaultData) {
-		List<String> res = new ArrayList<String>();
-		if(this.isValidRequest(parametersSet, useDefaultData)) {
-			res = resolutor.getExplination();
-		}
-		return res;
+		return analyzer.whyIsNotValidRequest(parametersSet, useDefaultData);
 	}
 	
 	public List<String> whyIsNotValidPartialRequest(Map<String, String> parametersSet) {
-		List<String> res = new ArrayList<String>();
-		if(this.isValidPartialRequest(parametersSet)) {
-			res = resolutor.getExplination();
-		}
-		return res;
+		return analyzer.whyIsNotValidPartialRequest(parametersSet);
 	}
 	
-	
-	
-
-	private void setupAnalysisOperation() {
-		if (!needReloadConstraintsFile)
-			needReloadConstraintsFile = true;
-		if (resolutor.isRandomSearch())
-			resolutor.setRandomSearch(false);
-		mapper.resetCurrentProblem();
-		mapper.resetStringIntMapping();
-	}
-
-	private void setupRandomRequestOperation(boolean valid) {
-		if (needReloadConstraintsFile || lastRandomReqWasValid!=valid) {
-			setupAnalysisOperation();
-			if (!valid)
-				mapper.inverseConstraints();
-			mapper.finishConstraintsFileWithSearch();
-			resolutor.setRandomSearch(true);
-			needReloadConstraintsFile = false;
-			lastRandomReqWasValid = valid;
-		}
-	}
 
 	public void updateData(Map<String, List<String>> data) {
-		recreateFile(cr.DATA_FILE);
-		try {
-			mapper.initializeStringIntMapping();
-			mapper.updateDataFile(data);
-		} catch (IOException e) {
-			terminate("There was an error while creating the data file. Try again.", e);
-		}
-		mapper.fixStringToIntCounter();
+		analyzer.updateData(data);
 	}
 
 

@@ -22,7 +22,7 @@ public class IDL2JSONMapper {
         this.idlSpecificationPath = idlSpecificationPath;
     }
 	
-	public void mapIDL2JSON() {
+	public void mapIDL2JSON() {	
 		IDL2JSONGenerator jsonGenerator = new IDL2JSONGenerator();
 		jsonGenerator.setFolderPath(cr.BASE_CONSTRAINTS_FILE.substring(0, cr.BASE_CONSTRAINTS_FILE.lastIndexOf("/")));
 		Injector injector = new IDLStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();

@@ -15,12 +15,14 @@ public class IDLConfiguration {
     public static String IDL_FILES_FOLDER;
     public static String MAX_RESULTS;
     public static Long TIMEOUT;
+    public static String ANALYZER;
 
     private static void updateConf() {
         SOLVER = readProperty("solver");
         IDL_FILES_FOLDER = readProperty("idlFolder");
         MAX_RESULTS = readProperty("maxResults");
         TIMEOUT = Long.parseLong(readProperty("timeout"));
+        ANALYZER = readProperty("analyzer");
     }
     
     public static void initJosnFile(CommonResources cr) {

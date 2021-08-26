@@ -1,6 +1,8 @@
 package es.us.isa.idlreasoner;
 
 import es.us.isa.idlreasoner.analyzer.Analyzer;
+import es.us.isa.idlreasoner.util.IDLConfiguration;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 

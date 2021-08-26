@@ -214,17 +214,17 @@ public abstract class AbstractMapper {
         appendContentToFile(cr.STRING_INT_MAPPING_FILE, json);
     }
 
-    public Map<String,String> setUpRequest(Map<String,String> mznSolution) {
-        if (mznSolution == null)
+    public Map<String, String> setUpRequest(Map<String, String> r) {
+        if (r == null)
             return null;
-        Map<String,String> request = new HashMap<>();
-        Iterator<Map.Entry<String, String>> cspVariables = mznSolution.entrySet().iterator();
+        Map<String, String> request = new HashMap<>();
+        Iterator<Map.Entry<String, String>> cspVariables = r.entrySet().iterator();
         Map.Entry<String, String> currentCspVariable;
 
         while (cspVariables.hasNext()) {
             currentCspVariable = cspVariables.next();
-            if (mznSolution.get(currentCspVariable.getKey() + "Set") != null)
-                if (mznSolution.get(currentCspVariable.getKey() + "Set").equals("1"))
+            if (r.get(currentCspVariable.getKey() + "Set") != null)
+                if (r.get(currentCspVariable.getKey() + "Set").equals("1"))
                     request.put(changedToOrigParamName(currentCspVariable.getKey()), changedToOrigParamValue(currentCspVariable.getKey(), currentCspVariable.getValue()));
         }
 
