@@ -89,7 +89,6 @@ public class Resolutor {
 		return res;
 	}
 	
-	//TODO
 	private List<String> mapExplinationSolution(String solutions){
 		List<String> res = new ArrayList<>();
 		

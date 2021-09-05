@@ -59,10 +59,11 @@ public class IDLConfiguration {
             if(br.readLine()==null) {
                 BufferedWriter bw = openWriter(filePath);
 
-                bw.append("solver=Gecode\n");
+                bw.append("solver=z3\n");
                 bw.append("idlFolder=src/test/resources\n");
                 bw.append("maxResults=100\n");
                 bw.append("timeout=1000\n");
+                bw.append("resolutor=Caleta\n");
                 bw.append("\n");
 
                 bw.flush();

@@ -43,6 +43,10 @@ public class CALETAResolutor {
 	}
 	
 	public void addListener() {
+		instanceModels();
+		controller = new CSPModelToZ3ModelController(new Integer(IDLConfiguration.MAX_RESULTS));
+		IDL4OASModelToCSPController idl2CSPcontroller = new IDL4OASModelToCSPController(CSPmodel);
+		IDLModel.registerObserver(idl2CSPcontroller);	
 		if(IDLConfiguration.SOLVER.toLowerCase().equals("z3")) {
 			addZ3Listener();
 		}else {
@@ -51,10 +55,6 @@ public class CALETAResolutor {
 	}
 	
 	private void addZ3Listener() {
-		instanceModels();
-		controller = new CSPModelToZ3ModelController(new Integer(IDLConfiguration.MAX_RESULTS));
-		IDL4OASModelToCSPController idl2CSPcontroller = new IDL4OASModelToCSPController(CSPmodel);
-		IDLModel.registerObserver(idl2CSPcontroller);	
 		CSPmodel.registerObserver(controller);
 	}
 	
@@ -68,7 +68,7 @@ public class CALETAResolutor {
 	
 	public void resetDependencies() {		
 		List<NAryFunction<Boolean>> aux = new ArrayList<>(originalDependencies);
-		addZ3Listener();
+		addListener();
 		dependencies = new ArrayList<>(aux);
 	}
 	
@@ -89,7 +89,7 @@ public class CALETAResolutor {
 	
 	public Map<String, String> getRandomNotValidSolution(){
 		Map<String, String> res = filterSolution(controller.getRandomNotValidSolution());
-		if(res.keySet().size()==0) {
+		if(res != null && res.keySet().size()==0) {
 			res = null;
 		}
 		return res;
@@ -114,10 +114,6 @@ public class CALETAResolutor {
 					res.put(param, solution.get(param).replace("\"", ""));
 				}
 			}
-			
-			//else if(solution.get(param).equals("true")) {
-			//	res.put(param, solution.get(param));
-			//}
 		}
 		return res;
 	}

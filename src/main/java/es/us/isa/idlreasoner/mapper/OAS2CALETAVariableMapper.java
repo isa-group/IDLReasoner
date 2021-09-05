@@ -76,7 +76,7 @@ public class OAS2CALETAVariableMapper implements CALETAVariableMapper {
         if(parameters!=null) {
             for (Parameter parameter : parameters) {
             	List<?> enumList = parameter.getSchema().getEnum();
-            	
+
             	Boolean isEnumerate = enumList!=null;
             	Boolean required = false;
             	Domain domain = null;
@@ -86,6 +86,7 @@ public class OAS2CALETAVariableMapper implements CALETAVariableMapper {
             		required = parameter.getRequired();
             	}
             	
+            	//TODO Array types
             	if("boolean".equals(parameterType)) {
         			domain = new BooleanDomain();
             	}else if("string".equals(parameterType)) {
@@ -104,6 +105,7 @@ public class OAS2CALETAVariableMapper implements CALETAVariableMapper {
         			}
             	}else if("number".equals(parameterType)) {
             		domain = new RealDomain();
+            		//TODO Como no podemos obtener el tipo del array, hacemos una variable numérica.
             	}
 
             	es.us.isa.IDL4OAS.Parameter<?> p = new es.us.isa.IDL4OAS.Parameter<>(parameter.getName(), required, domain);

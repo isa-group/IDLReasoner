@@ -704,7 +704,7 @@ public class CALETAMapper extends AbstractMapper {
     		p = new PresenceParameter(mapParameter.get(parameter).getName(), mapParameter.get(parameter), true);
     		mapPresence.put(parameter, p);
     	}
-    	//p1
+
     	RelationalObjectDependency<Boolean> res = new RelationalObjectDependency<Boolean>(p, c, Boolean.class);
     	
     	return res;
@@ -714,7 +714,6 @@ public class CALETAMapper extends AbstractMapper {
 	public RelationalObjectDependency<?> putParameterValue(String parameter, String value) throws Exception{
     	es.us.isa.IDL4OAS.Parameter<?> p = mapParameter.get(parameter);
     	RelationalObjectDependency<?> res = null;
-    	//Integer
     	Domain domain = p.getDomain();
     	if(domain instanceof BooleanDomain) {
     		if(value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) { 			
@@ -725,19 +724,15 @@ public class CALETAMapper extends AbstractMapper {
     		}else {
     			throw new Exception("Can't convert string in Boolean");
     		}
-        //String
     	}else if(domain instanceof IntegerDomain) {
     		Integer intValue = new Integer(value);
         	Constant<Integer> c = new Constant<Integer>(intValue);
         	es.us.isa.IDL4OAS.Parameter<Integer> param = (es.us.isa.IDL4OAS.Parameter<Integer>) p;
         	res = new RelationalObjectDependency<Integer>(param, c, Integer.class);
-        //Boolean
     	}else if(domain instanceof StringDomain) {
-    		value = value.replaceAll("^\"|\"$", "");
         	Constant<String> c = new Constant<String>(value);
         	es.us.isa.IDL4OAS.Parameter<String> param = (es.us.isa.IDL4OAS.Parameter<String>) p;
         	res = new RelationalObjectDependency<String>(param, c, String.class);
-    	//Double
     	}else if(domain instanceof RealDomain) {
     		Double doubleValue = new Double(value);
         	Constant<Double> c = new Constant<Double>(doubleValue);
@@ -761,8 +756,6 @@ public class CALETAMapper extends AbstractMapper {
     }
     
     public void resetCurrentProblem() {
-    	System.out.println(dependencies);
-    	System.out.println(originalDependencies);
     	this.dependencies = new ArrayList<>(originalDependencies);
     }
     

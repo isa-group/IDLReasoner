@@ -35,7 +35,7 @@ public class CALETAnalyzer implements AbstractAnalyzer {
 	public Boolean isDeadParameter(String parameter) {
 		resetDependencies();
 		setParamPresence(parameter, true);
-
+		
 		return !isSatisfiable();
 	}
 	
@@ -63,42 +63,9 @@ public class CALETAnalyzer implements AbstractAnalyzer {
 	}
 	
 	public Boolean isValidRequest(Map<String, String> parametersSet) {
-		/**
-		Boolean res = true;
-		
-		resetDependencies();
-		Set<String> parametersSetNames = parametersSet.keySet();
-		Set<String> operationParameters = mapper.getOperationParameters();
-		for (String parameter : operationParameters) {
-			if(parametersSetNames.contains(parameter)) {
-				setParamPresence(parameter, true);
-				setParamValue(parameter, parametersSet.get(parameter));
-			}else {
-				setParamPresence(parameter, false);
-			}
-		}
-		
-		res = isSatisfiable();
-		return res;
-		*/
 		return isValidRequest(parametersSet, false);
 	}
 	
-	public Map<String,String> getPseudoRandomValidRequest() {
-		resetDependencies();
-		finishModel();
-		isSatisfiable();
-		return resolutor.getASolution();
-	}
-
-	@Override
-	public List<Map<String, String>> getAllRequests() {
-		List<Map<String, String>> res = new ArrayList<>();
-		if(isSatisfiable()) {
-			res = resolutor.getAllSolutions();
-		}
-		return res;
-	}
 
 	@Override
 	public Boolean isValidRequest(Map<String, String> parametersSet, boolean useDefaultData) {
@@ -119,7 +86,8 @@ public class CALETAnalyzer implements AbstractAnalyzer {
 			}
 		return isSatisfiable();
 	}
-
+	
+	
 	@Override
 	public Boolean isValidPartialRequest(Map<String, String> parametersSet) {
 		resetDependencies();
@@ -135,6 +103,23 @@ public class CALETAnalyzer implements AbstractAnalyzer {
 			}
 		return isSatisfiable();
 	}
+	
+	public Map<String,String> getPseudoRandomValidRequest() {
+		resetDependencies();
+		finishModel();
+		isSatisfiable();
+		return resolutor.getASolution();
+	}
+
+	@Override
+	public List<Map<String, String>> getAllRequests() {
+		List<Map<String, String>> res = new ArrayList<>();
+		if(isSatisfiable()) {
+			res = resolutor.getAllSolutions();
+		}
+		return res;
+	}
+
 
 	@Override
 	public Integer numberOfRequest() {
@@ -149,10 +134,10 @@ public class CALETAnalyzer implements AbstractAnalyzer {
 	@Override
 	public Map<String, String> getRandomInvalidRequest() {
 		resetDependencies();
-		if(isSatisfiable()) {
+		if(!isSatisfiable()) {
 			return null;
 		}else {
-			return resolutor.getRandomSolution();
+			return resolutor.getRandomNotValidSolution();
 		}
 	}
 	
