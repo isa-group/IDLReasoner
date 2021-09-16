@@ -63,7 +63,7 @@ public class IDLConfiguration {
                 bw.append("idlFolder=src/test/resources\n");
                 bw.append("maxResults=100\n");
                 bw.append("timeout=1000\n");
-                bw.append("resolutor=Caleta\n");
+                bw.append("analyzer=Caleta\n");
                 bw.append("\n");
 
                 bw.flush();
